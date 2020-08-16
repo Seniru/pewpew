@@ -32,5 +32,12 @@ local items = {
 }
 
 local assets = {
-    banner = "173d4e343d9.png"
+    banner = "173f1aa1720.png",
+    count1 = "173f211056a.png",
+    count2 = "173f210937b.png",
+    count3 = "173f210089f.png",
+    newRound = "173f2113b5e.png"
 }
+
+local initialized, newRoundStarted, suddenDeath = false
+local currentItem = 17 -- cannon

@@ -4,10 +4,12 @@ const vkbeauty = require("vkbeautify")
 
 combine({
 
+    init: { files: [ "src/init.lua" ] },
     libs: {
         files: [
             "libs/utils.lua",
-            "libs/timers4tfm.lua"
+            "libs/timers4tfm.lua",
+            "libs/Player.lua"
         ]
     },
     translations: {
@@ -21,10 +23,13 @@ combine({
             "src/translations/translator.lua"
         ],
     },
-    init: { files: [ "src/init.lua" ] },
     events: {
         files: [
-            "src/events/eventNewPlayer.lua"
+            "src/events/eventNewPlayer.lua",
+            "src/events/eventLoop.lua",
+            "src/events/eventKeyboard.lua",
+            "src/events/eventNewGame.lua",
+            "src/events/eventPlayerDied.lua"
         ]
     },
     main: { files: [ "src/main.lua" ] },
