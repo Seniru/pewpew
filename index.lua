@@ -34,11 +34,12 @@ local items = {
 }
 
 local assets = {
-    banner = "173f1aa1720.png",
-    count1 = "173f211056a.png",
-    count2 = "173f210937b.png",
-    count3 = "173f210089f.png",
-    newRound = "173f2113b5e.png"
+    banner      = "173f1aa1720.png",
+    count1      = "173f211056a.png",
+    count2      = "173f210937b.png",
+    count3      = "173f210089f.png",
+    newRound    = "173f2113b5e.png",
+    heart       = "173f2212052.png"
 }
 
 local initialized, newRoundStarted, suddenDeath = false
@@ -106,6 +107,7 @@ function Player.new(name)
 	self.lives = 0
 	self.inCooldown = true
 	self.community = tfm.get.room.playerList[name].community
+	self.hearts = {}
 
 	system.bindKeyboard(name, 32, true, true) -- space
 	system.bindKeyboard(name, 0, true, true) -- left / a
@@ -129,6 +131,13 @@ end
 function Player:setLives(lives)
 	self.lives = lives
 	tfm.exec.setPlayerScore(self.name, lives)
+	for _, id in next, self.hearts do tfm.exec.removeImage(id) end
+	self.hearts = {}
+	local heartCount = 0
+	while heartCount < lives do
+		heartCount = heartCount + 1
+		self.hearts[heartCount] = tfm.exec.addImage(assets.heart, "$" .. self.name, -45 + heartCount * 15, -45)
+	end
 end
 
 function Player:shoot(x, y)
@@ -290,7 +299,13 @@ function eventNewGame()
 end
 function eventPlayerDied(name)
 	local player = Player.players[name]
-	player:setLives(player.lives - 1)
+	if not player then return end
+	if not newRoundStarted then
+		tfm.exec.respawnPlayer(name)
+		return player:refresh()
+	end
+	player.lives = player.lives - 1
+	tfm.exec.setPlayerScore(name, player.lives)
 	player.alive = false
 
 	if player.lives == 0 then
@@ -305,20 +320,30 @@ function eventPlayerDied(name)
 			tfm.exec.giveCheese(winner)
 			tfm.exec.playerVictory(winner)					
 			Timer("newRound", newRound, 3 * 1000)
+		elseif Player.aliveCount == 0  then
+			Timer("newRound", newRound, 3 * 1000)
 		end
-		
 		
 	else
 
 		tfm.exec.chatMessage(translate("LIVES_LEFT", player.community, nil, {lives = player.lives}), name)
 		Timer("respawn_" .. name, function()
 			tfm.exec.respawnPlayer(name)
+			player:setLives(player.lives)
 			player.alive = true
 		end, 3000, false)
 
 	end
 end
 
+function eventPlayerLeft(name)
+	if Player.players[name] then
+		Player.players[name].lives = 1
+		eventPlayerDied(name)
+		Player.players[name] = nil
+		Player.playerCount = Player.playerCount - 1
+	end
+end
 
 --==[[ main ]]==--
 
@@ -337,7 +362,6 @@ local shuffleMaps = function(maps)
 end
 
 newRound = function()
-    print("got in here")
     if not initialized then
         initialized = true
         Timer("changeItem", function()
@@ -353,12 +377,12 @@ newRound = function()
     suddenDeath = false
     currentMapIndex = next(rotation, currentMapIndex)
     
+    tfm.exec.newGame(rotation[currentMapIndex])
+    tfm.exec.setGameTime(93, true)
+    
     Player.alive = {}
     Player.aliveCount = 0
     for name, player in next, Player.players do player:refresh() end
-    
-    tfm.exec.newGame(rotation[currentMapIndex])
-    tfm.exec.setGameTime(93, true)
 
     if currentMapIndex >= #rotation then
         rotation = shuffleMaps(maps)

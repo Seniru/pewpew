@@ -13,7 +13,6 @@ local shuffleMaps = function(maps)
 end
 
 newRound = function()
-    print("got in here")
     if not initialized then
         initialized = true
         Timer("changeItem", function()
@@ -29,12 +28,12 @@ newRound = function()
     suddenDeath = false
     currentMapIndex = next(rotation, currentMapIndex)
     
+    tfm.exec.newGame(rotation[currentMapIndex])
+    tfm.exec.setGameTime(93, true)
+    
     Player.alive = {}
     Player.aliveCount = 0
     for name, player in next, Player.players do player:refresh() end
-    
-    tfm.exec.newGame(rotation[currentMapIndex])
-    tfm.exec.setGameTime(93, true)
 
     if currentMapIndex >= #rotation then
         rotation = shuffleMaps(maps)

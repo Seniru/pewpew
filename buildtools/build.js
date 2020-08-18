@@ -29,7 +29,8 @@ combine({
             "src/events/eventLoop.lua",
             "src/events/eventKeyboard.lua",
             "src/events/eventNewGame.lua",
-            "src/events/eventPlayerDied.lua"
+            "src/events/eventPlayerDied.lua",
+            "src/events/eventPlayerLeft.lua"
         ]
     },
     main: { files: [ "src/main.lua" ] },

@@ -32,11 +32,12 @@ local items = {
 }
 
 local assets = {
-    banner = "173f1aa1720.png",
-    count1 = "173f211056a.png",
-    count2 = "173f210937b.png",
-    count3 = "173f210089f.png",
-    newRound = "173f2113b5e.png"
+    banner      = "173f1aa1720.png",
+    count1      = "173f211056a.png",
+    count2      = "173f210937b.png",
+    count3      = "173f210089f.png",
+    newRound    = "173f2113b5e.png",
+    heart       = "173f2212052.png"
 }
 
 local initialized, newRoundStarted, suddenDeath = false

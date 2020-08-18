@@ -23,6 +23,7 @@ function Player.new(name)
 	self.lives = 0
 	self.inCooldown = true
 	self.community = tfm.get.room.playerList[name].community
+	self.hearts = {}
 
 	system.bindKeyboard(name, 32, true, true) -- space
 	system.bindKeyboard(name, 0, true, true) -- left / a
@@ -46,6 +47,13 @@ end
 function Player:setLives(lives)
 	self.lives = lives
 	tfm.exec.setPlayerScore(self.name, lives)
+	for _, id in next, self.hearts do tfm.exec.removeImage(id) end
+	self.hearts = {}
+	local heartCount = 0
+	while heartCount < lives do
+		heartCount = heartCount + 1
+		self.hearts[heartCount] = tfm.exec.addImage(assets.heart, "$" .. self.name, -45 + heartCount * 15, -45)
+	end
 end
 
 function Player:shoot(x, y)
