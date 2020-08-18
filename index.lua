@@ -34,12 +34,42 @@ local items = {
 }
 
 local assets = {
-    banner      = "173f1aa1720.png",
-    count1      = "173f211056a.png",
-    count2      = "173f210937b.png",
-    count3      = "173f210089f.png",
-    newRound    = "173f2113b5e.png",
-    heart       = "173f2212052.png"
+    banner = "173f1aa1720.png",
+    count1 = "173f211056a.png",
+    count2 = "173f210937b.png",
+    count3 = "173f210089f.png",
+    newRound = "173f2113b5e.png",
+    heart = "173f2212052.png",
+    items = {
+        [1] = "172514f2882.png",
+        [2] = "172514f2882.png",
+        [3] = "172514f2882.png",
+        [4] = "172514f2882.png",
+        [6] = "172514f110f.png",
+        [10] = "172514f2882.png",
+        [17] = "173f5c17582.png", -- cannon
+        [23] = "172514f2882.png",
+        [24] = "172514f2882.png",
+        [28] = "172514f2882.png",
+        [32] = "172514f2882.png",
+        [34] = "172514f2882.png",
+        [35] = "172514f2882.png",
+        [39] = "172514f2882.png",
+        [40] = "172514f2882.png",
+        [45] = "172514f2882.png",
+        [46] = "172514f2882.png",
+        [54] = "172514f2882.png",
+        [57] = "172514f2882.png",
+        [59] = "172514f2882.png",
+        [60] = "172514f2882.png",
+        [62] = "172514f2882.png",
+        [65] = "172514f2882.png",
+        [90] = "172514f2882.png"
+    }
+}
+
+local closeSequence = {
+    [1] = {}
 }
 
 local initialized, newRoundStarted, suddenDeath = false
@@ -362,17 +392,7 @@ local shuffleMaps = function(maps)
 end
 
 newRound = function()
-    if not initialized then
-        initialized = true
-        Timer("changeItem", function()
-            if math.random(1, 3) == 3 then
-                currentItem = 17 -- cannon
-            else
-                currentItem = items[math.random(1, #items)]
-            end
-        end, 10000, true)
-    end    
-        
+    
     newRoundStarted = false
     suddenDeath = false
     currentMapIndex = next(rotation, currentMapIndex)
@@ -383,11 +403,26 @@ newRound = function()
     Player.alive = {}
     Player.aliveCount = 0
     for name, player in next, Player.players do player:refresh() end
-
+    
     if currentMapIndex >= #rotation then
         rotation = shuffleMaps(maps)
         currentMapIndex = 1
     end
+
+    if not initialized then
+        initialized = true
+        closeSequence[1].images = { tfm.exec.addImage(assets.items[currentItem],":1", 630, 210) }
+        Timer("changeItem", function()
+            if math.random(1, 3) == 3 then
+                currentItem = 17 -- cannon
+            else
+                currentItem = items[math.random(1, #items)]
+            end
+            tfm.exec.removeImage(closeSequence[1].images[1])
+            closeSequence[1].images = { tfm.exec.addImage(assets.items[currentItem], ":1", 630, 210) }    
+        end, 10000, true)
+    end
+
 end
 
 getPos = function(item, stance)

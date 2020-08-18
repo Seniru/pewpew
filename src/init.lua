@@ -32,12 +32,42 @@ local items = {
 }
 
 local assets = {
-    banner      = "173f1aa1720.png",
-    count1      = "173f211056a.png",
-    count2      = "173f210937b.png",
-    count3      = "173f210089f.png",
-    newRound    = "173f2113b5e.png",
-    heart       = "173f2212052.png"
+    banner = "173f1aa1720.png",
+    count1 = "173f211056a.png",
+    count2 = "173f210937b.png",
+    count3 = "173f210089f.png",
+    newRound = "173f2113b5e.png",
+    heart = "173f2212052.png",
+    items = {
+        [1] = "172514f2882.png",
+        [2] = "172514f2882.png",
+        [3] = "172514f2882.png",
+        [4] = "172514f2882.png",
+        [6] = "172514f110f.png",
+        [10] = "172514f2882.png",
+        [17] = "173f5c17582.png", -- cannon
+        [23] = "172514f2882.png",
+        [24] = "172514f2882.png",
+        [28] = "172514f2882.png",
+        [32] = "172514f2882.png",
+        [34] = "172514f2882.png",
+        [35] = "172514f2882.png",
+        [39] = "172514f2882.png",
+        [40] = "172514f2882.png",
+        [45] = "172514f2882.png",
+        [46] = "172514f2882.png",
+        [54] = "172514f2882.png",
+        [57] = "172514f2882.png",
+        [59] = "172514f2882.png",
+        [60] = "172514f2882.png",
+        [62] = "172514f2882.png",
+        [65] = "172514f2882.png",
+        [90] = "172514f2882.png"
+    }
+}
+
+local closeSequence = {
+    [1] = {}
 }
 
 local initialized, newRoundStarted, suddenDeath = false
