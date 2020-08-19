@@ -13,13 +13,18 @@ function eventPlayerDied(name)
 		
 		Player.alive[name] = nil
 		tfm.exec.chatMessage(translate("LOST_ALL", player.community), name)
+		player.rounds = player.rounds + 1
 		Player.aliveCount = Player.aliveCount - 1
 		
 		if Player.aliveCount == 1 then
 			local winner = next(Player.alive)
+			local winnerPlayer = Player.players[winner]
 			tfm.exec.chatMessage(translate("SOLE", tfm.get.room.community, nil, {player = winner}))
 			tfm.exec.giveCheese(winner)
-			tfm.exec.playerVictory(winner)					
+			tfm.exec.playerVictory(winner)
+			winnerPlayer.rounds = winnerPlayer.rounds + 1
+			winnerPlayer.survived = winnerPlayer.survived + 1
+			winnerPlayer.won = winnerPlayer.won + 1				
 			Timer("newRound", newRound, 3 * 1000)
 		elseif Player.aliveCount == 0  then
 			Timer("newRound", newRound, 3 * 1000)

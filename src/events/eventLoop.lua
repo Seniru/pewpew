@@ -14,7 +14,9 @@ function eventLoop(tc, tr)
 			local aliveCount = Player.aliveCount
 			if aliveCount > 1 then
 				local winnerString = ""
-				for name in next, Player.alive do
+				for name, player in next, Player.alive do
+					player.rounds = player.rounds + 1
+					player.survived = player.survived + 1
 					if aliveCount == 1 then
 						winnerString = winnerString:sub(1, -3) .. " and " .. name
 						break

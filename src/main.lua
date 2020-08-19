@@ -23,7 +23,11 @@ newRound = function()
     
     Player.alive = {}
     Player.aliveCount = 0
-    for name, player in next, Player.players do player:refresh() end
+
+    for name, player in next, Player.players do
+        player:savePlayerData()
+        player:refresh()
+    end
     
     if currentMapIndex >= #rotation then
         rotation = shuffleMaps(maps)

@@ -40,7 +40,7 @@ local assets = {
     heart = "173f2212052.png",
     items = {
         [1] = "172514f2882.png",
-        [2] = "172514f2882.png",
+        [2] = "174068e3bca.png", -- large box
         [3] = "172514f2882.png",
         [4] = "172514f2882.png",
         [6] = "172514f110f.png",
@@ -70,5 +70,23 @@ local closeSequence = {
     [1] = {}
 }
 
+local dHandler = DataHandler.new("pew", {
+    rounds = {
+        index = 1,
+        type = "number",
+        default = 0
+    },
+    survived = {
+        index = 2,
+        type = "number",
+        default = 0
+    },
+    won = {
+        index = 3,
+        type = "number",
+        default = 0
+    }
+})
+
 local initialized, newRoundStarted, suddenDeath = false
-local currentItem = 17 -- cannon
+local currentItem = 2 -- cannon
