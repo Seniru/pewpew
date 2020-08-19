@@ -36,7 +36,7 @@ newRound = function()
 
     if not initialized then
         initialized = true
-        closeSequence[1].images = { tfm.exec.addImage(assets.items[currentItem],":1", 630, 210) }
+        closeSequence[1].images = { tfm.exec.addImage(assets.items[currentItem],":1", 740, 330) }
         Timer("changeItem", function()
             if math.random(1, 3) == 3 then
                 currentItem = 17 -- cannon
@@ -44,7 +44,7 @@ newRound = function()
                 currentItem = items[math.random(1, #items)]
             end
             tfm.exec.removeImage(closeSequence[1].images[1])
-            closeSequence[1].images = { tfm.exec.addImage(assets.items[currentItem], ":1", 630, 210) }    
+            closeSequence[1].images = { tfm.exec.addImage(assets.items[currentItem], ":1", 740, 330) }    
         end, 10000, true)
     end
 

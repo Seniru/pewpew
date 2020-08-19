@@ -81,30 +81,30 @@ local assets = {
     newRound = "173f2113b5e.png",
     heart = "173f2212052.png",
     items = {
-        [1] = "172514f2882.png",
+        [1] = "17406985997.png", -- small box
         [2] = "174068e3bca.png", -- large box
-        [3] = "172514f2882.png",
-        [4] = "172514f2882.png",
-        [6] = "172514f110f.png",
-        [10] = "172514f2882.png",
-        [17] = "173f5c17582.png", -- cannon
-        [23] = "172514f2882.png",
-        [24] = "172514f2882.png",
-        [28] = "172514f2882.png",
-        [32] = "172514f2882.png",
-        [34] = "172514f2882.png",
-        [35] = "172514f2882.png",
-        [39] = "172514f2882.png",
-        [40] = "172514f2882.png",
-        [45] = "172514f2882.png",
-        [46] = "172514f2882.png",
-        [54] = "172514f2882.png",
-        [57] = "172514f2882.png",
-        [59] = "172514f2882.png",
-        [60] = "172514f2882.png",
-        [62] = "172514f2882.png",
-        [65] = "172514f2882.png",
-        [90] = "172514f2882.png"
+        [3] = "174069a972e.png", -- small plank
+        [4] = "174069c5a7a.png", -- large plank
+        [6] = "174069d7a29.png", -- ball
+        [10] = "174069e766a.png", -- anvil
+        [17] = "17406bf2f70.png", -- cannon
+        [23] = "17406bf6ffc.png", -- bomb
+        [24] = "17406a23cd0.png", -- spirit
+        [28] = "17406a41815.png", -- blue balloon
+        [32] = "17406a58032.png", -- rune
+        [34] = "17406a795f4.png", -- snowball
+        [35] = "17406a914a3.png", -- cupid arrow
+        [39] = "17406aa2daf.png", -- apple
+        [40] = "17406ac8ab7.png", -- sheep
+        [45] = "17406aefb88.png", -- small ice plank
+        [46] = "17406b00239.png", -- small choco plank
+        [54] = "17406b15725.png", -- ice cube
+        [57] = "17406b22bd6.png", -- cloud
+        [59] = "17406b32d1f.png", -- bubble
+        [60] = "17406b59bd6.png", -- tiny plank
+        [62] = "17406b772b7.png", -- stable rune
+        [65] = "17406b8c9f2.png", -- puffer fish
+        [90] = "17406b9eda9.png" -- tombstone
     }
 }
 
@@ -131,7 +131,7 @@ local dHandler = DataHandler.new("pew", {
 })
 
 local initialized, newRoundStarted, suddenDeath = false
-local currentItem = 2 -- cannon
+local currentItem = 17 -- cannon
 
 
 --==[[ translations ]]==--
@@ -477,7 +477,7 @@ newRound = function()
 
     if not initialized then
         initialized = true
-        closeSequence[1].images = { tfm.exec.addImage(assets.items[currentItem],":1", 630, 210) }
+        closeSequence[1].images = { tfm.exec.addImage(assets.items[currentItem],":1", 740, 330) }
         Timer("changeItem", function()
             if math.random(1, 3) == 3 then
                 currentItem = 17 -- cannon
@@ -485,7 +485,7 @@ newRound = function()
                 currentItem = items[math.random(1, #items)]
             end
             tfm.exec.removeImage(closeSequence[1].images[1])
-            closeSequence[1].images = { tfm.exec.addImage(assets.items[currentItem], ":1", 630, 210) }    
+            closeSequence[1].images = { tfm.exec.addImage(assets.items[currentItem], ":1", 740, 330) }    
         end, 10000, true)
     end
 
