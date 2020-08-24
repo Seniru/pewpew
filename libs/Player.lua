@@ -29,6 +29,7 @@ function Player.new(name)
 	self.rounds = 0
 	self.survived = 0
 	self.won = 0
+	self.score = 0
 
 	system.bindKeyboard(name, 32, true, true) -- space
 	system.bindKeyboard(name, 0, true, true) -- left / a
@@ -88,10 +89,11 @@ function Player:shoot(x, y)
 end
 
 function Player:savePlayerData()
+	-- TODO: Uncomment the line below
+	-- if tfm.get.room.uniquePlayers < 3 then return end
 	local name = self.name
     dHandler:set(name, "rounds", self.rounds)
     dHandler:set(name, "survived", self.survived)
 	dHandler:set(name, "won", self.won)
-	print(dHandler:dumpPlayer(name))
     system.savePlayerData(name, "v2" .. dHandler:dumpPlayer(name))
 end

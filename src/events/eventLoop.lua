@@ -17,6 +17,7 @@ function eventLoop(tc, tr)
 				for name, player in next, Player.alive do
 					player.rounds = player.rounds + 1
 					player.survived = player.survived + 1
+					player:savePlayerData()
 					if aliveCount == 1 then
 						winnerString = winnerString:sub(1, -3) .. " and " .. name
 						break

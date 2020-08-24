@@ -32,10 +32,19 @@ combine({
             "src/events/eventNewGame.lua",
             "src/events/eventPlayerDied.lua",
             "src/events/eventPlayerLeft.lua",
-            "src/events/eventPlayerDataLoaded.lua"
+            "src/events/eventPlayerDataLoaded.lua",
+            "src/events/eventFileLoaded.lua",
+            "src/events/eventFileSaved.lua",
+            "src/events/eventChatCommand.lua",
+            "src/events/eventTextAreaCallback.lua"
         ]
     },
-    main: { files: [ "src/main.lua" ] },
+    main: { 
+        files: [
+            "src/leaderboard.lua",
+            "src/main.lua"
+        ]
+    },
 
 }).then((res) => {
     console.log("\x1b[1m\x1b[32m%s\x1b[0m", "Build completed!")

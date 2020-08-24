@@ -11,7 +11,4 @@ function eventPlayerDataLoaded(name, data)
 	Player.players[name].survived = dHandler:get(name, "survived")
 	Player.players[name].won = dHandler:get(name, "won")
 
-	print(table.tostring(Player.players[name]))
-	print(dHandler:dumpPlayer(name))
-
 end

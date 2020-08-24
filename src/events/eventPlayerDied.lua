@@ -15,6 +15,7 @@ function eventPlayerDied(name)
 		tfm.exec.chatMessage(translate("LOST_ALL", player.community), name)
 		player.rounds = player.rounds + 1
 		Player.aliveCount = Player.aliveCount - 1
+		player:savePlayerData()
 		
 		if Player.aliveCount == 1 then
 			local winner = next(Player.alive)
@@ -24,7 +25,8 @@ function eventPlayerDied(name)
 			tfm.exec.playerVictory(winner)
 			winnerPlayer.rounds = winnerPlayer.rounds + 1
 			winnerPlayer.survived = winnerPlayer.survived + 1
-			winnerPlayer.won = winnerPlayer.won + 1				
+			winnerPlayer.won = winnerPlayer.won + 1
+			winnerPlayer:savePlayerData()	
 			Timer("newRound", newRound, 3 * 1000)
 		elseif Player.aliveCount == 0  then
 			Timer("newRound", newRound, 3 * 1000)

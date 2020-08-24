@@ -1,3 +1,27 @@
+cmds = {
+    ["p"] = function(args, msg, author)
+        local player = Player.players[args[1] or author] or Player.players[author]
+        ui.addTextArea(1,
+            "<a href='event:close'>X</a><br>Profile of " .. player.name .. "\nRounds: " .. player.rounds .. " \nSurvived: " .. player.survived .. " \nWon: " .. player.won,
+            author, 300, 150, 100, 100, nil, nil, 1, true
+        )
+    end,
+    ["lboard"] = function(args, msg, author) -- temporary commands
+        local leaders = {}
+        for name, player in next, Player.players do leaders[#leaders + 1] = player end
+        table.sort(leaders, function(p1, p2)
+            return leaderboard.scorePlayer(p1) > leaderboard.scorePlayer(p2)
+        end)
+        ui.addTextArea(1,
+            "<a href='event:close'>X</a><br>" .. table.tostring(leaders),
+            author, 300, 150, 300, 300, nil, nil, 1, true
+        )
+    end,
+    ["glboard"] = function(args, msg, author) -- temporary commands
+        print(table.tostring(leaderboard.leaders))
+    end
+}
+
 local rotation, currentMapIndex = {}
 
 local shuffleMaps = function(maps)
@@ -23,11 +47,8 @@ newRound = function()
     
     Player.alive = {}
     Player.aliveCount = 0
-
-    for name, player in next, Player.players do
-        player:savePlayerData()
-        player:refresh()
-    end
+    
+    for name, player in next, Player.players do player:refresh() end
     
     if currentMapIndex >= #rotation then
         rotation = shuffleMaps(maps)
@@ -73,7 +94,9 @@ end
 do
     rotation = shuffleMaps(maps)
     currentMapIndex = 1
+    leaderboard.load()
     Timer("newRound", newRound, 6 * 1000)
+    Timer("leaderboard", leaderboard.load, 2 * 60 * 1000, true)
     tfm.exec.newGame(rotation[currentMapIndex])
     tfm.exec.setGameTime(8)
     for name in next, tfm.get.room.playerList do

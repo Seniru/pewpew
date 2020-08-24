@@ -90,3 +90,5 @@ local dHandler = DataHandler.new("pew", {
 
 local initialized, newRoundStarted, suddenDeath = false
 local currentItem = 17 -- cannon
+
+local leaderboard
