@@ -107,14 +107,14 @@ do
     end
 
     function Image:show(target)
-        if target == nil then error("Target cannot be nil") end
+		if target == nil then error("Target cannot be nil") end
+		if self.instances[target] then return self end
         self.instances[target] = tfm.exec.addImage(self.imageId, self.target, self.x, self.y, target)
         return self
     end
 
     function Image:hide(target)
 		if target == nil then error("Target cannot be nil") end
-		print("target " .. tostring(self.instances[target]))
         tfm.exec.removeImage(self.instances[target])
         self.instances[target] = nil
         return self
