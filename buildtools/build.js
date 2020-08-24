@@ -7,6 +7,7 @@ combine({
     libs: {
         files: [
             "libs/utils.lua",
+            "libs/Windows.lua",
             "libs/timers4tfm.lua",
             "libs/DataHandler.lua",
         ]

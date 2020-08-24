@@ -63,6 +63,15 @@ local assets = {
         [62] = "17406b772b7.png", -- stable rune
         [65] = "17406b8c9f2.png", -- puffer fish
         [90] = "17406b9eda9.png" -- tombstone
+    },
+    widgets = {
+        borders = {
+            topLeft = "155cbe99c72.png",
+            topRight = "155cbea943a.png",
+            bottomLeft = "155cbe97a3f.png",
+            bottomRight = "155cbe9bc9b.png"
+        },
+        closeButton = "171e178660d.png"
     }
 }
 
@@ -87,6 +96,8 @@ local dHandler = DataHandler.new("pew", {
         default = 0
     }
 })
+
+local profileWindow
 
 local initialized, newRoundStarted, suddenDeath = false
 local currentItem = 17 -- cannon

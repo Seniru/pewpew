@@ -1,3 +1,3 @@
 function eventTextAreaCallback(id, name, event)
-	ui.removeTextArea(id)
+	Panel.handleActions(id, name, event)
 end

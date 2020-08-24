@@ -31,6 +31,212 @@ table.tostring = function(tbl, depth)
     return res:sub(1, res:len() - 2) .. "}"
 end
 
+local Panel = {}
+local Image = {}
+
+do
+
+
+    local string_split = function(s, delimiter)
+        result = {}
+        for match in (s .. delimiter):gmatch("(.-)" .. delimiter) do
+            table.insert(result, match)
+        end
+        return result
+    end
+
+    local table_tostring
+
+    table_tostring = function(tbl, depth)
+        local res = "{"
+        local prev = 0
+        for k, v in next, tbl do
+            if type(v) == "table" then
+                if depth == nil or depth > 0 then
+                    res =
+                        res ..
+                        ((type(k) == "number" and prev and prev + 1 == k) and "" or k .. ": ") ..
+                            table_tostring(v, depth and depth - 1 or nil) .. ", "
+                else
+                    res = res .. k .. ":  {...}, "
+                end
+            else
+                res = res .. ((type(k) == "number" and prev and prev + 1 == k) and "" or k .. ": ") .. tostring(v) .. ", "
+            end
+            prev = type(k) == "number" and k or nil
+        end
+        return res:sub(1, res:len() - 2) .. "}"
+    end
+
+    local table_copy = function(tbl)
+        local res = {}
+        for k, v in next, tbl do res[k] = v end
+        return res
+    end
+
+
+
+    -- [[ class Image ]] --
+
+    Image.__index = Image
+    Image.__tostring = function(self) return table_tostring(self) end
+
+    Image.images = {}
+
+    setmetatable(Image, {
+        __call = function(cls, ...)
+            return cls.new(...)
+        end
+    })
+
+    function Image.new(imageId, target, x, y, parent)
+
+        local self = setmetatable({
+            id = #Image.images + 1,
+            imageId = imageId,
+            target = target,
+            x = x,
+            y = y,
+            instances = {},
+        }, Image)
+
+        Image.images[self.id] = self
+
+        return self
+
+    end
+
+    function Image:show(target)
+        if target == nil then error("Target cannot be nil") end
+        self.instances[target] = tfm.exec.addImage(self.imageId, self.target, self.x, self.y, target)
+        return self
+    end
+
+    function Image:hide(target)
+		if target == nil then error("Target cannot be nil") end
+		print("target " .. tostring(self.instances[target]))
+        tfm.exec.removeImage(self.instances[target])
+        self.instances[target] = nil
+        return self
+    end
+
+    -- [[ class Panel ]] --
+
+    Panel.__index = Panel
+    Panel.__tostring = function(self) return table_tostring(self) end
+
+    Panel.panels = {}
+
+    setmetatable(Panel, {
+        __call = function (cls, ...)
+            return cls.new(...)
+        end,
+    })
+
+    function Panel.new(id, text, x, y, w, h, background, border, opacity, fixed, hidden)
+    
+        local self = setmetatable({
+            id = id,
+            text = text,
+            x = x,
+            y = y,
+            w = w,
+            h = h,
+            background = background,
+            border = border,
+            opacity = opacity,
+            fixed = fixed,
+            hidden = hidden,
+            isCloseButton = false,
+            closeTarget = nil,
+            parent = nil,
+            onhide = nil,
+            onclick = nil,
+            children = {},
+        }, Panel)
+
+        Panel.panels[id] = self
+
+        return self
+
+    end
+
+    function Panel.handleActions(id, name, event)
+        local panelId = id - 10000
+        local panel = Panel.panels[panelId]
+        if not panel then return print("no panel") end
+        if panel.isCloseButton then
+            print("is close button")
+            if not panel.closeTarget then return print("no close target") end
+            panel.closeTarget:hide(name)
+        else
+            if panel.onhide then panel.onhide(id, name, event) end
+        end
+    end
+
+    function Panel:show(target)
+        ui.addTextArea(10000 + self.id, self.text, target, self.x, self.y, self.w, self.h, self.background, self.border, self.opacity, self.opacity)
+        self.visible = true
+
+        for name in next, (target and { [target] = true } or tfm.get.room.playerList) do
+            for id, child in next, self.children do
+                child:show(name)
+            end
+        end
+
+        return self
+
+    end
+
+    function Panel:update(text, target)
+        ui.updateTextArea(10000 + self.id, text, target)
+        return self
+    end
+
+    function Panel:hide(target)
+        
+        ui.removeTextArea(10000 + self.id, target)
+
+        for name in next, (target and { [target] = true } or tfm.get.room.playerList) do
+            for id, panel in next, self.children do
+				panel:hide(name)
+				print(name)
+            end
+        end
+        
+        if self.onclose then self.onclose(target) end
+        return self
+
+    end
+
+    function Panel:addPanel(panel)
+        self.children[panel.id] = panel
+        panel.parent = self.id
+        return self
+    end
+
+    function Panel:addImage(image)
+        self.children["i_" .. image.id] = image
+        return self
+    end
+
+    function Panel:setActionListener(fn)
+        self.onclick = fn
+        return self
+    end
+
+    function Panel:setCloseButton(id, callback)
+        local button = Panel.panels[id]
+        if not button then return self end
+        self.closeTarget = button
+        self.onclose = callback
+        button.isCloseButton = true
+        button.closeTarget = self
+        return self
+    end
+
+end
+
 -- [[Timers4TFM]] --
 local a={}a.__index=a;a._timers={}setmetatable(a,{__call=function(b,...)return b.new(...)end})function a.process()local c=os.time()local d={}for e,f in next,a._timers do if f.isAlive and f.mature<=c then f:call()if f.loop then f:reset()else f:kill()d[#d+1]=e end end end;for e,f in next,d do a._timers[f]=nil end end;function a.new(g,h,i,j,...)local self=setmetatable({},a)self.id=g;self.callback=h;self.timeout=i;self.isAlive=true;self.mature=os.time()+i;self.loop=j;self.args={...}a._timers[g]=self;return self end;function a:setCallback(k)self.callback=k end;function a:addTime(c)self.mature=self.mature+c end;function a:setLoop(j)self.loop=j end;function a:setArgs(...)self.args={...}end;function a:call()self.callback(table.unpack(self.args))end;function a:kill()self.isAlive=false end;function a:reset()self.mature=os.time()+self.timeout end;Timer=a
 
@@ -105,6 +311,15 @@ local assets = {
         [62] = "17406b772b7.png", -- stable rune
         [65] = "17406b8c9f2.png", -- puffer fish
         [90] = "17406b9eda9.png" -- tombstone
+    },
+    widgets = {
+        borders = {
+            topLeft = "155cbe99c72.png",
+            topRight = "155cbea943a.png",
+            bottomLeft = "155cbe97a3f.png",
+            bottomRight = "155cbe9bc9b.png"
+        },
+        closeButton = "171e178660d.png"
     }
 }
 
@@ -129,6 +344,8 @@ local dHandler = DataHandler.new("pew", {
         default = 0
     }
 })
+
+local profileWindow
 
 local initialized, newRoundStarted, suddenDeath = false
 local currentItem = 17 -- cannon
@@ -473,7 +690,7 @@ function eventChatCommand(name, cmd)
 end
 
 function eventTextAreaCallback(id, name, event)
-	ui.removeTextArea(id)
+	Panel.handleActions(id, name, event)
 end
 
 
@@ -547,10 +764,7 @@ leaderboard.leaders, leaderboard.cached = leaderboard.parseLeaderboard(leaderboa
 cmds = {
     ["p"] = function(args, msg, author)
         local player = Player.players[args[1] or author] or Player.players[author]
-        ui.addTextArea(1,
-            "<a href='event:close'>X</a><br>Profile of " .. player.name .. "\nRounds: " .. player.rounds .. " \nSurvived: " .. player.survived .. " \nWon: " .. player.won,
-            author, 300, 150, 100, 100, nil, nil, 1, true
-        )
+        displayProfile(player, author)
     end,
     ["lboard"] = function(args, msg, author) -- temporary commands
         local leaders = {}
@@ -637,17 +851,62 @@ getRot = function(item, stance)
 	end
 end
 
+createPrettyUI = function(id, x, y, w, h, fixed)
+    
+    return Panel(id * 100 + 10, "", x - 4, y - 4, w + 8, h + 8, 0x7f492d, 0x7f492d, 1, true)
+        :addPanel(
+            Panel(id * 100 + 20, "", x, y, w, h, 0x152d30, 0x0f1213, 1, true)
+        )
+        :addPanel(
+            Panel(id * 100 + 30, "<a href='event:close'>\n\n\n\n\n\n</a>", x + w + 18, y - 10, 15, 20, nil, nil, 0, true)
+                :addImage(Image(assets.widgets.closeButton, ":0", x + w + 15, y - 10))
+        )
+        :addImage(Image(assets.widgets.borders.topLeft, "&1",     x - 10,     y - 10))
+        :addImage(Image(assets.widgets.borders.topRight, "&1",    x + w - 18, y - 10))
+        :addImage(Image(assets.widgets.borders.bottomLeft, "&1",  x - 10,     y + h - 18))
+        :addImage(Image(assets.widgets.borders.bottomRight, "&1", x + w - 18, y + h - 18))
+        :setCloseButton(id * 100 + 30)
+        
+end
+
+displayProfile = function(player, target)
+    profileWindow:show(target)
+    profileWindow.children[1 * 100 + 20]:update(player.name, target)
+end
+
 do
+
     rotation = shuffleMaps(maps)
     currentMapIndex = 1
+
     leaderboard.load()
     Timer("newRound", newRound, 6 * 1000)
     Timer("leaderboard", leaderboard.load, 2 * 60 * 1000, true)
+
     tfm.exec.newGame(rotation[currentMapIndex])
     tfm.exec.setGameTime(8)
+
     for name in next, tfm.get.room.playerList do
         eventNewPlayer(name)
     end
+
+    --[[profileWindow = Panel(100, "", 300, 150, 300, 200, 0x7f492d, 0x7f492d, 1, true)
+        :addPanel(
+            Panel(110, "", 304, 154, 292, 192, 0x152d30, 0x0f1213, 1, true)
+        )
+        :addPanel(
+            Panel(120, "<a href='event:close'>\n\n\n\n\n\n</a>", 615, 145, 10, 15, nil, nil, 0, true)
+                :addImage(Image(assets.widgets.closeButton, ":0", 610, 145))
+        )
+        :addImage(Image(assets.widgets.borders.topLeft, "&1", 293, 142))
+        :addImage(Image(assets.widgets.borders.topRight, "&1", 580, 142))
+        :addImage(Image(assets.widgets.borders.bottomLeft, "&1", 293, 330))
+        :addImage(Image(assets.widgets.borders.bottomRight, "&1", 580, 330))
+        :setCloseButton(120)]]
+    profileWindow = createPrettyUI(1, 300, 150, 300, 200, true)
+
+
+
 end
 
 

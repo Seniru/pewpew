@@ -1,10 +1,7 @@
 cmds = {
     ["p"] = function(args, msg, author)
         local player = Player.players[args[1] or author] or Player.players[author]
-        ui.addTextArea(1,
-            "<a href='event:close'>X</a><br>Profile of " .. player.name .. "\nRounds: " .. player.rounds .. " \nSurvived: " .. player.survived .. " \nWon: " .. player.won,
-            author, 300, 150, 100, 100, nil, nil, 1, true
-        )
+        displayProfile(player, author)
     end,
     ["lboard"] = function(args, msg, author) -- temporary commands
         local leaders = {}
@@ -91,16 +88,61 @@ getRot = function(item, stance)
 	end
 end
 
+createPrettyUI = function(id, x, y, w, h, fixed)
+    
+    return Panel(id * 100 + 10, "", x - 4, y - 4, w + 8, h + 8, 0x7f492d, 0x7f492d, 1, true)
+        :addPanel(
+            Panel(id * 100 + 20, "", x, y, w, h, 0x152d30, 0x0f1213, 1, true)
+        )
+        :addPanel(
+            Panel(id * 100 + 30, "<a href='event:close'>\n\n\n\n\n\n</a>", x + w + 18, y - 10, 15, 20, nil, nil, 0, true)
+                :addImage(Image(assets.widgets.closeButton, ":0", x + w + 15, y - 10))
+        )
+        :addImage(Image(assets.widgets.borders.topLeft, "&1",     x - 10,     y - 10))
+        :addImage(Image(assets.widgets.borders.topRight, "&1",    x + w - 18, y - 10))
+        :addImage(Image(assets.widgets.borders.bottomLeft, "&1",  x - 10,     y + h - 18))
+        :addImage(Image(assets.widgets.borders.bottomRight, "&1", x + w - 18, y + h - 18))
+        :setCloseButton(id * 100 + 30)
+        
+end
+
+displayProfile = function(player, target)
+    profileWindow:show(target)
+    profileWindow.children[1 * 100 + 20]:update(player.name, target)
+end
+
 do
+
     rotation = shuffleMaps(maps)
     currentMapIndex = 1
+
     leaderboard.load()
     Timer("newRound", newRound, 6 * 1000)
     Timer("leaderboard", leaderboard.load, 2 * 60 * 1000, true)
+
     tfm.exec.newGame(rotation[currentMapIndex])
     tfm.exec.setGameTime(8)
+
     for name in next, tfm.get.room.playerList do
         eventNewPlayer(name)
     end
+
+    --[[profileWindow = Panel(100, "", 300, 150, 300, 200, 0x7f492d, 0x7f492d, 1, true)
+        :addPanel(
+            Panel(110, "", 304, 154, 292, 192, 0x152d30, 0x0f1213, 1, true)
+        )
+        :addPanel(
+            Panel(120, "<a href='event:close'>\n\n\n\n\n\n</a>", 615, 145, 10, 15, nil, nil, 0, true)
+                :addImage(Image(assets.widgets.closeButton, ":0", 610, 145))
+        )
+        :addImage(Image(assets.widgets.borders.topLeft, "&1", 293, 142))
+        :addImage(Image(assets.widgets.borders.topRight, "&1", 580, 142))
+        :addImage(Image(assets.widgets.borders.bottomLeft, "&1", 293, 330))
+        :addImage(Image(assets.widgets.borders.bottomRight, "&1", 580, 330))
+        :setCloseButton(120)]]
+    profileWindow = createPrettyUI(1, 300, 150, 300, 200, true)
+
+
+
 end
 
