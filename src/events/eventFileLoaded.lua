@@ -4,11 +4,10 @@ function eventFileLoaded(id, data)
 		print("[STATS] Leaderboard data loaded!")
 		if not (leaderboard.leaderboardData == data) then
 			leaderboard.leaderboardData = data
-			leaderboard.leaders, leaderboard.cached = leaderboard.parseLeaderboard(data)
+			leaderboard.leaders = leaderboard.parseLeaderboard(data)
 		end
-		--print(table.tostring(leaderboard.leaders))
 		print("[STATS] Leaderboard prepared!")
 		for name, player in next, Player.players do leaderboard.addPlayer(player) end
-		if leaderboard.needUpdate then leaderboard.save() end
+		leaderboard.save(leaderboard.leaders)
 	end
 end

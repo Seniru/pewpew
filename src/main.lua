@@ -15,7 +15,7 @@ cmds = {
         )
     end,
     ["glboard"] = function(args, msg, author) -- temporary commands
-        print(table.tostring(leaderboard.leaders))
+        print(leaderboard.prepare(leaderboard.leaders))
     end
 }
 
@@ -133,10 +133,10 @@ do
 
     rotation = shuffleMaps(maps)
     currentMapIndex = 1
-    -- TODO: uncomment the leaderboard handling codes
-    -- leaderboard.load()
+
+    leaderboard.load()
     Timer("newRound", newRound, 6 * 1000)
-    -- Timer("leaderboard", leaderboard.load, 2 * 60 * 1000, true)
+    Timer("leaderboard", leaderboard.load, 2 * 60 * 1000, true)
 
     tfm.exec.newGame(rotation[currentMapIndex])
     tfm.exec.setGameTime(8)

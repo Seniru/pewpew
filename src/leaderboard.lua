@@ -7,14 +7,14 @@ leaderboard.needUpdate = false
 leaderboard.leaderboardData = leaderboard.leaderboardData or leaderboard.DUMMY_DATA
 
 leaderboard.parseLeaderboard = function(data)
-	local res, cachedIndexes = {}, {}
+	local res = {}
   	for i, entry in next, string.split(data, "|") do
-    	local fields = string.split(entry, ",")
-		res[#res + 1] = { name = fields[1], rounds = tonumber(fields[2]), survived = tonumber(fields[3]), won = tonumber(fields[4]), commu = fields[5] }
-		res[#res].score = leaderboard.scorePlayer(res[#res])
-		cachedIndexes[fields[1]] = #res
+		local fields = string.split(entry, ",")
+		local name = fields[1]
+		res[name] = { name = name, rounds = tonumber(fields[2]), survived = tonumber(fields[3]), won = tonumber(fields[4]), commu = fields[5] }
+		res[name].score = leaderboard.scorePlayer(res[name])
   	end
-  	return res, cachedIndexes
+  	return res
 end
 
 leaderboard.dumpLeaderboard = function(lboard)
@@ -30,8 +30,10 @@ leaderboard.load = function()
 	if started then print("[STATS] Loading leaderboard...") end
 end
 
-leaderboard.save = function()
-	local started = system.saveFile(leaderboard.dumpLeaderboard(leaderboard.leaders), leaderboard.FILE_ID)
+leaderboard.save = function(leaders)
+	local serialised = leaderboard.prepare(leaders)
+	if serialised == leaderboard.leaderboardData then return end
+	local started = system.saveFile(serialised, leaderboard.FILE_ID)
 	if started then print("[STATS] Saving leaderboard...") end
 end
 
@@ -41,24 +43,25 @@ end
 
 leaderboard.addPlayer = function(player)
 	local score = leaderboard.scorePlayer(player)
-	--[[if score < leaderboard.leaders[#leaderboard.leaders].score then return end
-	leaderboard.leaders[#leaderboard.leaders + 1] = { name = player.name, rounds = player.rounds, survived = player.survived, won = player.won, commu = player.community, score = score }
-	]]
-	local cachedIndex = leaderboard.cached[player.name]
-	if cachedIndex then
-		print(player.name .. " is cached")
-		if score == leaderboard.leaders[cachedIndex].score then return print("but no need to add") end
-		leaderboard.leaders[cachedIndex] = { name = player.name, rounds = player.rounds, survived = player.survived, won = player.won, commu = player.community, score = score }
-	elseif score > leaderboard.leaders[#leaderboard.leaders].score then
-		print("player is not cached but can be added")
-		leaderboard.leaders[#leaderboard.leaders] = { name = player.name, rounds = player.rounds, survived = player.survived, won = player.won, commu = player.community, score = score }
-	else return print("lol noob") end
+	leaderboard.leaders[player.name] = { name = player.name, rounds = player.rounds, survived = player.survived, won = player.won, commu = player.community, score = score }
+end
 
-	table.sort(leaderboard.leaders, function(p1, p2)
+leaderboard.prepare = function(leaders)
+	
+	local res, i = {}, 0
+
+	for name, leader in next, leaders do
+		i = i + 1
+		res[i] = leader
+		if i >= 50 then break end
+	end
+
+	table.sort(res, function(p1, p2)
 		return p1.score > p2.score
 	end)
 
-	leaderboard.needUpdate = true
+	return leaderboard.dumpLeaderboard(res)
+
 end
 
-leaderboard.leaders, leaderboard.cached = leaderboard.parseLeaderboard(leaderboard.leaderboardData)
+leaderboard.leaders = leaderboard.parseLeaderboard(leaderboard.leaderboardData)
