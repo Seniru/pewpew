@@ -88,37 +88,55 @@ getRot = function(item, stance)
 	end
 end
 
-createPrettyUI = function(id, x, y, w, h, fixed)
+extractName = function(name)
+    return name:match("^(.+)(#%d+)$")
+end
+
+createPrettyUI = function(id, x, y, w, h, fixed, closeButton)
     
-    return Panel(id * 100 + 10, "", x - 4, y - 4, w + 8, h + 8, 0x7f492d, 0x7f492d, 1, true)
+    local window =  Panel(id * 100 + 10, "", x - 4, y - 4, w + 8, h + 8, 0x7f492d, 0x7f492d, 1, true)
         :addPanel(
             Panel(id * 100 + 20, "", x, y, w, h, 0x152d30, 0x0f1213, 1, true)
-        )
-        :addPanel(
-            Panel(id * 100 + 30, "<a href='event:close'>\n\n\n\n\n\n</a>", x + w + 18, y - 10, 15, 20, nil, nil, 0, true)
-                :addImage(Image(assets.widgets.closeButton, ":0", x + w + 15, y - 10))
         )
         :addImage(Image(assets.widgets.borders.topLeft, "&1",     x - 10,     y - 10))
         :addImage(Image(assets.widgets.borders.topRight, "&1",    x + w - 18, y - 10))
         :addImage(Image(assets.widgets.borders.bottomLeft, "&1",  x - 10,     y + h - 18))
         :addImage(Image(assets.widgets.borders.bottomRight, "&1", x + w - 18, y + h - 18))
-        :setCloseButton(id * 100 + 30)
         
+
+    if closeButton then
+        window
+            :addPanel(
+                Panel(id * 100 + 30, "<a href='event:close'>\n\n\n\n\n\n</a>", x + w + 18, y - 10, 15, 20, nil, nil, 0, true)
+                    :addImage(Image(assets.widgets.closeButton, ":0", x + w + 15, y - 10)
+                )
+            )
+            :setCloseButton(id * 100 + 30)
+    end
+    
+    return window
+
 end
 
 displayProfile = function(player, target)
+    local name, tag = extractName(player.name)
+    if (not name) or (not tag) then return end -- guest players
     profileWindow:show(target)
-    profileWindow.children[1 * 100 + 20]:update(player.name, target)
+    Panel.panels[2 * 100 + 20]:update("<b><font size='20'><V>" .. name .. "</V></font><font size='10'><G>" .. tag, target)
+    Panel.panels[151]:update("<b><BV><font size='14'>" .. player.rounds .. "</font></BV>", target)
+    Panel.panels[152]:update("<b><BV><font size='14'>" .. player.rounds - player.survived .. "</font></BV>", target)
+    Panel.panels[153]:update("<b><BV><font size='14'>" .. player.survived .. "</font></BV>     <font size='10'>(" .. math.floor(player.survived / player.rounds * 100) .."%)</font>", target)
+    Panel.panels[154]:update("<b><BV><font size='14'>" .. player.won .. "</font></BV>     <font size='10'>(" .. math.floor(player.won / player.rounds * 100) .."%)</font>", target)
 end
 
 do
 
     rotation = shuffleMaps(maps)
     currentMapIndex = 1
-
-    leaderboard.load()
+    -- TODO: uncomment the leaderboard handling codes
+    -- leaderboard.load()
     Timer("newRound", newRound, 6 * 1000)
-    Timer("leaderboard", leaderboard.load, 2 * 60 * 1000, true)
+    -- Timer("leaderboard", leaderboard.load, 2 * 60 * 1000, true)
 
     tfm.exec.newGame(rotation[currentMapIndex])
     tfm.exec.setGameTime(8)
@@ -127,20 +145,19 @@ do
         eventNewPlayer(name)
     end
 
-    --[[profileWindow = Panel(100, "", 300, 150, 300, 200, 0x7f492d, 0x7f492d, 1, true)
+    profileWindow = createPrettyUI(1, 200, 100, 400, 200, true, true)
+        :addPanel(createPrettyUI(2, 240, 80, 250, 35, true))
         :addPanel(
-            Panel(110, "", 304, 154, 292, 192, 0x152d30, 0x0f1213, 1, true)
+            Panel(150, "", 220, 140, 360, 100, 0x7f492d, 0x7f492d, 1, true)
+                :addImage(Image(assets.dummy, "&1", 230, 140))
+                :addPanel(Panel(151, "", 290, 150, 120, 50, nil, nil, 0, true))
+                :addImage(Image(assets.dummy, "&1", 400, 140))
+                :addPanel(Panel(152, "", 460, 150, 120, 50, nil, nil, 0, true))
+                :addImage(Image(assets.dummy, "&1", 230, 200))
+                :addPanel(Panel(153, "", 290, 210, 120, 50, nil, nil, 0, true))
+                :addImage(Image(assets.dummy, "&1", 400, 200))
+                :addPanel(Panel(154, "", 460, 210, 120, 50, nil, nil, 0, true))
         )
-        :addPanel(
-            Panel(120, "<a href='event:close'>\n\n\n\n\n\n</a>", 615, 145, 10, 15, nil, nil, 0, true)
-                :addImage(Image(assets.widgets.closeButton, ":0", 610, 145))
-        )
-        :addImage(Image(assets.widgets.borders.topLeft, "&1", 293, 142))
-        :addImage(Image(assets.widgets.borders.topRight, "&1", 580, 142))
-        :addImage(Image(assets.widgets.borders.bottomLeft, "&1", 293, 330))
-        :addImage(Image(assets.widgets.borders.bottomRight, "&1", 580, 330))
-        :setCloseButton(120)]]
-    profileWindow = createPrettyUI(1, 300, 150, 300, 200, true)
 
 
 

@@ -72,7 +72,8 @@ local assets = {
             bottomRight = "155cbe9bc9b.png"
         },
         closeButton = "171e178660d.png"
-    }
+    },
+    dummy = "17404561700.png"
 }
 
 local closeSequence = {
