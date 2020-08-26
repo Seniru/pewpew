@@ -75,7 +75,7 @@ do
 
     function Image:show(target)
 		if target == nil then error("Target cannot be nil") end
-		if self.instances[target] then return self end
+        if self.instances[target] then return self end
         self.instances[target] = tfm.exec.addImage(self.imageId, self.target, self.x, self.y, target)
         return self
     end
@@ -120,6 +120,7 @@ do
             onhide = nil,
             onclick = nil,
             children = {},
+            temporary = {}
         }, Panel)
 
         Panel.panels[id] = self
@@ -131,13 +132,13 @@ do
     function Panel.handleActions(id, name, event)
         local panelId = id - 10000
         local panel = Panel.panels[panelId]
-        if not panel then return print("no panel") end
+        if not panel then return end
         if panel.isCloseButton then
-            print("is close button")
-            if not panel.closeTarget then return print("no close target") end
+            if not panel.closeTarget then return end
             panel.closeTarget:hide(name)
+            if panel.onhide then panel.onhide(panelId, name, event) end
         else
-            if panel.onhide then panel.onhide(id, name, event) end
+            if panel.onclick then panel.onclick(panelId, name, event) end
         end
     end
 
@@ -165,11 +166,20 @@ do
         ui.removeTextArea(10000 + self.id, target)
 
         for name in next, (target and { [target] = true } or tfm.get.room.playerList) do
-            for id, panel in next, self.children do
-				panel:hide(name)
-				print(name)
+            
+            for id, child in next, self.children do
+				child:hide(name)
             end
+
+            if self.temporary[name] then
+                for id, child in next, self.temporary[name] do
+                    child:hide(name)
+                end
+                self.temporary[name] = {}
+            end
+            
         end
+
         
         if self.onclose then self.onclose(target) end
         return self
@@ -185,6 +195,18 @@ do
     function Panel:addImage(image)
         self.children["i_" .. image.id] = image
         return self
+    end
+
+    function Panel:addPanelTemp(panel, target)
+        if not self.temporary[target] then self.temporary[target] = {} end
+        panel:show(target)
+        self.temporary[target][panel.id] = panel
+    end
+
+    function Panel:addImageTemp(image, target)
+        if not self.temporary[target] then self.temporary[target] = {} end
+        image:show(target)
+        self.temporary[target]["i_" .. image.id] = image
     end
 
     function Panel:setActionListener(fn)

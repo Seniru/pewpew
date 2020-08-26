@@ -4,18 +4,10 @@ cmds = {
         displayProfile(player, author)
     end,
     ["lboard"] = function(args, msg, author) -- temporary commands
-        local leaders = {}
-        for name, player in next, Player.players do leaders[#leaders + 1] = player end
-        table.sort(leaders, function(p1, p2)
-            return leaderboard.scorePlayer(p1) > leaderboard.scorePlayer(p2)
-        end)
-        ui.addTextArea(1,
-            "<a href='event:close'>X</a><br>" .. table.tostring(leaders),
-            author, 300, 150, 300, 300, nil, nil, 1, true
-        )
+        leaderboard.displayLeaderboard("room", nil, author)
     end,
     ["glboard"] = function(args, msg, author) -- temporary commands
-        print(leaderboard.prepare(leaderboard.leaders))
+        leaderboard.displayLeaderboard("global", 1, author)
     end
 }
 
@@ -159,7 +151,47 @@ do
                 :addPanel(Panel(154, "", 460, 210, 120, 50, nil, nil, 0, true))
         )
 
-
+    leaderboardWindow = createPrettyUI(3, 70, 50, 670, 330, true, true)
+        :addPanel(Panel(350, "", 90, 100, 50, 240, 0x7f492d, 0x7f492d, 1, true))
+        :addPanel(Panel(351, "", 160, 100, 200, 240, 0x7f492d, 0x7f492d, 1, true))
+        :addPanel(
+            Panel(352, "", 380, 100, 70, 240, 0x7f492d, 0x7f492d, 1, true)
+                :addImage(Image(assets.dummy, "&1", 380, 70))
+        )
+        :addPanel(
+            Panel(353, "", 470, 100, 70, 240, 0x7f492d, 0x7f492d, 1, true)
+                :addImage(Image(assets.dummy, "&1", 470, 70))
+        )
+        :addPanel(
+            Panel(354, "", 560, 100, 70, 240, 0x7f492d, 0x7f492d, 1, true)
+                :addImage(Image(assets.dummy, "&1", 560, 70))
+        )
+        :addPanel(
+            Panel(355, "", 650, 100, 70, 240, 0x7f492d, 0x7f492d, 1, true)
+                :addImage(Image(assets.dummy, "&1", 650, 70))
+        )
+        :addPanel(
+            Panel(356, "", 70, 350, 670, 50, nil, nil, 0, true)
+                :setActionListener(function(id, name, event)
+                    local page = tonumber(event)
+                    if page then
+                        leaderboardWindow:hide(name)
+                        leaderboard.displayLeaderboard("global", page, name)
+                    end
+                end)
+            )
+        :addPanel(
+            Panel(357, "<a href='event:switch'>Room \t ▼</a>", 90, 55, 80, 20, 0x152d30, 0x7f492d, 1, true)
+                :setActionListener(function(id, name, event)
+                    Panel.panels[id]:addPanelTemp(
+                        Panel(358, "<a href='event:room'>Room</a><br><a href='event:global'>Global</a>", 90, 85, 80, 30, 0x152d30, 0x7f492d, 1, true)
+                            :setActionListener(function(id, name, event)
+                                leaderboardWindow:hide(name)
+                                leaderboard.displayLeaderboard(event, 1, name)
+                            end),
+                    name)
+                end)
+        )
 
 end
 

@@ -108,7 +108,7 @@ do
 
     function Image:show(target)
 		if target == nil then error("Target cannot be nil") end
-		if self.instances[target] then return self end
+        if self.instances[target] then return self end
         self.instances[target] = tfm.exec.addImage(self.imageId, self.target, self.x, self.y, target)
         return self
     end
@@ -153,6 +153,7 @@ do
             onhide = nil,
             onclick = nil,
             children = {},
+            temporary = {}
         }, Panel)
 
         Panel.panels[id] = self
@@ -164,13 +165,13 @@ do
     function Panel.handleActions(id, name, event)
         local panelId = id - 10000
         local panel = Panel.panels[panelId]
-        if not panel then return print("no panel") end
+        if not panel then return end
         if panel.isCloseButton then
-            print("is close button")
-            if not panel.closeTarget then return print("no close target") end
+            if not panel.closeTarget then return end
             panel.closeTarget:hide(name)
+            if panel.onhide then panel.onhide(panelId, name, event) end
         else
-            if panel.onhide then panel.onhide(id, name, event) end
+            if panel.onclick then panel.onclick(panelId, name, event) end
         end
     end
 
@@ -198,11 +199,20 @@ do
         ui.removeTextArea(10000 + self.id, target)
 
         for name in next, (target and { [target] = true } or tfm.get.room.playerList) do
-            for id, panel in next, self.children do
-				panel:hide(name)
-				print(name)
+            
+            for id, child in next, self.children do
+				child:hide(name)
             end
+
+            if self.temporary[name] then
+                for id, child in next, self.temporary[name] do
+                    child:hide(name)
+                end
+                self.temporary[name] = {}
+            end
+            
         end
+
         
         if self.onclose then self.onclose(target) end
         return self
@@ -218,6 +228,18 @@ do
     function Panel:addImage(image)
         self.children["i_" .. image.id] = image
         return self
+    end
+
+    function Panel:addPanelTemp(panel, target)
+        if not self.temporary[target] then self.temporary[target] = {} end
+        panel:show(target)
+        self.temporary[target][panel.id] = panel
+    end
+
+    function Panel:addImageTemp(image, target)
+        if not self.temporary[target] then self.temporary[target] = {} end
+        image:show(target)
+        self.temporary[target]["i_" .. image.id] = image
     end
 
     function Panel:setActionListener(fn)
@@ -321,6 +343,37 @@ local assets = {
         },
         closeButton = "171e178660d.png"
     },
+    community = {
+        xx = "1651b327097.png",
+        ar = "1651b32290a.png",
+        bg = "1651b300203.png",
+        br = "1651b3019c0.png",
+        cn = "1651b3031bf.png",
+        cz = "1651b304972.png",
+        de = "1651b306152.png",
+        ee = "1651b307973.png",
+        en = "1723dc10ec2.png",
+        e2 = "1723dc10ec2.png",
+        es = "1651b309222.png",
+        fi = "1651b30aa94.png",
+        fr = "1651b30c284.png",
+        gb = "1651b30da90.png",
+        hr = "1651b30f25d.png",
+        hu = "1651b310a3b.png",
+        id = "1651b3121ec.png",
+        il = "1651b3139ed.png",
+        it = "1651b3151ac.png",
+        jp = "1651b31696a.png",
+        lt = "1651b31811c.png",
+        lv = "1651b319906.png",
+        nl = "1651b31b0dc.png",
+        ph = "1651b31c891.png",
+        pl = "1651b31e0cf.png",
+        ro = "1651b31f950.png",
+        ru = "1651b321113.png",
+        tr = "1651b3240e8.png",
+        vk = "1651b3258b3.png"
+    },    
     dummy = "17404561700.png"
 }
 
@@ -346,7 +399,7 @@ local dHandler = DataHandler.new("pew", {
     }
 })
 
-local profileWindow
+local profileWindow, leaderboardWindow
 
 local initialized, newRoundStarted, suddenDeath = false
 local currentItem = 17 -- cannon
@@ -701,6 +754,7 @@ leaderboard.FILE_ID = 1
 leaderboard.DUMMY_DATA = [[*souris1,0,0,0,xx|*souris2,0,0,0,xx|*souris3,0,0,0,xx|*souris4,0,0,0,xx|*souris5,0,0,0,xx|*souris6,0,0,0,xx|*souris7,0,0,0,xx|*souris8,0,0,0,xx|*souris9,0,0,0,xx|*souris10,0,0,0,xx|*souris11,0,0,0,xx|*souris12,0,0,0,xx|*souris13,0,0,0,xx|*souris14,0,0,0,xx|*souris15,0,0,0,xx|*souris16,0,0,0,xx|*souris17,0,0,0,xx|*souris18,0,0,0,xx|*souris19,0,0,0,xx|*souris20,0,0,0,xx|*souris21,0,0,0,xx|*souris22,0,0,0,xx|*souris23,0,0,0,xx|*souris24,0,0,0,xx|*souris25,0,0,0,xx|*souris26,0,0,0,xx|*souris27,0,0,0,xx|*souris28,0,0,0,xx|*souris29,0,0,0,xx|*souris30,0,0,0,xx|*souris31,0,0,0,xx|*souris32,0,0,0,xx|*souris33,0,0,0,xx|*souris34,0,0,0,xx|*souris35,0,0,0,xx|*souris36,0,0,0,xx|*souris37,0,0,0,xx|*souris38,0,0,0,xx|*souris39,0,0,0,xx|*souris40,0,0,0,xx|*souris41,0,0,0,xx|*souris42,0,0,0,xx|*souris43,0,0,0,xx|*souris44,0,0,0,xx|*souris45,0,0,0,xx|*souris46,0,0,0,xx|*souris47,0,0,0,xx|*souris48,0,0,0,xx|*souris49,0,0,0,xx|*souris50,0,0,0,xx]]
 
 leaderboard.needUpdate = false
+leaderboard.indexed = {}
 leaderboard.leaderboardData = leaderboard.leaderboardData or leaderboard.DUMMY_DATA
 
 leaderboard.parseLeaderboard = function(data)
@@ -708,7 +762,7 @@ leaderboard.parseLeaderboard = function(data)
   	for i, entry in next, string.split(data, "|") do
 		local fields = string.split(entry, ",")
 		local name = fields[1]
-		res[name] = { name = name, rounds = tonumber(fields[2]), survived = tonumber(fields[3]), won = tonumber(fields[4]), commu = fields[5] }
+		res[name] = { name = name, rounds = tonumber(fields[2]), survived = tonumber(fields[3]), won = tonumber(fields[4]), community = fields[5] }
 		res[name].score = leaderboard.scorePlayer(res[name])
   	end
   	return res
@@ -717,7 +771,7 @@ end
 leaderboard.dumpLeaderboard = function(lboard)
 	local res = ""
 	for i, entry in next, lboard do
-  		res = res .. entry.name .. "," .. entry.rounds .. "," .. entry.survived .. "," .. entry.won .. "," .. entry.commu .. "|"
+  		res = res .. entry.name .. "," .. entry.rounds .. "," .. entry.survived .. "," .. entry.won .. "," .. entry.community .. "|"
 	end 
 	return res:sub(1, -2)
 end
@@ -728,8 +782,9 @@ leaderboard.load = function()
 end
 
 leaderboard.save = function(leaders)
-	local serialised = leaderboard.prepare(leaders)
+	local serialised, indexes = leaderboard.prepare(leaders)
 	if serialised == leaderboard.leaderboardData then return end
+	leaderboard.indexed = indexes
 	local started = system.saveFile(serialised, leaderboard.FILE_ID)
 	if started then print("[STATS] Saving leaderboard...") end
 end
@@ -740,7 +795,7 @@ end
 
 leaderboard.addPlayer = function(player)
 	local score = leaderboard.scorePlayer(player)
-	leaderboard.leaders[player.name] = { name = player.name, rounds = player.rounds, survived = player.survived, won = player.won, commu = player.community, score = score }
+	leaderboard.leaders[player.name] = { name = player.name, rounds = player.rounds, survived = player.survived, won = player.won, community = player.community, score = score }
 end
 
 leaderboard.prepare = function(leaders)
@@ -757,7 +812,60 @@ leaderboard.prepare = function(leaders)
 		return p1.score > p2.score
 	end)
 
-	return leaderboard.dumpLeaderboard(res)
+	return leaderboard.dumpLeaderboard(res), res
+
+end
+
+leaderboard.displayLeaderboard = function(mode, page, target)
+	leaderboardWindow:show(target)
+	local leaders = {}
+	local rankTxt, nameTxt, roundsTxt, deathsTxt, survivedTxt, wonTxt 
+		= "<br><br>", "<br><br>", "<br><br>", "<br><br>", "<br><br>", "<br><br>"
+
+	if mode == "global" then
+		for leader = (page - 1) * 10, page * 10 do leaders[#leaders + 1] = leaderboard.indexed[leader] end
+		Panel.panels[356]:update("<font size='20'><BV><p align='center'><a href='event:1'>•</a>  <a href='event:2'>•</a>  <a href='event:3'>•</a>  <a href='event:4'>•</a>  <a href='event:5'>•</a></p>")
+		Panel.panels[357]:update("<a href='event:switch'>Global \t ▼</a>", target)
+	else
+		local selfRank
+		
+		for name, player in next, Player.players do
+			leaders[#leaders + 1] = player
+		end
+		
+		table.sort(leaders, function(p1, p2)
+			return leaderboard.scorePlayer(p1) > leaderboard.scorePlayer(p2)
+		end)
+		
+		for i, leader in ipairs(leaders) do if leader.name == target then selfRank = i break end end
+		-- TODO: Add translations v
+		Panel.panels[356]:update("<p align='center'>Your rank: " .. selfRank .. "</p>")
+		Panel.panels[357]:update("<a href='event:switch'>Room \t ▼</a>", target)
+	end
+	
+	
+	local counter = 0
+	for i, leader in next, leaders do
+		local name, tag = extractName(leader.name)
+		if not (name and tag) then name, tag = leader.name, "" end
+		counter = counter + 1
+		rankTxt = rankTxt .. "# " .. counter .. "<br>"
+		nameTxt = nameTxt .. "\t<b><V>" .. name .. "</V><N><font size='8'>" .. tag .. "</font></N></b><br>"
+		roundsTxt = roundsTxt .. leader.rounds .. "<br>"
+		deathsTxt = deathsTxt .. (leader.rounds - leader.survived) .. "<br>"
+		survivedTxt = survivedTxt .. leader.survived .. " <V><i>(" .. math.floor(leader.survived / (leader.rounds == 0 and 1 or leader.rounds) * 100) .. " %)</i></V><br>"
+		wonTxt = wonTxt .. leader.won .. " <V><i>(" .. math.floor(leader.won / (leader.rounds == 0 and 1 or leader.rounds) * 100) .. " %)</i></V><br>"
+		Panel.panels[351]:addImageTemp(Image(assets.community[leader.community], "&1", 170, 115 + 13 * counter), target)
+		if counter >= 10 then break end
+	end
+
+	Panel.panels[350]:update(rankTxt, target)	
+	Panel.panels[351]:update(nameTxt, target)
+	Panel.panels[352]:update(roundsTxt, target)
+	Panel.panels[353]:update(deathsTxt, target)
+	Panel.panels[354]:update(survivedTxt, target)
+	Panel.panels[355]:update(wonTxt, target)
+
 
 end
 
@@ -769,18 +877,10 @@ cmds = {
         displayProfile(player, author)
     end,
     ["lboard"] = function(args, msg, author) -- temporary commands
-        local leaders = {}
-        for name, player in next, Player.players do leaders[#leaders + 1] = player end
-        table.sort(leaders, function(p1, p2)
-            return leaderboard.scorePlayer(p1) > leaderboard.scorePlayer(p2)
-        end)
-        ui.addTextArea(1,
-            "<a href='event:close'>X</a><br>" .. table.tostring(leaders),
-            author, 300, 150, 300, 300, nil, nil, 1, true
-        )
+        leaderboard.displayLeaderboard("room", nil, author)
     end,
     ["glboard"] = function(args, msg, author) -- temporary commands
-        print(leaderboard.prepare(leaderboard.leaders))
+        leaderboard.displayLeaderboard("global", 1, author)
     end
 }
 
@@ -924,7 +1024,47 @@ do
                 :addPanel(Panel(154, "", 460, 210, 120, 50, nil, nil, 0, true))
         )
 
-
+    leaderboardWindow = createPrettyUI(3, 70, 50, 670, 330, true, true)
+        :addPanel(Panel(350, "", 90, 100, 50, 240, 0x7f492d, 0x7f492d, 1, true))
+        :addPanel(Panel(351, "", 160, 100, 200, 240, 0x7f492d, 0x7f492d, 1, true))
+        :addPanel(
+            Panel(352, "", 380, 100, 70, 240, 0x7f492d, 0x7f492d, 1, true)
+                :addImage(Image(assets.dummy, "&1", 380, 70))
+        )
+        :addPanel(
+            Panel(353, "", 470, 100, 70, 240, 0x7f492d, 0x7f492d, 1, true)
+                :addImage(Image(assets.dummy, "&1", 470, 70))
+        )
+        :addPanel(
+            Panel(354, "", 560, 100, 70, 240, 0x7f492d, 0x7f492d, 1, true)
+                :addImage(Image(assets.dummy, "&1", 560, 70))
+        )
+        :addPanel(
+            Panel(355, "", 650, 100, 70, 240, 0x7f492d, 0x7f492d, 1, true)
+                :addImage(Image(assets.dummy, "&1", 650, 70))
+        )
+        :addPanel(
+            Panel(356, "", 70, 350, 670, 50, nil, nil, 0, true)
+                :setActionListener(function(id, name, event)
+                    local page = tonumber(event)
+                    if page then
+                        leaderboardWindow:hide(name)
+                        leaderboard.displayLeaderboard("global", page, name)
+                    end
+                end)
+            )
+        :addPanel(
+            Panel(357, "<a href='event:switch'>Room \t ▼</a>", 90, 55, 80, 20, 0x152d30, 0x7f492d, 1, true)
+                :setActionListener(function(id, name, event)
+                    Panel.panels[id]:addPanelTemp(
+                        Panel(358, "<a href='event:room'>Room</a><br><a href='event:global'>Global</a>", 90, 85, 80, 30, 0x152d30, 0x7f492d, 1, true)
+                            :setActionListener(function(id, name, event)
+                                leaderboardWindow:hide(name)
+                                leaderboard.displayLeaderboard(event, 1, name)
+                            end),
+                    name)
+                end)
+        )
 
 end
 
