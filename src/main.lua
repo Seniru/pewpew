@@ -140,7 +140,7 @@ do
     profileWindow = createPrettyUI(1, 200, 100, 400, 200, true, true)
         :addPanel(createPrettyUI(2, 240, 80, 250, 35, true))
         :addPanel(
-            Panel(150, "", 220, 140, 360, 100, 0x7f492d, 0x7f492d, 1, true)
+            Panel(150, "", 220, 140, 360, 100, 0x1A3846 , 0x1A3846, 1, true)
                 :addImage(Image(assets.dummy, "&1", 230, 140))
                 :addPanel(Panel(151, "", 290, 150, 120, 50, nil, nil, 0, true))
                 :addImage(Image(assets.dummy, "&1", 400, 140))
@@ -152,22 +152,22 @@ do
         )
 
     leaderboardWindow = createPrettyUI(3, 70, 50, 670, 330, true, true)
-        :addPanel(Panel(350, "", 90, 100, 50, 240, 0x7f492d, 0x7f492d, 1, true))
-        :addPanel(Panel(351, "", 160, 100, 200, 240, 0x7f492d, 0x7f492d, 1, true))
+        :addPanel(Panel(350, "", 90, 100, 50, 240, 0x1A3846, 0x1A3846, 1, true))
+        :addPanel(Panel(351, "", 160, 100, 200, 240, 0x1A3846, 0x1A3846, 1, true))
         :addPanel(
-            Panel(352, "", 380, 100, 70, 240, 0x7f492d, 0x7f492d, 1, true)
+            Panel(352, "", 380, 100, 70, 240, 0x1A3846, 0x1A3846, 1, true)
                 :addImage(Image(assets.dummy, "&1", 380, 70))
         )
         :addPanel(
-            Panel(353, "", 470, 100, 70, 240, 0x7f492d, 0x7f492d, 1, true)
+            Panel(353, "", 470, 100, 70, 240, 0x1A3846, 0x1A3846, 1, true)
                 :addImage(Image(assets.dummy, "&1", 470, 70))
         )
         :addPanel(
-            Panel(354, "", 560, 100, 70, 240, 0x7f492d, 0x7f492d, 1, true)
+            Panel(354, "", 560, 100, 70, 240, 0x1A3846, 0x1A3846, 1, true)
                 :addImage(Image(assets.dummy, "&1", 560, 70))
         )
         :addPanel(
-            Panel(355, "", 650, 100, 70, 240, 0x7f492d, 0x7f492d, 1, true)
+            Panel(355, "", 650, 100, 70, 240, 0x1A3846, 0x1A3846, 1, true)
                 :addImage(Image(assets.dummy, "&1", 650, 70))
         )
         :addPanel(
