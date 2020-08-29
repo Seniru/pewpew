@@ -648,12 +648,15 @@ function eventNewGame()
 	end
 end
 function eventPlayerDied(name)
-	local player = Player.players[name]
+    local player = Player.players[name]
+    
 	if not player then return end
 	if not newRoundStarted then
 		tfm.exec.respawnPlayer(name)
 		return player:refresh()
-	end
+    end
+    --if not Player.alive[name] then return end -- leaving the room
+
 	player.lives = player.lives - 1
 	tfm.exec.setPlayerScore(name, player.lives)
 	player.alive = false
@@ -664,7 +667,9 @@ function eventPlayerDied(name)
 		tfm.exec.chatMessage(translate("LOST_ALL", player.community), name)
 		player.rounds = player.rounds + 1
 		Player.aliveCount = Player.aliveCount - 1
-		player:savePlayerData()
+        player:savePlayerData()
+        
+        print("alive " .. Player.aliveCount)
 		
 		if Player.aliveCount == 1 then
 			local winner = next(Player.alive)
