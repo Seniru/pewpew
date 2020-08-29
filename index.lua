@@ -655,7 +655,7 @@ function eventPlayerDied(name)
 		tfm.exec.respawnPlayer(name)
 		return player:refresh()
     end
-    --if not Player.alive[name] then return end -- leaving the room
+    if not Player.alive[name] then return end -- leaving the room
 
 	player.lives = player.lives - 1
 	tfm.exec.setPlayerScore(name, player.lives)
