@@ -44,24 +44,22 @@ leaderboard.scorePlayer = function(player)
 end
 
 leaderboard.addPlayer = function(player)
-	local score = leaderboard.scorePlayer(player)
+    local score = leaderboard.scorePlayer(player)
 	leaderboard.leaders[player.name] = { name = player.name, rounds = player.rounds, survived = player.survived, won = player.won, community = player.community, score = score }
 end
 
 leaderboard.prepare = function(leaders)
 	
-	local res, i = {}, 0
-
-	for name, leader in next, leaders do
-		i = i + 1
-		res[i] = leader
-		if i >= 50 then break end
-	end
-
-	table.sort(res, function(p1, p2)
+	local temp, res = {}, {} 
+    
+	for name, leader in next, leaders do temp[#temp + 1] = leader end
+    
+	table.sort(temp, function(p1, p2)
 		return p1.score > p2.score
-	end)
-
+    end)
+    
+    for i = 1, 50 do res[i] = temp[i] end
+    
 	return leaderboard.dumpLeaderboard(res), res
 
 end

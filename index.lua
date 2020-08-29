@@ -308,6 +308,10 @@ local assets = {
     count3 = "173f210089f.png",
     newRound = "173f2113b5e.png",
     heart = "173f2212052.png",
+    iconRounds = "17434cc5748.png",
+    iconDeaths = "17434d1c965.png",
+    iconSurvived = "17434d0a87e.png",
+    iconWon = "17434cff8bd.png",
     items = {
         [1] = "17406985997.png", -- small box
         [2] = "174068e3bca.png", -- large box
@@ -727,7 +731,8 @@ end
 
 function eventFileSaved(id)
 	if id == leaderboard.FILE_ID or id == tostring(leaderboard.FILE_ID) then
-		print("[STATS] Leaderboard saved!")
+        print("[STATS] Leaderboard saved!")
+        print(os.time())
 		leaderboard.needUpdate = false
 	end
 end
@@ -794,24 +799,22 @@ leaderboard.scorePlayer = function(player)
 end
 
 leaderboard.addPlayer = function(player)
-	local score = leaderboard.scorePlayer(player)
+    local score = leaderboard.scorePlayer(player)
 	leaderboard.leaders[player.name] = { name = player.name, rounds = player.rounds, survived = player.survived, won = player.won, community = player.community, score = score }
 end
 
 leaderboard.prepare = function(leaders)
 	
-	local res, i = {}, 0
-
-	for name, leader in next, leaders do
-		i = i + 1
-		res[i] = leader
-		if i >= 50 then break end
-	end
-
-	table.sort(res, function(p1, p2)
+	local temp, res = {}, {} 
+    
+	for name, leader in next, leaders do temp[#temp + 1] = leader end
+    
+	table.sort(temp, function(p1, p2)
 		return p1.score > p2.score
-	end)
-
+    end)
+    
+    for i = 1, 50 do res[i] = temp[i] end
+    
 	return leaderboard.dumpLeaderboard(res), res
 
 end
@@ -1014,13 +1017,13 @@ do
         :addPanel(createPrettyUI(2, 240, 80, 250, 35, true))
         :addPanel(
             Panel(150, "", 220, 140, 360, 100, 0x1A3846 , 0x1A3846, 1, true)
-                :addImage(Image(assets.dummy, "&1", 230, 140))
+                :addImage(Image(assets.iconRounds, "&1", 230, 125))
                 :addPanel(Panel(151, "", 290, 150, 120, 50, nil, nil, 0, true))
-                :addImage(Image(assets.dummy, "&1", 400, 140))
+                :addImage(Image(assets.iconDeaths, "&1", 400, 125))
                 :addPanel(Panel(152, "", 460, 150, 120, 50, nil, nil, 0, true))
-                :addImage(Image(assets.dummy, "&1", 230, 200))
+                :addImage(Image(assets.iconSurvived, "&1", 230, 185))
                 :addPanel(Panel(153, "", 290, 210, 120, 50, nil, nil, 0, true))
-                :addImage(Image(assets.dummy, "&1", 400, 200))
+                :addImage(Image(assets.iconWon, "&1", 400, 185))
                 :addPanel(Panel(154, "", 460, 210, 120, 50, nil, nil, 0, true))
         )
 
@@ -1029,19 +1032,19 @@ do
         :addPanel(Panel(351, "", 160, 100, 200, 240, 0x1A3846, 0x1A3846, 1, true))
         :addPanel(
             Panel(352, "", 380, 100, 70, 240, 0x1A3846, 0x1A3846, 1, true)
-                :addImage(Image(assets.dummy, "&1", 380, 70))
+                :addImage(Image(assets.iconRounds, "&1", 380, 70))
         )
         :addPanel(
             Panel(353, "", 470, 100, 70, 240, 0x1A3846, 0x1A3846, 1, true)
-                :addImage(Image(assets.dummy, "&1", 470, 70))
+                :addImage(Image(assets.iconDeaths, "&1", 470, 70))
         )
         :addPanel(
             Panel(354, "", 560, 100, 70, 240, 0x1A3846, 0x1A3846, 1, true)
-                :addImage(Image(assets.dummy, "&1", 560, 70))
+                :addImage(Image(assets.iconSurvived, "&1", 560, 70))
         )
         :addPanel(
             Panel(355, "", 650, 100, 70, 240, 0x1A3846, 0x1A3846, 1, true)
-                :addImage(Image(assets.dummy, "&1", 650, 70))
+                :addImage(Image(assets.iconWon, "&1", 650, 70))
         )
         :addPanel(
             Panel(356, "", 70, 350, 670, 50, nil, nil, 0, true)

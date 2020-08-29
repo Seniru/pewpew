@@ -141,13 +141,13 @@ do
         :addPanel(createPrettyUI(2, 240, 80, 250, 35, true))
         :addPanel(
             Panel(150, "", 220, 140, 360, 100, 0x1A3846 , 0x1A3846, 1, true)
-                :addImage(Image(assets.dummy, "&1", 230, 140))
+                :addImage(Image(assets.iconRounds, "&1", 230, 125))
                 :addPanel(Panel(151, "", 290, 150, 120, 50, nil, nil, 0, true))
-                :addImage(Image(assets.dummy, "&1", 400, 140))
+                :addImage(Image(assets.iconDeaths, "&1", 400, 125))
                 :addPanel(Panel(152, "", 460, 150, 120, 50, nil, nil, 0, true))
-                :addImage(Image(assets.dummy, "&1", 230, 200))
+                :addImage(Image(assets.iconSurvived, "&1", 230, 185))
                 :addPanel(Panel(153, "", 290, 210, 120, 50, nil, nil, 0, true))
-                :addImage(Image(assets.dummy, "&1", 400, 200))
+                :addImage(Image(assets.iconWon, "&1", 400, 185))
                 :addPanel(Panel(154, "", 460, 210, 120, 50, nil, nil, 0, true))
         )
 
@@ -156,19 +156,19 @@ do
         :addPanel(Panel(351, "", 160, 100, 200, 240, 0x1A3846, 0x1A3846, 1, true))
         :addPanel(
             Panel(352, "", 380, 100, 70, 240, 0x1A3846, 0x1A3846, 1, true)
-                :addImage(Image(assets.dummy, "&1", 380, 70))
+                :addImage(Image(assets.iconRounds, "&1", 380, 70))
         )
         :addPanel(
             Panel(353, "", 470, 100, 70, 240, 0x1A3846, 0x1A3846, 1, true)
-                :addImage(Image(assets.dummy, "&1", 470, 70))
+                :addImage(Image(assets.iconDeaths, "&1", 470, 70))
         )
         :addPanel(
             Panel(354, "", 560, 100, 70, 240, 0x1A3846, 0x1A3846, 1, true)
-                :addImage(Image(assets.dummy, "&1", 560, 70))
+                :addImage(Image(assets.iconSurvived, "&1", 560, 70))
         )
         :addPanel(
             Panel(355, "", 650, 100, 70, 240, 0x1A3846, 0x1A3846, 1, true)
-                :addImage(Image(assets.dummy, "&1", 650, 70))
+                :addImage(Image(assets.iconWon, "&1", 650, 70))
         )
         :addPanel(
             Panel(356, "", 70, 350, 670, 50, nil, nil, 0, true)
