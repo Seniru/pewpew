@@ -501,7 +501,9 @@ function Player.new(name)
 	self.rounds = 0
 	self.survived = 0
 	self.won = 0
-	self.score = 0
+    self.score = 0
+    
+    self.openedWindow = nil
 
 	system.bindKeyboard(name, 32, true, true) -- space
 	system.bindKeyboard(name, 0, true, true) -- left / a
@@ -655,7 +657,7 @@ function eventPlayerDied(name)
 		tfm.exec.respawnPlayer(name)
 		return player:refresh()
     end
-    --if not Player.alive[name] then return end -- leaving the room
+    if not Player.alive[name] then return end -- leaving the room
 
 	player.lives = player.lives - 1
 	tfm.exec.setPlayerScore(name, player.lives)
@@ -668,9 +670,7 @@ function eventPlayerDied(name)
 		player.rounds = player.rounds + 1
 		Player.aliveCount = Player.aliveCount - 1
         player:savePlayerData()
-        
-        print("alive " .. Player.aliveCount)
-		
+        		
 		if Player.aliveCount == 1 then
 			local winner = next(Player.alive)
 			local winnerPlayer = Player.players[winner]
@@ -825,6 +825,8 @@ leaderboard.prepare = function(leaders)
 end
 
 leaderboard.displayLeaderboard = function(mode, page, target)
+    local targetPlayer = Player.players[target]
+    if targetPlayer.openedWindow then targetPlayer.openedWindow:hide(target) end
 	leaderboardWindow:show(target)
 	local leaders = {}
 	local rankTxt, nameTxt, roundsTxt, deathsTxt, survivedTxt, wonTxt 
@@ -848,7 +850,8 @@ leaderboard.displayLeaderboard = function(mode, page, target)
 		for i, leader in ipairs(leaders) do if leader.name == target then selfRank = i break end end
 		-- TODO: Add translations v
 		Panel.panels[356]:update("<p align='center'>Your rank: " .. selfRank .. "</p>")
-		Panel.panels[357]:update("<a href='event:switch'>Room \t ▼</a>", target)
+        Panel.panels[357]:update("<a href='event:switch'>Room \t ▼</a>", target)
+        targetPlayer.openedWindow = Panel.panels[310]
 	end
 	
 	
@@ -992,14 +995,18 @@ createPrettyUI = function(id, x, y, w, h, fixed, closeButton)
 end
 
 displayProfile = function(player, target)
+    local targetPlayer = Player.players[target]
+    print(targetPlayer.openedWindow)
+    if targetPlayer.openedWindow then targetPlayer.openedWindow:hide(target) end
     local name, tag = extractName(player.name)
     if (not name) or (not tag) then return end -- guest players
     profileWindow:show(target)
-    Panel.panels[2 * 100 + 20]:update("<b><font size='20'><V>" .. name .. "</V></font><font size='10'><G>" .. tag, target)
+    Panel.panels[220]:update("<b><font size='20'><V>" .. name .. "</V></font><font size='10'><G>" .. tag, target)
     Panel.panels[151]:update("<b><BV><font size='14'>" .. player.rounds .. "</font></BV>", target)
     Panel.panels[152]:update("<b><BV><font size='14'>" .. player.rounds - player.survived .. "</font></BV>", target)
     Panel.panels[153]:update("<b><BV><font size='14'>" .. player.survived .. "</font></BV>     <font size='10'>(" .. math.floor(player.survived / player.rounds * 100) .."%)</font>", target)
     Panel.panels[154]:update("<b><BV><font size='14'>" .. player.won .. "</font></BV>     <font size='10'>(" .. math.floor(player.won / player.rounds * 100) .."%)</font>", target)
+    targetPlayer.openedWindow = Panel.panels[110]
 end
 
 do

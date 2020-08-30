@@ -29,7 +29,9 @@ function Player.new(name)
 	self.rounds = 0
 	self.survived = 0
 	self.won = 0
-	self.score = 0
+    self.score = 0
+    
+    self.openedWindow = nil
 
 	system.bindKeyboard(name, 32, true, true) -- space
 	system.bindKeyboard(name, 0, true, true) -- left / a

@@ -111,14 +111,18 @@ createPrettyUI = function(id, x, y, w, h, fixed, closeButton)
 end
 
 displayProfile = function(player, target)
+    local targetPlayer = Player.players[target]
+    print(targetPlayer.openedWindow)
+    if targetPlayer.openedWindow then targetPlayer.openedWindow:hide(target) end
     local name, tag = extractName(player.name)
     if (not name) or (not tag) then return end -- guest players
     profileWindow:show(target)
-    Panel.panels[2 * 100 + 20]:update("<b><font size='20'><V>" .. name .. "</V></font><font size='10'><G>" .. tag, target)
+    Panel.panels[220]:update("<b><font size='20'><V>" .. name .. "</V></font><font size='10'><G>" .. tag, target)
     Panel.panels[151]:update("<b><BV><font size='14'>" .. player.rounds .. "</font></BV>", target)
     Panel.panels[152]:update("<b><BV><font size='14'>" .. player.rounds - player.survived .. "</font></BV>", target)
     Panel.panels[153]:update("<b><BV><font size='14'>" .. player.survived .. "</font></BV>     <font size='10'>(" .. math.floor(player.survived / player.rounds * 100) .."%)</font>", target)
     Panel.panels[154]:update("<b><BV><font size='14'>" .. player.won .. "</font></BV>     <font size='10'>(" .. math.floor(player.won / player.rounds * 100) .."%)</font>", target)
+    targetPlayer.openedWindow = Panel.panels[110]
 end
 
 do

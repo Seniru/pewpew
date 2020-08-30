@@ -19,9 +19,7 @@ function eventPlayerDied(name)
 		player.rounds = player.rounds + 1
 		Player.aliveCount = Player.aliveCount - 1
         player:savePlayerData()
-        
-        print("alive " .. Player.aliveCount)
-		
+        		
 		if Player.aliveCount == 1 then
 			local winner = next(Player.alive)
 			local winnerPlayer = Player.players[winner]

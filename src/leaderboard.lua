@@ -65,6 +65,8 @@ leaderboard.prepare = function(leaders)
 end
 
 leaderboard.displayLeaderboard = function(mode, page, target)
+    local targetPlayer = Player.players[target]
+    if targetPlayer.openedWindow then targetPlayer.openedWindow:hide(target) end
 	leaderboardWindow:show(target)
 	local leaders = {}
 	local rankTxt, nameTxt, roundsTxt, deathsTxt, survivedTxt, wonTxt 
@@ -88,7 +90,8 @@ leaderboard.displayLeaderboard = function(mode, page, target)
 		for i, leader in ipairs(leaders) do if leader.name == target then selfRank = i break end end
 		-- TODO: Add translations v
 		Panel.panels[356]:update("<p align='center'>Your rank: " .. selfRank .. "</p>")
-		Panel.panels[357]:update("<a href='event:switch'>Room \t ▼</a>", target)
+        Panel.panels[357]:update("<a href='event:switch'>Room \t ▼</a>", target)
+        targetPlayer.openedWindow = Panel.panels[310]
 	end
 	
 	
