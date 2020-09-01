@@ -30,8 +30,6 @@ function eventLoop(tc, tr)
 					aliveCount = aliveCount - 1			
                 end
                 tfm.exec.chatMessage(translate("SURVIVORS", tfm.get.room.community, nil, { winners = winners, winner = winner }))
-                print(winner)
-                print(winners)
 			end
 			Timer("newRound", newRound, 3 * 1000)
 			tfm.exec.setGameTime(4, true)

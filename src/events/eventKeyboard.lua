@@ -1,9 +1,14 @@
 function eventKeyboard(name, key, down, x, y)
-	if key == 32 or key == 3 then -- space / duck
+	if key == keys.SPACE or key == keys.DOWN then
 		Player.players[name]:shoot(x, y)
-	elseif key == 0 then-- left
+	elseif key == keys.LEFT then
 		Player.players[name].stance = -1
-	elseif key == 2 then-- right
+	elseif key == keys.RIGHT then
 		Player.players[name].stance = 1
-	end	
+    elseif key == keys.LETTER_H then
+    elseif key == keys.LETTER_P then
+        displayProfile(Player.players[name], name)
+    elseif key == keys.LETTER_L then
+        leaderboard.displayLeaderboard("global", 1, name)
+    end
 end

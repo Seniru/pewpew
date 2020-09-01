@@ -31,6 +31,16 @@ local items = {
     90  -- tombstone
 }
 
+local keys = {
+    LEFT        = 0,
+    RIGHT       = 2,
+    DOWN        = 3,
+    SPACE       = 32,
+    LETTER_H    = 72,
+    LETTER_L    = 76,
+    LETTER_P    = 80,
+}
+
 local assets = {
     banner = "173f1aa1720.png",
     count1 = "173f211056a.png",

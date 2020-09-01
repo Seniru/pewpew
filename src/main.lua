@@ -2,12 +2,6 @@ cmds = {
     ["p"] = function(args, msg, author)
         local player = Player.players[args[1] or author] or Player.players[author]
         displayProfile(player, author)
-    end,
-    ["lboard"] = function(args, msg, author) -- temporary commands
-        leaderboard.displayLeaderboard("room", nil, author)
-    end,
-    ["glboard"] = function(args, msg, author) -- temporary commands
-        leaderboard.displayLeaderboard("global", 1, author)
     end
 }
 
@@ -114,7 +108,6 @@ end
 
 displayProfile = function(player, target)
     local targetPlayer = Player.players[target]
-    print(targetPlayer.openedWindow)
     if targetPlayer.openedWindow then targetPlayer.openedWindow:hide(target) end
     local name, tag = extractName(player.name)
     if (not name) or (not tag) then return end -- guest players

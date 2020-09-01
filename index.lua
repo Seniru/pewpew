@@ -301,6 +301,16 @@ local items = {
     90  -- tombstone
 }
 
+local keys = {
+    LEFT        = 0,
+    RIGHT       = 2,
+    DOWN        = 3,
+    SPACE       = 32,
+    LETTER_H    = 72,
+    LETTER_L    = 76,
+    LETTER_P    = 80,
+}
+
 local assets = {
     banner = "173f1aa1720.png",
     count1 = "173f211056a.png",
@@ -506,11 +516,8 @@ function Player.new(name)
     self.score = 0
     
     self.openedWindow = nil
-
-	system.bindKeyboard(name, 32, true, true) -- space
-	system.bindKeyboard(name, 0, true, true) -- left / a
-	system.bindKeyboard(name, 2, true, true) -- right / d
-	system.bindKeyboard(name, 3, true, true) -- down / s
+    
+    for key, code in next, keys do system.bindKeyboard(name, code, true, true) end
 
 	Player.players[name] = self
 	Player.playerCount = Player.playerCount + 1
@@ -617,8 +624,6 @@ function eventLoop(tc, tr)
 					aliveCount = aliveCount - 1			
                 end
                 tfm.exec.chatMessage(translate("SURVIVORS", tfm.get.room.community, nil, { winners = winners, winner = winner }))
-                print(winner)
-                print(winners)
 			end
 			Timer("newRound", newRound, 3 * 1000)
 			tfm.exec.setGameTime(4, true)
@@ -627,13 +632,18 @@ function eventLoop(tc, tr)
 
 end
 function eventKeyboard(name, key, down, x, y)
-	if key == 32 or key == 3 then -- space / duck
+	if key == keys.SPACE or key == keys.DOWN then
 		Player.players[name]:shoot(x, y)
-	elseif key == 0 then-- left
+	elseif key == keys.LEFT then
 		Player.players[name].stance = -1
-	elseif key == 2 then-- right
+	elseif key == keys.RIGHT then
 		Player.players[name].stance = 1
-	end	
+    elseif key == keys.LETTER_H then
+    elseif key == keys.LETTER_P then
+        displayProfile(Player.players[name], name)
+    elseif key == keys.LETTER_L then
+        leaderboard.displayLeaderboard("global", 1, name)
+    end
 end
 
 function eventNewGame()
@@ -893,12 +903,6 @@ cmds = {
     ["p"] = function(args, msg, author)
         local player = Player.players[args[1] or author] or Player.players[author]
         displayProfile(player, author)
-    end,
-    ["lboard"] = function(args, msg, author) -- temporary commands
-        leaderboard.displayLeaderboard("room", nil, author)
-    end,
-    ["glboard"] = function(args, msg, author) -- temporary commands
-        leaderboard.displayLeaderboard("global", 1, author)
     end
 }
 
@@ -1005,7 +1009,6 @@ end
 
 displayProfile = function(player, target)
     local targetPlayer = Player.players[target]
-    print(targetPlayer.openedWindow)
     if targetPlayer.openedWindow then targetPlayer.openedWindow:hide(target) end
     local name, tag = extractName(player.name)
     if (not name) or (not tag) then return end -- guest players

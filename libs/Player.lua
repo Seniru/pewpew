@@ -32,11 +32,8 @@ function Player.new(name)
     self.score = 0
     
     self.openedWindow = nil
-
-	system.bindKeyboard(name, 32, true, true) -- space
-	system.bindKeyboard(name, 0, true, true) -- left / a
-	system.bindKeyboard(name, 2, true, true) -- right / d
-	system.bindKeyboard(name, 3, true, true) -- down / s
+    
+    for key, code in next, keys do system.bindKeyboard(name, code, true, true) end
 
 	Player.players[name] = self
 	Player.playerCount = Player.playerCount + 1
