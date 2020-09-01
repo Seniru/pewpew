@@ -91,8 +91,7 @@ function Player:shoot(x, y)
 end
 
 function Player:savePlayerData()
-	-- TODO: Uncomment the line below
-	-- if tfm.get.room.uniquePlayers < 3 then return end
+	if tfm.get.room.uniquePlayers < 4 then return end
 	local name = self.name
     dHandler:set(name, "rounds", self.rounds)
     dHandler:set(name, "survived", self.survived)

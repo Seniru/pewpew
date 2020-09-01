@@ -420,7 +420,9 @@ translations["en"] = {
 	LOST_ALL =	"<ROSE>You have lost all your lives!",	
 	SD =		"<VP>Sudden death! Everyone has <N>1 <VP>life left",	
 	WELCOME =	"<VP>Welcome to pewpew, <N>duck <VP>or <N>spacebar <VP>to shoot items!",	
-	SOLE =		"<ROSE>${player} is the sole survivor!"
+    SOLE =		"<ROSE>${player} is the sole survivor!",
+    SURVIVORS = "<ROSE>${winners} and ${winner} survived their lives this round!",
+    SELF_RANK = "<p align='center'>Your rank: ${rank}</p>"
 }
 
 translations["br"] = {        
@@ -563,8 +565,7 @@ function Player:shoot(x, y)
 end
 
 function Player:savePlayerData()
-	-- TODO: Uncomment the line below
-	-- if tfm.get.room.uniquePlayers < 3 then return end
+	if tfm.get.room.uniquePlayers < 4 then return end
 	local name = self.name
     dHandler:set(name, "rounds", self.rounds)
     dHandler:set(name, "survived", self.survived)
@@ -599,21 +600,22 @@ function eventLoop(tc, tr)
 		else
 			local aliveCount = Player.aliveCount
 			if aliveCount > 1 then
-				local winnerString = ""
+                local winners = ""
+                local winner = ""
 				for name, player in next, Player.alive do
 					player.rounds = player.rounds + 1
 					player.survived = player.survived + 1
 					player:savePlayerData()
 					if aliveCount == 1 then
-						winnerString = winnerString:sub(1, -3) .. " and " .. name
+                        winners = winners:sub(1, -3)
+                        winner = name
 						break
 					end
-					winnerString = winnerString .. name .. ", "
+					winners = winners .. name .. ", "
 					aliveCount = aliveCount - 1			
 				end
-				tfm.exec.chatMessage("we have some loads of winners this time: " .. winnerString)
+				tfm.exec.chatMessage(translate("SURVIVORS", tfm.get.room.community, nil, { winners = winners, winner = winner }))
 			end
-			tfm.exec.chatMessage("starting a new round")
 			Timer("newRound", newRound, 3 * 1000)
 			tfm.exec.setGameTime(4, true)
 		end
@@ -728,7 +730,6 @@ function eventFileLoaded(id, data)
 			leaderboard.leaderboardData = data
 			leaderboard.leaders = leaderboard.parseLeaderboard(data)
 		end
-		print("[STATS] Leaderboard prepared!")
 		for name, player in next, Player.players do leaderboard.addPlayer(player) end
 		leaderboard.save(leaderboard.leaders)
 	end
@@ -795,6 +796,7 @@ leaderboard.save = function(leaders)
 	local serialised, indexes = leaderboard.prepare(leaders)
 	if serialised == leaderboard.leaderboardData then return end
 	leaderboard.indexed = indexes
+    if tfm.get.room.uniquePlayers < 4 then return end
 	local started = system.saveFile(serialised, leaderboard.FILE_ID)
 	if started then print("[STATS] Saving leaderboard...") end
 end
@@ -849,7 +851,7 @@ leaderboard.displayLeaderboard = function(mode, page, target)
 		
 		for i, leader in ipairs(leaders) do if leader.name == target then selfRank = i break end end
 		-- TODO: Add translations v
-		Panel.panels[356]:update("<p align='center'>Your rank: " .. selfRank .. "</p>")
+		Panel.panels[356]:update(translate("SELF_RANK", targetPlayer.community, nil, { rank = selfRank }))
         Panel.panels[357]:update("<a href='event:switch'>Room \t ▼</a>", target)
         targetPlayer.openedWindow = Panel.panels[310]
 	end

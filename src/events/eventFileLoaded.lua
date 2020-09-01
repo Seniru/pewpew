@@ -6,7 +6,6 @@ function eventFileLoaded(id, data)
 			leaderboard.leaderboardData = data
 			leaderboard.leaders = leaderboard.parseLeaderboard(data)
 		end
-		print("[STATS] Leaderboard prepared!")
 		for name, player in next, Player.players do leaderboard.addPlayer(player) end
 		leaderboard.save(leaderboard.leaders)
 	end

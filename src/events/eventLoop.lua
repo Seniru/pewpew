@@ -13,21 +13,22 @@ function eventLoop(tc, tr)
 		else
 			local aliveCount = Player.aliveCount
 			if aliveCount > 1 then
-				local winnerString = ""
+                local winners = ""
+                local winner = ""
 				for name, player in next, Player.alive do
 					player.rounds = player.rounds + 1
 					player.survived = player.survived + 1
 					player:savePlayerData()
 					if aliveCount == 1 then
-						winnerString = winnerString:sub(1, -3) .. " and " .. name
+                        winners = winners:sub(1, -3)
+                        winner = name
 						break
 					end
-					winnerString = winnerString .. name .. ", "
+					winners = winners .. name .. ", "
 					aliveCount = aliveCount - 1			
 				end
-				tfm.exec.chatMessage("we have some loads of winners this time: " .. winnerString)
+				tfm.exec.chatMessage(translate("SURVIVORS", tfm.get.room.community, nil, { winners = winners, winner = winner }))
 			end
-			tfm.exec.chatMessage("starting a new round")
 			Timer("newRound", newRound, 3 * 1000)
 			tfm.exec.setGameTime(4, true)
 		end

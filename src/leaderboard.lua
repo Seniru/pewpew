@@ -35,6 +35,7 @@ leaderboard.save = function(leaders)
 	local serialised, indexes = leaderboard.prepare(leaders)
 	if serialised == leaderboard.leaderboardData then return end
 	leaderboard.indexed = indexes
+    if tfm.get.room.uniquePlayers < 4 then return end
 	local started = system.saveFile(serialised, leaderboard.FILE_ID)
 	if started then print("[STATS] Saving leaderboard...") end
 end
@@ -89,7 +90,7 @@ leaderboard.displayLeaderboard = function(mode, page, target)
 		
 		for i, leader in ipairs(leaders) do if leader.name == target then selfRank = i break end end
 		-- TODO: Add translations v
-		Panel.panels[356]:update("<p align='center'>Your rank: " .. selfRank .. "</p>")
+		Panel.panels[356]:update(translate("SELF_RANK", targetPlayer.community, nil, { rank = selfRank }))
         Panel.panels[357]:update("<a href='event:switch'>Room \t ▼</a>", target)
         targetPlayer.openedWindow = Panel.panels[310]
 	end
