@@ -426,13 +426,17 @@ local leaderboard
 local translations = {}
 
 translations["en"] = {	
-	LIVES_LEFT =	"<ROSE>You have <N>${lives} <ROSE>lives left. <VI>Respawning in 3...",	
+	LIVES_LEFT = "<ROSE>You have <N>${lives} <ROSE>lives left. <VI>Respawning in 3...",	
 	LOST_ALL =	"<ROSE>You have lost all your lives!",	
 	SD =		"<VP>Sudden death! Everyone has <N>1 <VP>life left",	
 	WELCOME =	"<VP>Welcome to pewpew, <N>duck <VP>or <N>spacebar <VP>to shoot items!",	
     SOLE =		"<ROSE>${player} is the sole survivor!",
     SURVIVORS = "<ROSE>${winners} and ${winner} survived their lives this round!",
-    SELF_RANK = "<p align='center'>Your rank: ${rank}</p>"
+    SELF_RANK = "<p align='center'>Your rank: ${rank}</p>",
+    ROUNDS  =   "<font face='Lucida console'><N2>Rounds played</N2></font>",
+    DEATHS =    "<font face='Lucida console'><N2>Deaths</N2></font>",
+    SURVIVED =  "<font face='Lucida console'><N2>Rounds survived</N2></font>",
+    WON =       "<font face='Lucida console'><N2>Rounds won</N2></font>"
 }
 
 translations["br"] = {        
@@ -1014,10 +1018,10 @@ displayProfile = function(player, target)
     if (not name) or (not tag) then return end -- guest players
     profileWindow:show(target)
     Panel.panels[220]:update("<b><font size='20'><V>" .. name .. "</V></font><font size='10'><G>" .. tag, target)
-    Panel.panels[151]:update("<b><BV><font size='14'>" .. player.rounds .. "</font></BV>", target)
-    Panel.panels[152]:update("<b><BV><font size='14'>" .. player.rounds - player.survived .. "</font></BV>", target)
-    Panel.panels[153]:update("<b><BV><font size='14'>" .. player.survived .. "</font></BV>     <font size='10'>(" .. math.floor(player.survived / player.rounds * 100) .."%)</font>", target)
-    Panel.panels[154]:update("<b><BV><font size='14'>" .. player.won .. "</font></BV>     <font size='10'>(" .. math.floor(player.won / player.rounds * 100) .."%)</font>", target)
+    Panel.panels[151]:update(translate("ROUNDS", player.community) .. "<br><b><BV><font size='14'>" .. player.rounds .. "</font></BV>", target)
+    Panel.panels[152]:update(translate("DEATHS", player.community) .. "<br><b><BV><font size='14'>" .. player.rounds - player.survived .. "</font></BV>", target)
+    Panel.panels[153]:update(translate("SURVIVED", player.community) .. "<br><b><BV><font size='14'>" .. player.survived .. "</font></BV>     <font size='10'>(" .. math.floor(player.survived / player.rounds * 100) .."%)</font>", target)
+    Panel.panels[154]:update(translate("WON", player.community) .. "<br><b><BV><font size='14'>" .. player.won .. "</font></BV>     <font size='10'>(" .. math.floor(player.won / player.rounds * 100) .."%)</font>", target)
     targetPlayer.openedWindow = Panel.panels[110]
 end
 
@@ -1042,13 +1046,13 @@ do
         :addPanel(
             Panel(150, "", 220, 140, 360, 100, 0x1A3846 , 0x1A3846, 1, true)
                 :addImage(Image(assets.iconRounds, "&1", 230, 125))
-                :addPanel(Panel(151, "", 290, 150, 120, 50, nil, nil, 0, true))
+                :addPanel(Panel(151, "", 290, 140, 120, 50, nil, nil, 0, true))
                 :addImage(Image(assets.iconDeaths, "&1", 400, 125))
-                :addPanel(Panel(152, "", 460, 150, 120, 50, nil, nil, 0, true))
+                :addPanel(Panel(152, "", 460, 140, 120, 50, nil, nil, 0, true))
                 :addImage(Image(assets.iconSurvived, "&1", 230, 185))
-                :addPanel(Panel(153, "", 290, 210, 120, 50, nil, nil, 0, true))
+                :addPanel(Panel(153, "", 290, 200, 120, 50, nil, nil, 0, true))
                 :addImage(Image(assets.iconWon, "&1", 400, 185))
-                :addPanel(Panel(154, "", 460, 210, 120, 50, nil, nil, 0, true))
+                :addPanel(Panel(154, "", 460, 200, 120, 50, nil, nil, 0, true))
         )
 
     leaderboardWindow = createPrettyUI(3, 70, 50, 670, 330, true, true)
