@@ -22,8 +22,9 @@ function eventPlayerDied(name)
         		
 		if Player.aliveCount == 1 then
 			local winner = next(Player.alive)
-			local winnerPlayer = Player.players[winner]
-			tfm.exec.chatMessage(translate("SOLE", tfm.get.room.community, nil, {player = winner}))
+            local winnerPlayer = Player.players[winner]
+            local n, t = extractName(winner)
+			tfm.exec.chatMessage(translate("SOLE", tfm.get.room.community, nil, {player = "<b><VI>" .. n .. "</VI><font size='8'><N2>" .. t .. "</N2></font></b>"}))
 			tfm.exec.giveCheese(winner)
 			tfm.exec.playerVictory(winner)
 			winnerPlayer.rounds = winnerPlayer.rounds + 1

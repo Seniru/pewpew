@@ -80,8 +80,10 @@ getRot = function(item, stance)
 	end
 end
 
-extractName = function(name)
-    return name:match("^(.+)(#%d+)$")
+extractName = function(username)
+    local name, tag = username:match("^(.+)(#%d+)$")
+    if name and tag then return name, tag
+    else return username, "" end
 end
 
 createPrettyUI = function(id, x, y, w, h, fixed, closeButton)

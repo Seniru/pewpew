@@ -608,13 +608,17 @@ function eventLoop(tc, tr)
 					player:savePlayerData()
 					if aliveCount == 1 then
                         winners = winners:sub(1, -3)
-                        winner = name
+                        local n, t = extractName(name)
+                        winner = "<b><VI>" .. n .. "</VI><font size='8'><N2>" .. t .. "</N2></font></b>"
 						break
-					end
-					winners = winners .. name .. ", "
+                    end
+                    local n, t = extractName(name)
+					winners = winners .. "<b><VI>" .. n .. "</VI><font size='8'><N2>" .. t .. "</N2></font></b>" .. ", "
 					aliveCount = aliveCount - 1			
-				end
-				tfm.exec.chatMessage(translate("SURVIVORS", tfm.get.room.community, nil, { winners = winners, winner = winner }))
+                end
+                tfm.exec.chatMessage(translate("SURVIVORS", tfm.get.room.community, nil, { winners = winners, winner = winner }))
+                print(winner)
+                print(winners)
 			end
 			Timer("newRound", newRound, 3 * 1000)
 			tfm.exec.setGameTime(4, true)
@@ -675,8 +679,9 @@ function eventPlayerDied(name)
         		
 		if Player.aliveCount == 1 then
 			local winner = next(Player.alive)
-			local winnerPlayer = Player.players[winner]
-			tfm.exec.chatMessage(translate("SOLE", tfm.get.room.community, nil, {player = winner}))
+            local winnerPlayer = Player.players[winner]
+            local n, t = extractName(winner)
+			tfm.exec.chatMessage(translate("SOLE", tfm.get.room.community, nil, {player = "<b><VI>" .. n .. "</VI><font size='8'><N2>" .. t .. "</N2></font></b>"}))
 			tfm.exec.giveCheese(winner)
 			tfm.exec.playerVictory(winner)
 			winnerPlayer.rounds = winnerPlayer.rounds + 1
@@ -966,8 +971,10 @@ getRot = function(item, stance)
 	end
 end
 
-extractName = function(name)
-    return name:match("^(.+)(#%d+)$")
+extractName = function(username)
+    local name, tag = username:match("^(.+)(#%d+)$")
+    if name and tag then return name, tag
+    else return username, "" end
 end
 
 createPrettyUI = function(id, x, y, w, h, fixed, closeButton)
