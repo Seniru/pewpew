@@ -906,7 +906,7 @@ end
 leaderboard.leaders = leaderboard.parseLeaderboard(leaderboard.leaderboardData)
 
 cmds = {
-    ["p"] = function(args, msg, author)
+    ["profile"] = function(args, msg, author)
         local player = Player.players[args[1] or author] or Player.players[author]
         displayProfile(player, author)
     end,
@@ -1046,6 +1046,8 @@ do
 
     tfm.exec.newGame(rotation[currentMapIndex])
     tfm.exec.setGameTime(8)
+
+    for cmd in next, cmds do system.disableChatCommandDisplay(cmd) end
 
     for name in next, tfm.get.room.playerList do
         eventNewPlayer(name)
