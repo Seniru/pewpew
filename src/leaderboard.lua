@@ -74,7 +74,7 @@ leaderboard.displayLeaderboard = function(mode, page, target)
 		= "<br><br>", "<br><br>", "<br><br>", "<br><br>", "<br><br>", "<br><br>"
 
 	if mode == "global" then
-		for leader = (page - 1) * 10, page * 10 do leaders[#leaders + 1] = leaderboard.indexed[leader] end
+		for leader = (page - 1) * 10 + 1, page * 10 do leaders[#leaders + 1] = leaderboard.indexed[leader] end
 		Panel.panels[356]:update("<font size='20'><BV><p align='center'><a href='event:1'>•</a>  <a href='event:2'>•</a>  <a href='event:3'>•</a>  <a href='event:4'>•</a>  <a href='event:5'>•</a></p>")
 		Panel.panels[357]:update("<a href='event:switch'>Global \t ▼</a>", target)
 	else
@@ -92,16 +92,17 @@ leaderboard.displayLeaderboard = function(mode, page, target)
 		-- TODO: Add translations v
 		Panel.panels[356]:update(translate("SELF_RANK", targetPlayer.community, nil, { rank = selfRank }))
         Panel.panels[357]:update("<a href='event:switch'>Room \t ▼</a>", target)
-        targetPlayer.openedWindow = Panel.panels[310]
+        
 	end
 	
 	
-	local counter = 0
+    local counter = 0
+    local rankPage = (page - 1) * 10
 	for i, leader in next, leaders do
 		local name, tag = extractName(leader.name)
 		if not (name and tag) then name, tag = leader.name, "" end
 		counter = counter + 1
-		rankTxt = rankTxt .. "# " .. counter .. "<br>"
+		rankTxt = rankTxt .. "# " .. rankPage + counter .. "<br>"
 		nameTxt = nameTxt .. "\t<b><V>" .. name .. "</V><N><font size='8'>" .. tag .. "</font></N></b><br>"
 		roundsTxt = roundsTxt .. leader.rounds .. "<br>"
 		deathsTxt = deathsTxt .. (leader.rounds - leader.survived) .. "<br>"
@@ -117,7 +118,7 @@ leaderboard.displayLeaderboard = function(mode, page, target)
 	Panel.panels[353]:update(deathsTxt, target)
 	Panel.panels[354]:update(survivedTxt, target)
 	Panel.panels[355]:update(wonTxt, target)
-
+    targetPlayer.openedWindow = leaderboardWindow
 
 end
 
