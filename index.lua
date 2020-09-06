@@ -643,6 +643,7 @@ function eventKeyboard(name, key, down, x, y)
 	elseif key == keys.RIGHT then
 		Player.players[name].stance = 1
     elseif key == keys.LETTER_H then
+        displayHelp(name)
     elseif key == keys.LETTER_P then
         displayProfile(Player.players[name], name)
     elseif key == keys.LETTER_L then
@@ -854,7 +855,7 @@ leaderboard.displayLeaderboard = function(mode, page, target)
 		= "<br><br>", "<br><br>", "<br><br>", "<br><br>", "<br><br>", "<br><br>"
 
 	if mode == "global" then
-		for leader = (page - 1) * 10 + 1, page * 10 do leaders[#leaders + 1] = leaderboard.indexed[leader] print(leader) end
+		for leader = (page - 1) * 10 + 1, page * 10 do leaders[#leaders + 1] = leaderboard.indexed[leader] end
 		Panel.panels[356]:update("<font size='20'><BV><p align='center'><a href='event:1'>•</a>  <a href='event:2'>•</a>  <a href='event:3'>•</a>  <a href='event:4'>•</a>  <a href='event:5'>•</a></p>")
 		Panel.panels[357]:update("<a href='event:switch'>Global \t ▼</a>", target)
 	else
@@ -870,7 +871,7 @@ leaderboard.displayLeaderboard = function(mode, page, target)
 		
 		for i, leader in ipairs(leaders) do if leader.name == target then selfRank = i break end end
 		-- TODO: Add translations v
-		Panel.panels[356]:update(translate("SELF_RANK", targetPlayer.community, nil, { rank = selfRank }))
+		Panel.panels[356]:update(translate("SELF_RANK", targetPlayer.community, nil, { rank = selfRank }), target)
         Panel.panels[357]:update("<a href='event:switch'>Room \t ▼</a>", target)
         
 	end
@@ -883,7 +884,7 @@ leaderboard.displayLeaderboard = function(mode, page, target)
 		if not (name and tag) then name, tag = leader.name, "" end
 		counter = counter + 1
 		rankTxt = rankTxt .. "# " .. rankPage + counter .. "<br>"
-		nameTxt = nameTxt .. "\t<b><V>" .. name .. "</V><N><font size='8'>" .. tag .. "</font></N></b><br>"
+		nameTxt = nameTxt .. "            <b><V>" .. name .. "</V><N><font size='8'>" .. tag .. "</font></N></b><br>"
 		roundsTxt = roundsTxt .. leader.rounds .. "<br>"
 		deathsTxt = deathsTxt .. (leader.rounds - leader.survived) .. "<br>"
 		survivedTxt = survivedTxt .. leader.survived .. " <V><i>(" .. math.floor(leader.survived / (leader.rounds == 0 and 1 or leader.rounds) * 100) .. " %)</i></V><br>"
@@ -908,6 +909,9 @@ cmds = {
     ["p"] = function(args, msg, author)
         local player = Player.players[args[1] or author] or Player.players[author]
         displayProfile(player, author)
+    end,
+    ["help"] = function(args, msg, author)
+        displayHelp(author)
     end
 }
 
@@ -1024,6 +1028,11 @@ displayProfile = function(player, target)
     Panel.panels[153]:update(translate("SURVIVED", player.community) .. "<br><b><BV><font size='14'>" .. player.survived .. "</font></BV>     <font size='10'>(" .. math.floor(player.survived / player.rounds * 100) .."%)</font>", target)
     Panel.panels[154]:update(translate("WON", player.community) .. "<br><b><BV><font size='14'>" .. player.won .. "</font></BV>     <font size='10'>(" .. math.floor(player.won / player.rounds * 100) .."%)</font>", target)
     targetPlayer.openedWindow = profileWindow
+end
+
+displayHelp = function(target)
+    tfm.exec.chatMessage("<br>" .. translate("WELCOME", tfm.get.room.playerList[target].community), target)
+    tfm.exec.chatMessage("<N>Report any bug to </N><VP>King_seniru</VP><G>#5890</G><br><br><b><VI>Commands</VI></b><br><br>[ <b>H</b> ] <N><ROSE>!help</ROSE> (displays this help menu)</N><br>[ <b>P</b> ] <N><ROSE>!profile <i>[player]</i></ROSE> (displays the profile of the player)</N><br>[ <b>L</b> ] <N>(displays the leaderboard)</N><br>", target)
 end
 
 do

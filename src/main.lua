@@ -2,6 +2,9 @@ cmds = {
     ["p"] = function(args, msg, author)
         local player = Player.players[args[1] or author] or Player.players[author]
         displayProfile(player, author)
+    end,
+    ["help"] = function(args, msg, author)
+        displayHelp(author)
     end
 }
 
@@ -118,6 +121,11 @@ displayProfile = function(player, target)
     Panel.panels[153]:update(translate("SURVIVED", player.community) .. "<br><b><BV><font size='14'>" .. player.survived .. "</font></BV>     <font size='10'>(" .. math.floor(player.survived / player.rounds * 100) .."%)</font>", target)
     Panel.panels[154]:update(translate("WON", player.community) .. "<br><b><BV><font size='14'>" .. player.won .. "</font></BV>     <font size='10'>(" .. math.floor(player.won / player.rounds * 100) .."%)</font>", target)
     targetPlayer.openedWindow = profileWindow
+end
+
+displayHelp = function(target)
+    tfm.exec.chatMessage("<br>" .. translate("WELCOME", tfm.get.room.playerList[target].community), target)
+    tfm.exec.chatMessage("<N>Report any bug to </N><VP>King_seniru</VP><G>#5890</G><br><br><b><VI>Commands</VI></b><br><br>[ <b>H</b> ] <N><ROSE>!help</ROSE> (displays this help menu)</N><br>[ <b>P</b> ] <N><ROSE>!profile <i>[player]</i></ROSE> (displays the profile of the player)</N><br>[ <b>L</b> ] <N>(displays the leaderboard)</N><br>", target)
 end
 
 do

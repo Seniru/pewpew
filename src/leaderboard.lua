@@ -90,7 +90,7 @@ leaderboard.displayLeaderboard = function(mode, page, target)
 		
 		for i, leader in ipairs(leaders) do if leader.name == target then selfRank = i break end end
 		-- TODO: Add translations v
-		Panel.panels[356]:update(translate("SELF_RANK", targetPlayer.community, nil, { rank = selfRank }))
+		Panel.panels[356]:update(translate("SELF_RANK", targetPlayer.community, nil, { rank = selfRank }), target)
         Panel.panels[357]:update("<a href='event:switch'>Room \t ▼</a>", target)
         
 	end
@@ -103,7 +103,7 @@ leaderboard.displayLeaderboard = function(mode, page, target)
 		if not (name and tag) then name, tag = leader.name, "" end
 		counter = counter + 1
 		rankTxt = rankTxt .. "# " .. rankPage + counter .. "<br>"
-		nameTxt = nameTxt .. "\t<b><V>" .. name .. "</V><N><font size='8'>" .. tag .. "</font></N></b><br>"
+		nameTxt = nameTxt .. "            <b><V>" .. name .. "</V><N><font size='8'>" .. tag .. "</font></N></b><br>"
 		roundsTxt = roundsTxt .. leader.rounds .. "<br>"
 		deathsTxt = deathsTxt .. (leader.rounds - leader.survived) .. "<br>"
 		survivedTxt = survivedTxt .. leader.survived .. " <V><i>(" .. math.floor(leader.survived / (leader.rounds == 0 and 1 or leader.rounds) * 100) .. " %)</i></V><br>"
