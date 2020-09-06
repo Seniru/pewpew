@@ -672,7 +672,6 @@ function eventNewGame()
 end
 function eventPlayerDied(name)
     local player = Player.players[name]
-    
 	if not player then return end
 	if not newRoundStarted then
 		tfm.exec.respawnPlayer(name)
@@ -691,7 +690,7 @@ function eventPlayerDied(name)
 		player.rounds = player.rounds + 1
 		Player.aliveCount = Player.aliveCount - 1
         player:savePlayerData()
-        		
+        
 		if Player.aliveCount == 1 then
 			local winner = next(Player.alive)
             local winnerPlayer = Player.players[winner]
@@ -721,9 +720,11 @@ function eventPlayerDied(name)
 end
 
 function eventPlayerLeft(name)
-	if Player.players[name] then
-		Player.players[name].lives = 1
-		eventPlayerDied(name)
+    if Player.players[name] then
+        if Player.alive[name] then
+            Player.players[name].lives = 1
+            eventPlayerDied(name)
+        end
 		Player.players[name] = nil
 		Player.playerCount = Player.playerCount - 1
 	end
@@ -985,6 +986,7 @@ getRot = function(item, stance)
 end
 
 extractName = function(username)
+    username = username or ""
     local name, tag = username:match("^(.+)(#%d+)$")
     if name and tag then return name, tag
     else return username, "" end

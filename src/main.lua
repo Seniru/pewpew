@@ -78,6 +78,7 @@ getRot = function(item, stance)
 end
 
 extractName = function(username)
+    username = username or ""
     local name, tag = username:match("^(.+)(#%d+)$")
     if name and tag then return name, tag
     else return username, "" end

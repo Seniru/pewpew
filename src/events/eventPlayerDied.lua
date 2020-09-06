@@ -1,6 +1,5 @@
 function eventPlayerDied(name)
     local player = Player.players[name]
-    
 	if not player then return end
 	if not newRoundStarted then
 		tfm.exec.respawnPlayer(name)
@@ -19,7 +18,7 @@ function eventPlayerDied(name)
 		player.rounds = player.rounds + 1
 		Player.aliveCount = Player.aliveCount - 1
         player:savePlayerData()
-        		
+        
 		if Player.aliveCount == 1 then
 			local winner = next(Player.alive)
             local winnerPlayer = Player.players[winner]
