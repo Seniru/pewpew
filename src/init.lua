@@ -148,5 +148,7 @@ local profileWindow, leaderboardWindow
 
 local initialized, newRoundStarted, suddenDeath = false
 local currentItem = 17 -- cannon
+local isTribeHouse = tfm.get.room.name:byte(2) == 3
+local statsEnabled = not isTribeHouse
 
 local leaderboard

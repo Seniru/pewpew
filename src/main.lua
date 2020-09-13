@@ -133,6 +133,7 @@ do
 
     rotation = shuffleMaps(maps)
     currentMapIndex = 1
+    statsEnabled = (not isTribeHouse) and tfm.get.room.uniquePlayers >= 4
 
     leaderboard.load()
     Timer("newRound", newRound, 6 * 1000)

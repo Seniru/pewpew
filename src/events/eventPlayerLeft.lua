@@ -4,4 +4,5 @@ function eventPlayerLeft(name)
     player:die()
     Player.players[name] = nil
     Player.playerCount = Player.playerCount - 1
+    statsEnabled = (not isTribeHouse) and tfm.get.room.uniquePlayers >= 4
 end

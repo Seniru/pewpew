@@ -16,9 +16,11 @@ function eventLoop(tc, tr)
                 local winners = ""
                 local winner = ""
 				for name, player in next, Player.alive do
-					player.rounds = player.rounds + 1
-					player.survived = player.survived + 1
-					player:savePlayerData()
+                    if statsEnabled then
+                        player.rounds = player.rounds + 1
+					    player.survived = player.survived + 1
+                        player:savePlayerData()
+                    end
 					if aliveCount == 1 then
                         winners = winners:sub(1, -3)
                         local n, t = extractName(name)

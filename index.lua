@@ -418,6 +418,8 @@ local profileWindow, leaderboardWindow
 
 local initialized, newRoundStarted, suddenDeath = false
 local currentItem = 17 -- cannon
+local isTribeHouse = tfm.get.room.name:byte(2) == 3
+local statsEnabled = not isTribeHouse
 
 local leaderboard
 
@@ -581,8 +583,11 @@ function Player:die()
     self.lives = 0
     self.alive = false
     tfm.exec.chatMessage(translate("LOST_ALL", self.community), self.name)
-    self.rounds = self.rounds + 1
-    self:savePlayerData()
+    
+    if statsEnabled then
+        self.rounds = self.rounds + 1
+        self:savePlayerData()
+    end
 
     if Player.alive[self.name] then
         Player.alive[self.name] = nil
@@ -590,16 +595,21 @@ function Player:die()
     end
 
     if Player.aliveCount == 1 then
+        
 		local winner = next(Player.alive)
         local winnerPlayer = Player.players[winner]
         local n, t = extractName(winner)
 		tfm.exec.chatMessage(translate("SOLE", tfm.get.room.community, nil, {player = "<b><VI>" .. n .. "</VI><font size='8'><N2>" .. t .. "</N2></font></b>"}))
 		tfm.exec.giveCheese(winner)
-		tfm.exec.playerVictory(winner)
-		winnerPlayer.rounds = winnerPlayer.rounds + 1
-		winnerPlayer.survived = winnerPlayer.survived + 1
-		winnerPlayer.won = winnerPlayer.won + 1
-		winnerPlayer:savePlayerData()	
+        tfm.exec.playerVictory(winner)
+        
+        if statsEnabled then
+		    winnerPlayer.rounds = winnerPlayer.rounds + 1
+		    winnerPlayer.survived = winnerPlayer.survived + 1
+		    winnerPlayer.won = winnerPlayer.won + 1
+            winnerPlayer:savePlayerData()	
+        end
+
 		Timer("newRound", newRound, 3 * 1000)
 	elseif Player.aliveCount == 0  then
 		Timer("newRound", newRound, 3 * 1000)
@@ -626,6 +636,7 @@ function eventNewPlayer(name)
         tfm.exec.removeImage(image)
     end, 5000, false, tfm.exec.addImage(assets.banner, ":1", 120, -85, name))
     system.loadPlayerData(name)
+    statsEnabled = (not isTribeHouse) and tfm.get.room.uniquePlayers >= 4
 end
 
 function eventLoop(tc, tr)
@@ -646,9 +657,11 @@ function eventLoop(tc, tr)
                 local winners = ""
                 local winner = ""
 				for name, player in next, Player.alive do
-					player.rounds = player.rounds + 1
-					player.survived = player.survived + 1
-					player:savePlayerData()
+                    if statsEnabled then
+                        player.rounds = player.rounds + 1
+					    player.survived = player.survived + 1
+                        player:savePlayerData()
+                    end
 					if aliveCount == 1 then
                         winners = winners:sub(1, -3)
                         local n, t = extractName(name)
@@ -732,6 +745,7 @@ function eventPlayerLeft(name)
     player:die()
     Player.players[name] = nil
     Player.playerCount = Player.playerCount - 1
+    statsEnabled = (not isTribeHouse) and tfm.get.room.uniquePlayers >= 4
 end
 function eventPlayerDataLoaded(name, data)
 	-- reset player data if they are stored according to the old version
@@ -1045,6 +1059,7 @@ do
 
     rotation = shuffleMaps(maps)
     currentMapIndex = 1
+    statsEnabled = (not isTribeHouse) and tfm.get.room.uniquePlayers >= 4
 
     leaderboard.load()
     Timer("newRound", newRound, 6 * 1000)
