@@ -44,9 +44,11 @@ end
 function Player:refresh()
 	self.alive = true
 	self.inCooldown = false
-	self:setLives(3)
-	Player.alive[self.name] = self
-	Player.aliveCount = Player.aliveCount + 1
+    self:setLives(3)
+    if not Player.alive[self.name] then
+	    Player.alive[self.name] = self
+        Player.aliveCount = Player.aliveCount + 1
+    end
 end
 
 function Player:setLives(lives)
