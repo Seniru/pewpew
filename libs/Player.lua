@@ -87,6 +87,37 @@ function Player:shoot(x, y)
 	end	
 end
 
+function Player:die()
+
+    self.lives = 0
+    self.alive = false
+    tfm.exec.chatMessage(translate("LOST_ALL", self.community), self.name)
+    self.rounds = self.rounds + 1
+    self:savePlayerData()
+
+    if Player.alive[self.name] then
+        Player.alive[self.name] = nil
+        Player.aliveCount = Player.aliveCount - 1
+    end
+
+    if Player.aliveCount == 1 then
+		local winner = next(Player.alive)
+        local winnerPlayer = Player.players[winner]
+        local n, t = extractName(winner)
+		tfm.exec.chatMessage(translate("SOLE", tfm.get.room.community, nil, {player = "<b><VI>" .. n .. "</VI><font size='8'><N2>" .. t .. "</N2></font></b>"}))
+		tfm.exec.giveCheese(winner)
+		tfm.exec.playerVictory(winner)
+		winnerPlayer.rounds = winnerPlayer.rounds + 1
+		winnerPlayer.survived = winnerPlayer.survived + 1
+		winnerPlayer.won = winnerPlayer.won + 1
+		winnerPlayer:savePlayerData()	
+		Timer("newRound", newRound, 3 * 1000)
+	elseif Player.aliveCount == 0  then
+		Timer("newRound", newRound, 3 * 1000)
+	end
+        
+end
+
 function Player:savePlayerData()
 	if tfm.get.room.uniquePlayers < 4 then return end
 	local name = self.name

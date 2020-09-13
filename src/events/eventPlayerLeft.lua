@@ -1,10 +1,7 @@
 function eventPlayerLeft(name)
-    if Player.players[name] then
-        if Player.alive[name] then
-            Player.players[name].lives = 1
-            eventPlayerDied(name)
-        end
-		Player.players[name] = nil
-		Player.playerCount = Player.playerCount - 1
-	end
+    local player = Player.players[name]
+    if not player then return end
+    player:die()
+    Player.players[name] = nil
+    Player.playerCount = Player.playerCount - 1
 end
