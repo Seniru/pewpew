@@ -1,3 +1,15 @@
 {
-    "workbench.editor.highlightModifiedTabs": false
+    "workbench.editor.highlightModifiedTabs": false,
+    "Lua.diagnostics.disable": [
+        "lowercase-global",
+        "undefined-global"
+    ],
+    "Lua.diagnostics.globals": [
+        "tfm",
+        "tfm",
+        "assets",
+        "ui",
+        "system",
+        "translate"
+    ]
 }

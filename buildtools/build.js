@@ -21,6 +21,8 @@ combine({
             "src/translations/es.lua",
             "src/translations/fr.lua",
             "src/translations/tr.lua",
+            "src/translations/ph.lua",
+            "src/translations/pl.lua",
             "src/translations/translator.lua"
         ],
     },

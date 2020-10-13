@@ -268,6 +268,40 @@ local a={}a.VERSION='1.5'a.__index=a;function a.new(b,c,d)local self=setmetatabl
 
 --==[[ init ]]==--
 
+local VERSION = "v2.0.2.0"
+local CHANGELOG =
+[[
+
+<p align='center'><font size='20'><b><V>CHANGELOG</V></b></font></p><font size='12' face='Lucide Console'>
+
+    <font size='15' face='Lucida Console'><b><BV>v2.0.2.0</BV></b></font> <i>(10/13/2020)</i>
+        • Added new translations
+            - Added PH Translations <i>(thanks to <b><V>Overforyou</V><N><font size='8'>#9290</font></N></b>)</i>
+            - Added PL Translations <i>(thanks to <b><V>Lightymouse</V><N><font size='8'>#0421</font></N></b>)</i>
+
+        • Added the changelog menu
+        • Added the discord link to the greeting mesesage
+
+
+    <font size='15' face='Lucida Console'><b><BV>v2.0.1.0</BV></b></font> <i>(09/13/2020)</i>
+        • Fixed the bug of choosing a random winner
+
+
+    <font size='15' face='Lucida Console'><b><BV>v2.0.0.0</BV></b></font> <i>(09/09/2020)</i>
+        Released an entirely new, rewritten version of #pewpew. Other than the original gameplay created by <b><V>Baasbase</V><font size='8'>#0095</font></b>, this version features
+        
+        • A new stat system
+            - Profiles
+            - Leaderboards
+
+        • Cool and helpful indicators
+            - Life count
+            - Current item
+
+
+</font>
+]]
+
 tfm.exec.disableAutoNewGame()
 tfm.exec.disableAutoScore()
 tfm.exec.disableAutoShaman()
@@ -355,7 +389,9 @@ local assets = {
             bottomLeft = "155cbe97a3f.png",
             bottomRight = "155cbe9bc9b.png"
         },
-        closeButton = "171e178660d.png"
+        closeButton = "171e178660d.png",
+        scrollbarBg = "1719e0e550a.png",
+        scrollbarFg = "1719e173ac6.png"
     },
     community = {
         xx = "1651b327097.png",
@@ -388,7 +424,7 @@ local assets = {
         ru = "1651b321113.png",
         tr = "1651b3240e8.png",
         vk = "1651b3258b3.png"
-    },    
+    },
     dummy = "17404561700.png"
 }
 
@@ -414,7 +450,7 @@ local dHandler = DataHandler.new("pew", {
     }
 })
 
-local profileWindow, leaderboardWindow
+local profileWindow, leaderboardWindow, changelogWindow
 
 local initialized, newRoundStarted, suddenDeath = false
 local currentItem = 17 -- cannon
@@ -472,6 +508,34 @@ translations["tr"] = {
 	SD =            "<VP>Ani ölüm! Art?k herkesin <N>1<VP> can? kald?",        
 	WELCOME =       "<VP>pewpew odas?na ho?geldiniz, e?yalar f?rlatmak için <N>e?ilin <VP>ya da <N>spacebar <VP>'a bas?n!",        
 	SOLE =          "<ROSE>Ya?ayan ki?i ${player}!"
+}
+
+translations["ph"] = {
+	LIVES_LEFT = "<ROSE>Mayroon kang <N>${lives} <ROSE>buhay na natitira. <VI>Respawning sa 3...",	
+	LOST_ALL =	"<ROSE>Nawala lahat nang buhay mo!",	
+	SD =		"<VP>Biglaang kamatayan! Lahat ay mayroong <N>1 <VP>buhay na natitira",	
+	WELCOME =	"<VP>Maligayang pagdating sa pewpew, <N>umiwas <VP>o <N>spacebar <VP>para bumaril nang items!",	
+    SOLE =		"<ROSE>${player} ang mag isang nakaligtas!",
+    SURVIVORS = "<ROSE>${winners} at ${winner} ay nakaligtas ngayong round!",
+    SELF_RANK = "<p align='center'>Ranggo mo: ${rank}</p>",
+    ROUNDS  =   "<font face='Lucida console'><N2>Rounds na nalaro</N2></font>",
+    DEATHS =    "<font face='Lucida console'><N2>Pagkamatay</N2></font>",
+    SURVIVED =  "<font face='Lucida console'><N2>Rounds na nakaligtas</N2></font>",
+    WON =       "<font face='Lucida console'><N2>Rounds na nanalo</N2></font>"
+}
+
+translations["pl"] = {	
+	LIVES_LEFT = "<ROSE>Pozostało ci <N>${lives} <ROSE>żyć! . <VI>Odrodzenie za 3...",
+	LOST_ALL =	"<ROSE>Straciłeś wszystkie życia!",	
+	SD =		"<VP>Nagła śmierć! Każdy został z <N>1 <VP>życiem",	
+	WELCOME =	"<VP>Witamy w Pewpew, kucnij, kliknij strzałkę w dół lub <N>spacje <VP>aby strzelać przedmiotami!",	
+    SOLE =		"<ROSE>${player} jest jedynym ocalałym!",
+    SURVIVORS = "<ROSE>${winners} i ${winner} przeżyli tę runde!",
+    SELF_RANK = "<p align='center'>Twoja range: ${rank}</p>",
+    ROUNDS  =   "<font face='Lucida console'><N2>Rozegrane rundy</N2></font>",
+    DEATHS =    "<font face='Lucida console'><N2>Śmierci</N2></font>",
+    SURVIVED =  "<font face='Lucida console'><N2>Przeżyte rundy</N2></font>",
+    WON =       "<font face='Lucida console'><N2>Wygrane rundy</N2></font>"
 }
 
 local translate = function(term, lang, page, kwargs)
@@ -633,7 +697,8 @@ end
 
 function eventNewPlayer(name)
     local player = Player.new(name)
-    tfm.exec.chatMessage(translate("WELCOME", player.community), name)   
+    tfm.exec.chatMessage(translate("WELCOME", player.community), name)
+    tfm.exec.chatMessage("<N>Discord server:</N> <VI><b><i>https://discord.gg/vaqgrgp</i></b></VI>", name)
     Timer("banner_" .. name, function(image)
         tfm.exec.removeImage(image)
     end, 5000, false, tfm.exec.addImage(assets.banner, ":1", 120, -85, name))
@@ -933,6 +998,9 @@ cmds = {
     end,
     ["help"] = function(args, msg, author)
         displayHelp(author)
+    end,
+    ["changelog"] = function(args, msg, author)
+        displayChangelog(author)
     end
 }
 
@@ -1054,8 +1122,16 @@ end
 
 displayHelp = function(target)
     tfm.exec.chatMessage("<br>" .. translate("WELCOME", tfm.get.room.playerList[target].community), target)
-    tfm.exec.chatMessage("<N>Report any bug to </N><VP>King_seniru</VP><G>#5890</G><br><br><b><VI>Commands</VI></b><br><br>[ <b>H</b> ] <N><ROSE>!help</ROSE> (displays this help menu)</N><br>[ <b>P</b> ] <N><ROSE>!profile <i>[player]</i></ROSE> (displays the profile of the player)</N><br>[ <b>L</b> ] <N>(displays the leaderboard)</N><br>", target)
+    tfm.exec.chatMessage("<N>Report any bug to </N><VP>King_seniru</VP><G>#5890</G><br><br><b><VI>Commands</VI></b><br><br>[ <b>H</b> ] <N><ROSE>!help</ROSE> (displays this help menu)</N><br>[ <b>P</b> ] <N><ROSE>!profile <i>[player]</i></ROSE> (displays the profile of the player)</N><br>[ <b>L</b> ] <N>(displays the leaderboard)</N><br><br><N><ROSE>!changelog</ROSE> (displays the changelog)</N><br>", target)
 end
+
+displayChangelog = function(target)
+    local targetPlayer = Player.players[target]
+    if targetPlayer.openedWindow then targetPlayer.openedWindow:hide(target) end
+    changelogWindow:show(target)
+    targetPlayer.openedWindow = changelogWindow
+end
+
 
 do
 
@@ -1131,6 +1207,11 @@ do
                     name)
                 end)
         )
+
+    changelogWindow = createPrettyUI(4, 70, 50, 670, 330, true, true)
+        :addPanel(Panel(450, CHANGELOG, 70, 50, 670, 330, nil, nil, 0, true))
+        :addImage(Image(assets.widgets.scrollbarBg, "&1", 720, 80))
+        :addImage(Image(assets.widgets.scrollbarFg, "&1", 720, 90))
 
 end
 

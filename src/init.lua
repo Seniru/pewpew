@@ -1,3 +1,37 @@
+local VERSION = "v2.0.2.0"
+local CHANGELOG =
+[[
+
+<p align='center'><font size='20'><b><V>CHANGELOG</V></b></font></p><font size='12' face='Lucide Console'>
+
+    <font size='15' face='Lucida Console'><b><BV>v2.0.2.0</BV></b></font> <i>(10/13/2020)</i>
+        • Added new translations
+            - Added PH Translations <i>(thanks to <b><V>Overforyou</V><N><font size='8'>#9290</font></N></b>)</i>
+            - Added PL Translations <i>(thanks to <b><V>Lightymouse</V><N><font size='8'>#0421</font></N></b>)</i>
+
+        • Added the changelog menu
+        • Added the discord link to the greeting mesesage
+
+
+    <font size='15' face='Lucida Console'><b><BV>v2.0.1.0</BV></b></font> <i>(09/13/2020)</i>
+        • Fixed the bug of choosing a random winner
+
+
+    <font size='15' face='Lucida Console'><b><BV>v2.0.0.0</BV></b></font> <i>(09/09/2020)</i>
+        Released an entirely new, rewritten version of #pewpew. Other than the original gameplay created by <b><V>Baasbase</V><font size='8'>#0095</font></b>, this version features
+        
+        • A new stat system
+            - Profiles
+            - Leaderboards
+
+        • Cool and helpful indicators
+            - Life count
+            - Current item
+
+
+</font>
+]]
+
 tfm.exec.disableAutoNewGame()
 tfm.exec.disableAutoScore()
 tfm.exec.disableAutoShaman()
@@ -85,7 +119,9 @@ local assets = {
             bottomLeft = "155cbe97a3f.png",
             bottomRight = "155cbe9bc9b.png"
         },
-        closeButton = "171e178660d.png"
+        closeButton = "171e178660d.png",
+        scrollbarBg = "1719e0e550a.png",
+        scrollbarFg = "1719e173ac6.png"
     },
     community = {
         xx = "1651b327097.png",
@@ -118,7 +154,7 @@ local assets = {
         ru = "1651b321113.png",
         tr = "1651b3240e8.png",
         vk = "1651b3258b3.png"
-    },    
+    },
     dummy = "17404561700.png"
 }
 
@@ -144,7 +180,7 @@ local dHandler = DataHandler.new("pew", {
     }
 })
 
-local profileWindow, leaderboardWindow
+local profileWindow, leaderboardWindow, changelogWindow
 
 local initialized, newRoundStarted, suddenDeath = false
 local currentItem = 17 -- cannon

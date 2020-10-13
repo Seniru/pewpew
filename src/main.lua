@@ -5,6 +5,9 @@ cmds = {
     end,
     ["help"] = function(args, msg, author)
         displayHelp(author)
+    end,
+    ["changelog"] = function(args, msg, author)
+        displayChangelog(author)
     end
 }
 
@@ -126,8 +129,16 @@ end
 
 displayHelp = function(target)
     tfm.exec.chatMessage("<br>" .. translate("WELCOME", tfm.get.room.playerList[target].community), target)
-    tfm.exec.chatMessage("<N>Report any bug to </N><VP>King_seniru</VP><G>#5890</G><br><br><b><VI>Commands</VI></b><br><br>[ <b>H</b> ] <N><ROSE>!help</ROSE> (displays this help menu)</N><br>[ <b>P</b> ] <N><ROSE>!profile <i>[player]</i></ROSE> (displays the profile of the player)</N><br>[ <b>L</b> ] <N>(displays the leaderboard)</N><br>", target)
+    tfm.exec.chatMessage("<N>Report any bug to </N><VP>King_seniru</VP><G>#5890</G><br><br><b><VI>Commands</VI></b><br><br>[ <b>H</b> ] <N><ROSE>!help</ROSE> (displays this help menu)</N><br>[ <b>P</b> ] <N><ROSE>!profile <i>[player]</i></ROSE> (displays the profile of the player)</N><br>[ <b>L</b> ] <N>(displays the leaderboard)</N><br><br><N><ROSE>!changelog</ROSE> (displays the changelog)</N><br>", target)
 end
+
+displayChangelog = function(target)
+    local targetPlayer = Player.players[target]
+    if targetPlayer.openedWindow then targetPlayer.openedWindow:hide(target) end
+    changelogWindow:show(target)
+    targetPlayer.openedWindow = changelogWindow
+end
+
 
 do
 
@@ -203,6 +214,11 @@ do
                     name)
                 end)
         )
+
+    changelogWindow = createPrettyUI(4, 70, 50, 670, 330, true, true)
+        :addPanel(Panel(450, CHANGELOG, 70, 50, 670, 330, nil, nil, 0, true))
+        :addImage(Image(assets.widgets.scrollbarBg, "&1", 720, 80))
+        :addImage(Image(assets.widgets.scrollbarFg, "&1", 720, 90))
 
 end
 
