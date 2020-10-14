@@ -309,30 +309,57 @@ tfm.exec.disableAutoTimeLeft()
 
 local maps = { 521833, 401421, 541917, 541928, 541936, 541943, 527935, 559634, 559644, 888052, 878047, 885641, 770600, 770656, 772172, 891472, 589736, 589800, 589708, 900012, 901062, 754380, 901337, 901411, 892660, 907870, 910078, 1190467, 1252043, 1124380, 1016258, 1252299, 1255902, 1256808, 986790, 1285380, 1271249, 1255944, 1255983, 1085344, 1273114, 1276664, 1279258, 1286824, 1280135, 1280342, 1284861, 1287556, 1057753, 1196679, 1288489, 1292983, 1298164, 1298521, 1293189, 1296949, 1308378, 1311136, 1314419, 1314982, 1318248, 1312411, 1312589, 1312845, 1312933, 1313969, 1338762, 1339474, 1349878, 1297154, 644588, 1351237, 1354040, 1354375, 1362386, 1283234, 1370578, 1306592, 1360889, 1362753, 1408124, 1407949, 1407849, 1343986, 1408028, 1441370, 1443416, 1389255, 1427349, 1450527, 1424739, 869836, 1459902, 1392993, 1426457, 1542824, 1533474, 1561467, 1563534, 1566991, 1587241, 1416119, 1596270, 1601580, 1525751, 1582146, 1558167, 1420943, 1466487, 1642575, 1648013, 1646094, 1393097, 1643446, 1545219, 1583484, 1613092, 1627981, 1633374, 1633277, 1633251, 1585138, 1624034, 1616785, 1625916, 1667582, 1666996, 1675013, 1675316, 1531316, 1665413, 1681719, 1699880, 1688696, 623770, 1727243, 1531329, 1683915, 1689533, 1738601, 3756146, 7742371, 7781585, 7781591 }
 
+local ENUM_ITEMS = {
+	SMALL_BOX = 		1,
+    LARGE_BOX = 		2,
+    SMALL_PLANK = 		3,
+    LARGE_PLANK = 		4,
+    BALL = 				6,
+	ANVIL = 			10,
+	CANNON =			17,
+    BOMB = 				23,
+    SPIRIT = 			24,
+    BLUE_BALOON = 		28,
+    RUNE = 				32,
+    SNOWBALL = 			34,
+    CUPID_ARROW = 		35,
+    APPLE = 			39,
+    SHEEP = 			40,
+    SMALL_ICE_PLANK = 	45,
+    SMALL_CHOCO_PLANK = 46,
+    ICE_CUBE = 			54,
+    CLOUD = 			57,
+    BUBBLE = 			59,
+    TINY_PLANK = 		60,
+    STABLE_RUNE = 		62,
+    PUFFER_FISH = 		65,
+    TOMBSTONE = 		90
+}
+
 local items = {
-    1,  -- small box
-    2,  -- large box
-    3,  -- small plank
-    4,  -- large plank
-    6,  -- ball
-    10, -- anvil
-    23, -- bomb
-    24, -- spirit
-    28, -- blueBaloon
-    32, -- rune
-    34, -- snow ball
-    35, -- cupid arrow
-    39, -- apple
-    40, -- sheep
-    45, -- small ice plank
-    46, -- small choco plank
-    54, -- ice cube
-    57, -- cloud
-    59, -- bubble
-    60, -- tiny plank
-    62, -- stable rune
-    65, -- puffer fish
-    90  -- tombstone
+    ENUM_ITEMS.SMALL_BOX,
+    ENUM_ITEMS.LARGE_BOX,
+    ENUM_ITEMS.SMALL_PLANK,
+    ENUM_ITEMS.LARGE_PLANK,
+    ENUM_ITEMS.BALL,
+    ENUM_ITEMS.ANVIL,
+    ENUM_ITEMS.BOMB,
+    ENUM_ITEMS.SPIRIT,
+    ENUM_ITEMS.BLUE_BALOON,
+    ENUM_ITEMS.RUNE,
+    ENUM_ITEMS.SNOWBALL,
+    ENUM_ITEMS.CUPID_ARROW,
+    ENUM_ITEMS.APPLE,
+    ENUM_ITEMS.SHEEP,
+    ENUM_ITEMS.SMALL_ICE_PLANK,
+    ENUM_ITEMS.SMALL_CHOCO_PLANK,
+    ENUM_ITEMS.ICE_CUBE,
+    ENUM_ITEMS.CLOUD,
+    ENUM_ITEMS.BUBBLE,
+    ENUM_ITEMS.TINY_PLANK,
+    ENUM_ITEMS.STABLE_RUNE,
+    ENUM_ITEMS.PUFFER_FISH,
+    ENUM_ITEMS.TOMBSTONE
 }
 
 local keys = {
@@ -357,30 +384,30 @@ local assets = {
     iconSurvived = "17434d0a87e.png",
     iconWon = "17434cff8bd.png",
     items = {
-        [1] = "17406985997.png", -- small box
-        [2] = "174068e3bca.png", -- large box
-        [3] = "174069a972e.png", -- small plank
-        [4] = "174069c5a7a.png", -- large plank
-        [6] = "174069d7a29.png", -- ball
-        [10] = "174069e766a.png", -- anvil
-        [17] = "17406bf2f70.png", -- cannon
-        [23] = "17406bf6ffc.png", -- bomb
-        [24] = "17406a23cd0.png", -- spirit
-        [28] = "17406a41815.png", -- blue balloon
-        [32] = "17406a58032.png", -- rune
-        [34] = "17406a795f4.png", -- snowball
-        [35] = "17406a914a3.png", -- cupid arrow
-        [39] = "17406aa2daf.png", -- apple
-        [40] = "17406ac8ab7.png", -- sheep
-        [45] = "17406aefb88.png", -- small ice plank
-        [46] = "17406b00239.png", -- small choco plank
-        [54] = "17406b15725.png", -- ice cube
-        [57] = "17406b22bd6.png", -- cloud
-        [59] = "17406b32d1f.png", -- bubble
-        [60] = "17406b59bd6.png", -- tiny plank
-        [62] = "17406b772b7.png", -- stable rune
-        [65] = "17406b8c9f2.png", -- puffer fish
-        [90] = "17406b9eda9.png" -- tombstone
+        [ENUM_ITEMS.SMALL_BOX] = "17406985997.png",
+        [ENUM_ITEMS.LARGE_BOX] = "174068e3bca.png",
+        [ENUM_ITEMS.SMALL_PLANK] = "174069a972e.png",
+        [ENUM_ITEMS.LARGE_PLANK] = "174069c5a7a.png",
+        [ENUM_ITEMS.BALL] = "174069d7a29.png",
+        [ENUM_ITEMS.ANVIL] = "174069e766a.png",
+        [ENUM_ITEMS.CANNON] = "17406bf2f70.png",
+        [ENUM_ITEMS.BOMB] = "17406bf6ffc.png",
+        [ENUM_ITEMS.SPIRIT] = "17406a23cd0.png",
+        [ENUM_ITEMS.BLUE_BALOON] = "17406a41815.png",
+        [ENUM_ITEMS.RUNE] = "17406a58032.png",
+        [ENUM_ITEMS.SNOWBALL] = "17406a795f4.png",
+        [ENUM_ITEMS.CUPID_ARROW] = "17406a914a3.png",
+        [ENUM_ITEMS.APPLE] = "17406aa2daf.png",
+        [ENUM_ITEMS.SHEEP] = "17406ac8ab7.png",
+        [ENUM_ITEMS.SMALL_ICE_PLANK] = "17406aefb88.png",
+        [ENUM_ITEMS.SMALL_CHOCO_PLANK] = "17406b00239.png",
+        [ENUM_ITEMS.ICE_CUBE] = "17406b15725.png",
+        [ENUM_ITEMS.CLOUD] = "17406b22bd6.png",
+        [ENUM_ITEMS.BUBBLE] = "17406b32d1f.png",
+        [ENUM_ITEMS.TINY_PLANK] = "17406b59bd6.png",
+        [ENUM_ITEMS.STABLE_RUNE] = "17406b772b7.png",
+        [ENUM_ITEMS.PUFFER_FISH] = "17406b8c9f2.png",
+        [ENUM_ITEMS.TOMBSTONE] = "17406b9eda9.png"
     },
     widgets = {
         borders = {
@@ -455,10 +482,12 @@ local dHandler = DataHandler.new("pew", {
     }
 })
 
+local MIN_PLAYERS = 4
+
 local profileWindow, leaderboardWindow, changelogWindow
 
 local initialized, newRoundStarted, suddenDeath = false
-local currentItem = 17 -- cannon
+local currentItem = ENUM_ITEMS.CANNON
 local isTribeHouse = tfm.get.room.isTribeHouse
 local statsEnabled = not isTribeHouse
 
@@ -691,7 +720,7 @@ function Player:die()
 end
 
 function Player:savePlayerData()
-	if tfm.get.room.uniquePlayers < 4 then return end
+	if tfm.get.room.uniquePlayers < MIN_PLAYERS then return end
 	local name = self.name
     dHandler:set(name, "rounds", self.rounds)
     dHandler:set(name, "survived", self.survived)
@@ -1032,7 +1061,7 @@ newRound = function()
     newRoundStarted = false
     suddenDeath = false
     currentMapIndex = next(rotation, currentMapIndex)
-    statsEnabled = (not isTribeHouse) and tfm.get.room.uniquePlayers >= 4
+    statsEnabled = (not isTribeHouse) and tfm.get.room.uniquePlayers >= MIN_PLAYERS
 
 
     tfm.exec.newGame(rotation[currentMapIndex])
@@ -1053,7 +1082,7 @@ newRound = function()
         closeSequence[1].images = { tfm.exec.addImage(assets.items[currentItem],":1", 740, 330) }
         Timer("changeItem", function()
             if math.random(1, 3) == 3 then
-                currentItem = 17 -- cannon
+                currentItem = ENUM_ITEMS.CANNON
             else
                 currentItem = items[math.random(1, #items)]
             end
@@ -1065,22 +1094,22 @@ newRound = function()
 end
 
 getPos = function(item, stance)
-	if item == 17 then
-		return { x = stance == -1 and 10 or -10, y = 18 }
-	elseif item == 24 then
-		return { x = 0, y = 10 }
-	else
-		return { x = stance == -1 and -10 or 10, y = 0 }
+	if item == ENUM_ITEMS.CANNON then		
+		return { x = stance == -1 and 10 or -10, y = 18 }	
+	elseif item == ENUM_ITEMS.SPIRIT then		
+		return { x = 0, y = 10 }	
+	else		
+		return { x = stance == -1 and -10 or 10, y = 0 }	
 	end
 end
 
-getRot = function(item, stance)
-	if item == 32 or item == 35 or item == 62 then
-		return stance == -1 and 180 or 0
-	elseif item == 17 then
+getRot = function(item, stance)	
+	if item == ENUM_ITEMS.RUNE or item == ENUM_ITEMS.CUPID_ARROW or item == ENUM_ITEMS.STABLE_RUNE then
+		return stance == -1 and 180 or 0	
+	elseif item == ENUM_ITEMS.CANNON then
 		return stance == -1 and -90 or 90
 	else
-		return 0
+		return 0	
 	end
 end
 
@@ -1148,7 +1177,7 @@ do
 
     rotation = shuffleMaps(maps)
     currentMapIndex = 1
-    statsEnabled = (not isTribeHouse) and tfm.get.room.uniquePlayers >= 4
+    statsEnabled = (not isTribeHouse) and tfm.get.room.uniquePlayers >= MIN_PLAYERS
 
     leaderboard.load()
     Timer("newRound", newRound, 6 * 1000)

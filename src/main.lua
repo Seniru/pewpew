@@ -30,7 +30,7 @@ newRound = function()
     newRoundStarted = false
     suddenDeath = false
     currentMapIndex = next(rotation, currentMapIndex)
-    statsEnabled = (not isTribeHouse) and tfm.get.room.uniquePlayers >= 4
+    statsEnabled = (not isTribeHouse) and tfm.get.room.uniquePlayers >= MIN_PLAYERS
 
 
     tfm.exec.newGame(rotation[currentMapIndex])
@@ -51,7 +51,7 @@ newRound = function()
         closeSequence[1].images = { tfm.exec.addImage(assets.items[currentItem],":1", 740, 330) }
         Timer("changeItem", function()
             if math.random(1, 3) == 3 then
-                currentItem = 17 -- cannon
+                currentItem = ENUM_ITEMS.CANNON
             else
                 currentItem = items[math.random(1, #items)]
             end
@@ -63,22 +63,22 @@ newRound = function()
 end
 
 getPos = function(item, stance)
-	if item == 17 then
-		return { x = stance == -1 and 10 or -10, y = 18 }
-	elseif item == 24 then
-		return { x = 0, y = 10 }
-	else
-		return { x = stance == -1 and -10 or 10, y = 0 }
+	if item == ENUM_ITEMS.CANNON then		
+		return { x = stance == -1 and 10 or -10, y = 18 }	
+	elseif item == ENUM_ITEMS.SPIRIT then		
+		return { x = 0, y = 10 }	
+	else		
+		return { x = stance == -1 and -10 or 10, y = 0 }	
 	end
 end
 
-getRot = function(item, stance)
-	if item == 32 or item == 35 or item == 62 then
-		return stance == -1 and 180 or 0
-	elseif item == 17 then
+getRot = function(item, stance)	
+	if item == ENUM_ITEMS.RUNE or item == ENUM_ITEMS.CUPID_ARROW or item == ENUM_ITEMS.STABLE_RUNE then
+		return stance == -1 and 180 or 0	
+	elseif item == ENUM_ITEMS.CANNON then
 		return stance == -1 and -90 or 90
 	else
-		return 0
+		return 0	
 	end
 end
 
@@ -146,7 +146,7 @@ do
 
     rotation = shuffleMaps(maps)
     currentMapIndex = 1
-    statsEnabled = (not isTribeHouse) and tfm.get.room.uniquePlayers >= 4
+    statsEnabled = (not isTribeHouse) and tfm.get.room.uniquePlayers >= MIN_PLAYERS
 
     leaderboard.load()
     Timer("newRound", newRound, 6 * 1000)
