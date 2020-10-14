@@ -26,19 +26,21 @@ local shuffleMaps = function(maps)
 end
 
 newRound = function()
-    
+
     newRoundStarted = false
     suddenDeath = false
     currentMapIndex = next(rotation, currentMapIndex)
-    
+    statsEnabled = (not isTribeHouse) and tfm.get.room.uniquePlayers >= 4
+
+
     tfm.exec.newGame(rotation[currentMapIndex])
     tfm.exec.setGameTime(93, true)
-    
+
     Player.alive = {}
     Player.aliveCount = 0
-    
+
     for name, player in next, Player.players do player:refresh() end
-    
+
     if currentMapIndex >= #rotation then
         rotation = shuffleMaps(maps)
         currentMapIndex = 1
@@ -54,29 +56,29 @@ newRound = function()
                 currentItem = items[math.random(1, #items)]
             end
             tfm.exec.removeImage(closeSequence[1].images[1])
-            closeSequence[1].images = { tfm.exec.addImage(assets.items[currentItem], ":1", 740, 330) }    
+            closeSequence[1].images = { tfm.exec.addImage(assets.items[currentItem], ":1", 740, 330) }
         end, 10000, true)
     end
 
 end
 
 getPos = function(item, stance)
-	if item == 17 then		
-		return { x = stance == -1 and 10 or -10, y = 18 }	
-	elseif item == 24 then		
-		return { x = 0, y = 10 }	
-	else		
-		return { x = stance == -1 and -10 or 10, y = 0 }	
+	if item == 17 then
+		return { x = stance == -1 and 10 or -10, y = 18 }
+	elseif item == 24 then
+		return { x = 0, y = 10 }
+	else
+		return { x = stance == -1 and -10 or 10, y = 0 }
 	end
 end
 
-getRot = function(item, stance)	
+getRot = function(item, stance)
 	if item == 32 or item == 35 or item == 62 then
-		return stance == -1 and 180 or 0	
+		return stance == -1 and 180 or 0
 	elseif item == 17 then
 		return stance == -1 and -90 or 90
 	else
-		return 0	
+		return 0
 	end
 end
 
@@ -88,27 +90,27 @@ extractName = function(username)
 end
 
 createPrettyUI = function(id, x, y, w, h, fixed, closeButton)
-    
-    local window =  Panel(id * 100 + 10, "", x - 4, y - 4, w + 8, h + 8, 0x7f492d, 0x7f492d, 1, true)
+
+    local window =  Panel(id * 100 + 10, "", x - 4, y - 4, w + 8, h + 8, 0x7f492d, 0x7f492d, 1, fixed)
         :addPanel(
-            Panel(id * 100 + 20, "", x, y, w, h, 0x152d30, 0x0f1213, 1, true)
+            Panel(id * 100 + 20, "", x, y, w, h, 0x152d30, 0x0f1213, 1, fixed)
         )
         :addImage(Image(assets.widgets.borders.topLeft, "&1",     x - 10,     y - 10))
         :addImage(Image(assets.widgets.borders.topRight, "&1",    x + w - 18, y - 10))
         :addImage(Image(assets.widgets.borders.bottomLeft, "&1",  x - 10,     y + h - 18))
         :addImage(Image(assets.widgets.borders.bottomRight, "&1", x + w - 18, y + h - 18))
-        
+
 
     if closeButton then
         window
             :addPanel(
-                Panel(id * 100 + 30, "<a href='event:close'>\n\n\n\n\n\n</a>", x + w + 18, y - 10, 15, 20, nil, nil, 0, true)
+                Panel(id * 100 + 30, "<a href='event:close'>\n\n\n\n\n\n</a>", x + w + 18, y - 10, 15, 20, nil, nil, 0, fixed)
                     :addImage(Image(assets.widgets.closeButton, ":0", x + w + 15, y - 10)
                 )
             )
             :setCloseButton(id * 100 + 30)
     end
-    
+
     return window
 
 end

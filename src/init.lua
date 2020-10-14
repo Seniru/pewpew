@@ -177,6 +177,11 @@ local dHandler = DataHandler.new("pew", {
         index = 3,
         type = "number",
         default = 0
+    },
+    points = {
+        index = 4,
+        type = "number",
+        default = 0
     }
 })
 
@@ -184,7 +189,7 @@ local profileWindow, leaderboardWindow, changelogWindow
 
 local initialized, newRoundStarted, suddenDeath = false
 local currentItem = 17 -- cannon
-local isTribeHouse = tfm.get.room.name:byte(2) == 3
+local isTribeHouse = tfm.get.room.isTribeHouse
 local statsEnabled = not isTribeHouse
 
 local leaderboard

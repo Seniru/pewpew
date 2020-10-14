@@ -18,7 +18,7 @@ setmetatable(Player, {
 
 function Player.new(name)
 	local self = setmetatable({}, Player)
-	
+
     self.name = name
 	self.alive = false
 	self.lives = 0
@@ -29,10 +29,11 @@ function Player.new(name)
 	self.rounds = 0
 	self.survived = 0
 	self.won = 0
-    self.score = 0
-    
+	self.score = 0
+	self.points = 0
+
     self.openedWindow = nil
-    
+
     for key, code in next, keys do system.bindKeyboard(name, code, true, true) end
 
 	Player.players[name] = self
@@ -65,7 +66,7 @@ end
 
 function Player:shoot(x, y)
 	if newRoundStarted and self.alive and not self.inCooldown then
-		
+
 		self.inCooldown = true
 
 		local stance = self.stance
@@ -86,7 +87,7 @@ function Player:shoot(x, y)
 			currentItem == 32 or currentItem == 62
 		))
 
-	end	
+	end
 end
 
 function Player:die()
@@ -94,7 +95,7 @@ function Player:die()
     self.lives = 0
     self.alive = false
     tfm.exec.chatMessage(translate("LOST_ALL", self.community), self.name)
-    
+
     if statsEnabled then
         self.rounds = self.rounds + 1
         self:savePlayerData()
@@ -106,26 +107,27 @@ function Player:die()
     end
 
     if Player.aliveCount == 1 then
-        
+
 		local winner = next(Player.alive)
         local winnerPlayer = Player.players[winner]
         local n, t = extractName(winner)
 		tfm.exec.chatMessage(translate("SOLE", tfm.get.room.community, nil, {player = "<b><VI>" .. n .. "</VI><font size='8'><N2>" .. t .. "</N2></font></b>"}))
 		tfm.exec.giveCheese(winner)
         tfm.exec.playerVictory(winner)
-        
+
         if statsEnabled then
 		    winnerPlayer.rounds = winnerPlayer.rounds + 1
 		    winnerPlayer.survived = winnerPlayer.survived + 1
-		    winnerPlayer.won = winnerPlayer.won + 1
-            winnerPlayer:savePlayerData()	
+			winnerPlayer.won = winnerPlayer.won + 1
+			winnerPlayer.points = winnerPlayer.points + 5
+            winnerPlayer:savePlayerData()
         end
 
 		Timer("newRound", newRound, 3 * 1000)
 	elseif Player.aliveCount == 0  then
 		Timer("newRound", newRound, 3 * 1000)
 	end
-        
+
 end
 
 function Player:savePlayerData()
@@ -134,5 +136,6 @@ function Player:savePlayerData()
     dHandler:set(name, "rounds", self.rounds)
     dHandler:set(name, "survived", self.survived)
 	dHandler:set(name, "won", self.won)
+	dHandler:set(name, "points", self.points)
     system.savePlayerData(name, "v2" .. dHandler:dumpPlayer(name))
 end

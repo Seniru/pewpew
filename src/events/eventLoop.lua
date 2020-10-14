@@ -18,7 +18,8 @@ function eventLoop(tc, tr)
 				for name, player in next, Player.alive do
                     if statsEnabled then
                         player.rounds = player.rounds + 1
-					    player.survived = player.survived + 1
+						player.survived = player.survived + 1
+						player.points = player.points + 2
                         player:savePlayerData()
                     end
 					if aliveCount == 1 then

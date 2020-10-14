@@ -447,6 +447,11 @@ local dHandler = DataHandler.new("pew", {
         index = 3,
         type = "number",
         default = 0
+    },
+    points = {
+        index = 4,
+        type = "number",
+        default = 0
     }
 })
 
@@ -454,7 +459,7 @@ local profileWindow, leaderboardWindow, changelogWindow
 
 local initialized, newRoundStarted, suddenDeath = false
 local currentItem = 17 -- cannon
-local isTribeHouse = tfm.get.room.name:byte(2) == 3
+local isTribeHouse = tfm.get.room.isTribeHouse
 local statsEnabled = not isTribeHouse
 
 local leaderboard
@@ -573,7 +578,7 @@ setmetatable(Player, {
 
 function Player.new(name)
 	local self = setmetatable({}, Player)
-	
+
     self.name = name
 	self.alive = false
 	self.lives = 0
@@ -584,10 +589,11 @@ function Player.new(name)
 	self.rounds = 0
 	self.survived = 0
 	self.won = 0
-    self.score = 0
-    
+	self.score = 0
+	self.points = 0
+
     self.openedWindow = nil
-    
+
     for key, code in next, keys do system.bindKeyboard(name, code, true, true) end
 
 	Player.players[name] = self
@@ -620,7 +626,7 @@ end
 
 function Player:shoot(x, y)
 	if newRoundStarted and self.alive and not self.inCooldown then
-		
+
 		self.inCooldown = true
 
 		local stance = self.stance
@@ -641,7 +647,7 @@ function Player:shoot(x, y)
 			currentItem == 32 or currentItem == 62
 		))
 
-	end	
+	end
 end
 
 function Player:die()
@@ -649,7 +655,7 @@ function Player:die()
     self.lives = 0
     self.alive = false
     tfm.exec.chatMessage(translate("LOST_ALL", self.community), self.name)
-    
+
     if statsEnabled then
         self.rounds = self.rounds + 1
         self:savePlayerData()
@@ -661,26 +667,27 @@ function Player:die()
     end
 
     if Player.aliveCount == 1 then
-        
+
 		local winner = next(Player.alive)
         local winnerPlayer = Player.players[winner]
         local n, t = extractName(winner)
 		tfm.exec.chatMessage(translate("SOLE", tfm.get.room.community, nil, {player = "<b><VI>" .. n .. "</VI><font size='8'><N2>" .. t .. "</N2></font></b>"}))
 		tfm.exec.giveCheese(winner)
         tfm.exec.playerVictory(winner)
-        
+
         if statsEnabled then
 		    winnerPlayer.rounds = winnerPlayer.rounds + 1
 		    winnerPlayer.survived = winnerPlayer.survived + 1
-		    winnerPlayer.won = winnerPlayer.won + 1
-            winnerPlayer:savePlayerData()	
+			winnerPlayer.won = winnerPlayer.won + 1
+			winnerPlayer.points = winnerPlayer.points + 5
+            winnerPlayer:savePlayerData()
         end
 
 		Timer("newRound", newRound, 3 * 1000)
 	elseif Player.aliveCount == 0  then
 		Timer("newRound", newRound, 3 * 1000)
 	end
-        
+
 end
 
 function Player:savePlayerData()
@@ -689,6 +696,7 @@ function Player:savePlayerData()
     dHandler:set(name, "rounds", self.rounds)
     dHandler:set(name, "survived", self.survived)
 	dHandler:set(name, "won", self.won)
+	dHandler:set(name, "points", self.points)
     system.savePlayerData(name, "v2" .. dHandler:dumpPlayer(name))
 end
 
@@ -703,7 +711,7 @@ function eventNewPlayer(name)
         tfm.exec.removeImage(image)
     end, 5000, false, tfm.exec.addImage(assets.banner, ":1", 120, -85, name))
     system.loadPlayerData(name)
-    statsEnabled = (not isTribeHouse) and tfm.get.room.uniquePlayers >= 4
+    -- statsEnabled = (not isTribeHouse) and tfm.get.room.uniquePlayers >= 4
 end
 
 function eventLoop(tc, tr)
@@ -726,7 +734,8 @@ function eventLoop(tc, tr)
 				for name, player in next, Player.alive do
                     if statsEnabled then
                         player.rounds = player.rounds + 1
-					    player.survived = player.survived + 1
+						player.survived = player.survived + 1
+						player.points = player.points + 2
                         player:savePlayerData()
                     end
 					if aliveCount == 1 then
@@ -812,7 +821,7 @@ function eventPlayerLeft(name)
     player:die()
     Player.players[name] = nil
     Player.playerCount = Player.playerCount - 1
-    statsEnabled = (not isTribeHouse) and tfm.get.room.uniquePlayers >= 4
+    -- statsEnabled = (not isTribeHouse) and tfm.get.room.uniquePlayers >= 4
 end
 function eventPlayerDataLoaded(name, data)
 	-- reset player data if they are stored according to the old version
@@ -1019,19 +1028,21 @@ local shuffleMaps = function(maps)
 end
 
 newRound = function()
-    
+
     newRoundStarted = false
     suddenDeath = false
     currentMapIndex = next(rotation, currentMapIndex)
-    
+    statsEnabled = (not isTribeHouse) and tfm.get.room.uniquePlayers >= 4
+
+
     tfm.exec.newGame(rotation[currentMapIndex])
     tfm.exec.setGameTime(93, true)
-    
+
     Player.alive = {}
     Player.aliveCount = 0
-    
+
     for name, player in next, Player.players do player:refresh() end
-    
+
     if currentMapIndex >= #rotation then
         rotation = shuffleMaps(maps)
         currentMapIndex = 1
@@ -1047,29 +1058,29 @@ newRound = function()
                 currentItem = items[math.random(1, #items)]
             end
             tfm.exec.removeImage(closeSequence[1].images[1])
-            closeSequence[1].images = { tfm.exec.addImage(assets.items[currentItem], ":1", 740, 330) }    
+            closeSequence[1].images = { tfm.exec.addImage(assets.items[currentItem], ":1", 740, 330) }
         end, 10000, true)
     end
 
 end
 
 getPos = function(item, stance)
-	if item == 17 then		
-		return { x = stance == -1 and 10 or -10, y = 18 }	
-	elseif item == 24 then		
-		return { x = 0, y = 10 }	
-	else		
-		return { x = stance == -1 and -10 or 10, y = 0 }	
+	if item == 17 then
+		return { x = stance == -1 and 10 or -10, y = 18 }
+	elseif item == 24 then
+		return { x = 0, y = 10 }
+	else
+		return { x = stance == -1 and -10 or 10, y = 0 }
 	end
 end
 
-getRot = function(item, stance)	
+getRot = function(item, stance)
 	if item == 32 or item == 35 or item == 62 then
-		return stance == -1 and 180 or 0	
+		return stance == -1 and 180 or 0
 	elseif item == 17 then
 		return stance == -1 and -90 or 90
 	else
-		return 0	
+		return 0
 	end
 end
 
@@ -1081,27 +1092,27 @@ extractName = function(username)
 end
 
 createPrettyUI = function(id, x, y, w, h, fixed, closeButton)
-    
-    local window =  Panel(id * 100 + 10, "", x - 4, y - 4, w + 8, h + 8, 0x7f492d, 0x7f492d, 1, true)
+
+    local window =  Panel(id * 100 + 10, "", x - 4, y - 4, w + 8, h + 8, 0x7f492d, 0x7f492d, 1, fixed)
         :addPanel(
-            Panel(id * 100 + 20, "", x, y, w, h, 0x152d30, 0x0f1213, 1, true)
+            Panel(id * 100 + 20, "", x, y, w, h, 0x152d30, 0x0f1213, 1, fixed)
         )
         :addImage(Image(assets.widgets.borders.topLeft, "&1",     x - 10,     y - 10))
         :addImage(Image(assets.widgets.borders.topRight, "&1",    x + w - 18, y - 10))
         :addImage(Image(assets.widgets.borders.bottomLeft, "&1",  x - 10,     y + h - 18))
         :addImage(Image(assets.widgets.borders.bottomRight, "&1", x + w - 18, y + h - 18))
-        
+
 
     if closeButton then
         window
             :addPanel(
-                Panel(id * 100 + 30, "<a href='event:close'>\n\n\n\n\n\n</a>", x + w + 18, y - 10, 15, 20, nil, nil, 0, true)
+                Panel(id * 100 + 30, "<a href='event:close'>\n\n\n\n\n\n</a>", x + w + 18, y - 10, 15, 20, nil, nil, 0, fixed)
                     :addImage(Image(assets.widgets.closeButton, ":0", x + w + 15, y - 10)
                 )
             )
             :setCloseButton(id * 100 + 30)
     end
-    
+
     return window
 
 end
