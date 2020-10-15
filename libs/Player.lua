@@ -31,6 +31,8 @@ function Player.new(name)
 	self.won = 0
 	self.score = 0
 	self.points = 0
+	self.packs = 1
+	self.equipped = 1
 
     self.openedWindow = nil
 

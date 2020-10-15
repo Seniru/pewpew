@@ -6,6 +6,9 @@ cmds = {
     ["help"] = function(args, msg, author)
         displayHelp(author)
     end,
+    ["shop"] = function(args, msg, author)
+        shop.displayShop(author)
+    end,
     ["changelog"] = function(args, msg, author)
         displayChangelog(author)
     end
@@ -221,6 +224,14 @@ do
         :addPanel(Panel(450, CHANGELOG, 70, 50, 670, 330, nil, nil, 0, true))
         :addImage(Image(assets.widgets.scrollbarBg, "&1", 720, 80))
         :addImage(Image(assets.widgets.scrollbarFg, "&1", 720, 90))
+
+    shopWindow = createPrettyUI(5, 360, 50, 380, 330, true, true) -- main shop window
+        :addPanel(  -- preview window 
+            createPrettyUI(6, 70, 50, 260, 330, true, false)
+                :addPanel(Panel(650, "", 80, 350, 240, 20, nil, 0x324650, 1, true))
+                :addPanel(Panel(651, "", 160, 60, 150, 90, nil, nil, 0, true))
+                :addPanel(Panel(652, "", 80, 160, 100, 100, nil, nil, 0, true))
+        )
 
 end
 

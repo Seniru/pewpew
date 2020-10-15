@@ -81,7 +81,8 @@ do
     end
 
     function Image:hide(target)
-		if target == nil then error("Target cannot be nil") end
+        if target == nil then error("Target cannot be nil") end
+        if not self.instances[target] then return end
         tfm.exec.removeImage(self.instances[target])
         self.instances[target] = nil
         return self
@@ -201,12 +202,14 @@ do
         if not self.temporary[target] then self.temporary[target] = {} end
         panel:show(target)
         self.temporary[target][panel.id] = panel
+        return self
     end
 
     function Panel:addImageTemp(image, target)
         if not self.temporary[target] then self.temporary[target] = {} end
         image:show(target)
         self.temporary[target]["i_" .. image.id] = image
+        return self
     end
 
     function Panel:setActionListener(fn)

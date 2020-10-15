@@ -209,16 +209,26 @@ local dHandler = DataHandler.new("pew", {
         index = 4,
         type = "number",
         default = 0
+    },
+    packs = {
+        index = 5,
+        type = "number",
+        default = 1
+    },
+    equipped = {
+        index = 6,
+        type = "number",
+        default = 1
     }
 })
 
 local MIN_PLAYERS = 4
 
-local profileWindow, leaderboardWindow, changelogWindow
+local profileWindow, leaderboardWindow, changelogWindow, shopWindow
 
 local initialized, newRoundStarted, suddenDeath = false
 local currentItem = ENUM_ITEMS.CANNON
 local isTribeHouse = tfm.get.room.isTribeHouse
 local statsEnabled = not isTribeHouse
 
-local leaderboard
+local leaderboard, shop

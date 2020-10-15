@@ -31,6 +31,126 @@ table.tostring = function(tbl, depth)
     return res:sub(1, res:len() - 2) .. "}"
 end
 
+-- Thanks to Turkitutu 
+-- https://pastebin.com/raw/Nw3y1A42
+
+bit = {}
+
+bit.lshift = function(x, by) -- Left-shift of x by n bits
+    return x * 2 ^ by
+end
+
+bit.rshift = function(x, by) -- Logical right-shift of x by n bits
+    return math.floor(x / 2 ^ by)
+end
+
+bit.band = function(a, b) -- bitwise and of x1, x2
+    local p, c = 1, 0
+    while a > 0 and b > 0 do
+        local ra, rb = a % 2, b % 2
+        if ra + rb > 1 then
+          c = c + p
+        end
+        a, b, p = (a - ra) / 2, (b - rb) / 2, p * 2
+    end
+    return c
+end
+
+bit.bxor = function(a,b) -- Bitwise xor of x1, x2
+    local r = 0
+    for i = 0, 31 do
+        local x = a / 2 + b / 2
+        if x ~= math.floor(x) then
+            r = r + 2^i
+        end
+        a = math.floor(a / 2)
+        b = math.floor(b / 2)
+    end
+    return r
+end
+
+bit.bor = function(a,b) -- Bitwise or of x1, x2
+    local p, c= 1, 0
+    while a+b > 0 do
+        local ra, rb = a % 2, b % 2
+        if ra + rb > 0 then
+            c = c + p
+        end
+        a, b, p = (a - ra) / 2, (b - rb) / 2, p * 2
+    end
+    return c
+end
+
+bit.bnot = function(n) -- Bitwise not of x
+    local p, c = 1, 0
+    while n > 0 do
+        local r = n % 2
+        if r < 0 then
+            c = c + p
+        end
+        n, p = (n - r) / 2, p * 2
+    end
+    return c
+end
+
+local BitList = {}
+
+BitList.__index = BitList
+setmetatable(BitList, {
+    __call = function(cls, ...)
+        return cls.new(...)
+    end
+})
+
+do
+
+    function BitList.new(features)
+        local self = setmetatable({}, BitList)
+        self.featureArray = features
+
+        self.featureKeys = {}
+
+        for k, v in next, features do
+            self.featureKeys[v] = k
+        end
+
+        self.features = #self.featureArray
+
+        return self
+    end
+
+    function BitList:encode(featTbl)
+        local res = 0
+        for k, v in next, featTbl do
+            if v and self.featureKeys[k] then
+              res = bit.bor(res, bit.lshift(1, self.featureKeys[k] - 1))
+            end
+        end
+        return res
+    end
+
+    function BitList:decode(featInt)
+        local features, index = {}, 1
+        while (featInt > 0) do
+            feat = bit.band(featInt, 1) == 1
+            corrFeat = self.featureArray[index]
+            features[corrFeat] = feat
+            featInt = bit.rshift(featInt, 1)
+            index = index + 1
+        end
+        return features
+    end
+
+    function BitList:get(index)
+        return self.featureArray[index]
+    end
+
+    function BitList:find(feature)
+        return self.featureKeys[feature]
+    end
+
+end
+
 local Panel = {}
 local Image = {}
 
@@ -114,7 +234,8 @@ do
     end
 
     function Image:hide(target)
-		if target == nil then error("Target cannot be nil") end
+        if target == nil then error("Target cannot be nil") end
+        if not self.instances[target] then return end
         tfm.exec.removeImage(self.instances[target])
         self.instances[target] = nil
         return self
@@ -234,12 +355,14 @@ do
         if not self.temporary[target] then self.temporary[target] = {} end
         panel:show(target)
         self.temporary[target][panel.id] = panel
+        return self
     end
 
     function Panel:addImageTemp(image, target)
         if not self.temporary[target] then self.temporary[target] = {} end
         image:show(target)
         self.temporary[target]["i_" .. image.id] = image
+        return self
     end
 
     function Panel:setActionListener(fn)
@@ -479,19 +602,29 @@ local dHandler = DataHandler.new("pew", {
         index = 4,
         type = "number",
         default = 0
+    },
+    packs = {
+        index = 5,
+        type = "number",
+        default = 1
+    },
+    equipped = {
+        index = 6,
+        type = "number",
+        default = 1
     }
 })
 
 local MIN_PLAYERS = 4
 
-local profileWindow, leaderboardWindow, changelogWindow
+local profileWindow, leaderboardWindow, changelogWindow, shopWindow
 
 local initialized, newRoundStarted, suddenDeath = false
 local currentItem = ENUM_ITEMS.CANNON
 local isTribeHouse = tfm.get.room.isTribeHouse
 local statsEnabled = not isTribeHouse
 
-local leaderboard
+local leaderboard, shop
 
 
 --==[[ translations ]]==--
@@ -620,6 +753,8 @@ function Player.new(name)
 	self.won = 0
 	self.score = 0
 	self.points = 0
+	self.packs = 1
+	self.equipped = 1
 
     self.openedWindow = nil
 
@@ -863,7 +998,10 @@ function eventPlayerDataLoaded(name, data)
 
 	Player.players[name].rounds = dHandler:get(name, "rounds")
 	Player.players[name].survived = dHandler:get(name, "survived")
-	Player.players[name].won = dHandler:get(name, "won")
+    Player.players[name].won = dHandler:get(name, "won")
+    Player.players[name].points = dHandler:get(name, "points")
+    Player.players[name].packs = shop.packsBitList:decode(dHandler:get(name, "packs"))
+    Player.players[name].equipped = shop.packsBitList:get(dHandler:get(name, "equipped"))
 
 end
 function eventFileLoaded(id, data)
@@ -1029,6 +1167,159 @@ end
 
 leaderboard.leaders = leaderboard.parseLeaderboard(leaderboard.leaderboardData)
 
+shop = {}
+-- Item packs that are used to display in the shop interface
+shop.packs = {
+
+	["Default"] = {
+		coverImage = "17404561700.png",
+		description = "Default item pack",
+		author = "Transformice",
+		price = 0,
+
+		description_locales = {
+			en = "Default item pack"
+		},
+
+		skins = {
+			[ENUM_ITEMS.CANNON] = "1752b1c10bc.png",
+			[ENUM_ITEMS.ANVIL] = "1752b1b9497.png",
+			[ENUM_ITEMS.BALL] = "1752b1bdeee.png",
+			[ENUM_ITEMS.BLUE_BALOON] = "1752b1aa57c.png",
+			[ENUM_ITEMS.LARGE_BOX] = "1752b1adb5e.png",
+			[ENUM_ITEMS.SMALL_BOX] = "1752b1b1cc6.png",
+			[ENUM_ITEMS.LARGE_PLANK] = "1752b1b5ac3.png",
+			[ENUM_ITEMS.SMALL_PLANK] = "1752b0918ed.png"
+		}
+	},
+
+	["Retro"] = {
+		coverImage = "17404561700.png",
+		description = "Back in old days...",
+		author = "Transformice",
+		price = 100,
+
+		description_locales = {
+			en = "Back in old days..."
+		},
+
+		skins = {
+			[ENUM_ITEMS.CANNON] = "174bb44115d.png",
+			[ENUM_ITEMS.BALL] = "174bb405fd4.png",
+			[ENUM_ITEMS.LARGE_BOX] = "174c530f384.png",
+			[ENUM_ITEMS.SMALL_BOX] = "174c532630c.png",
+			[ENUM_ITEMS.LARGE_PLANK] = "174c5311ea4.png",
+			[ENUM_ITEMS.SMALL_PLANK] = "174c5324b9b.png"
+		}
+
+    },
+
+    ["Catto"] = {
+        coverImage = "17404561700.png",
+		description = "Meow!",
+		author = "King_seniru#5890",
+		price = 20,
+		
+		skins = {
+			[ENUM_ITEMS.SMALL_BOX] = "17404561700.png",
+			[ENUM_ITEMS.LARGE_BOX] = "17404561700.png",
+			[ENUM_ITEMS.SMALL_PLANK] = "17404561700.png"
+		}
+	},
+	
+	["Parkour Pigs"] = {
+		coverImage = "17404561700.png",
+		description = "Thanks to Tocu!",
+		author = "Tocutoeltuco#0000",
+		price = 10,
+
+		skins = {
+			[ENUM_ITEMS.SMALL_BOX] = "17404561700.png",
+			[ENUM_ITEMS.LARGE_BOX] = "17404561700.png",
+			[ENUM_ITEMS.SMALL_PLANK] = "17404561700.png",
+			[ENUM_ITEMS.LARGE_PLANK] = "17404561700.png",
+			[ENUM_ITEMS.BALL] = "17404561700.png",
+			[ENUM_ITEMS.ANVIL] = "17404561700.png",
+			[ENUM_ITEMS.CANNON] = "17404561700.png",
+			[ENUM_ITEMS.BOMB] = "17404561700.png",
+			[ENUM_ITEMS.BLUE_BALOON] = "17404561700.png"
+		}
+	}
+
+}
+
+shop.totalPacks = 0
+for pack in next, shop.packs do shop.totalPacks = shop.totalPacks + 1 end
+
+shop.packsBitList = BitList {
+    "Default", "Retro", "Catto", "Parkour Pigs"
+}
+
+shop.displayShop = function(target, page)
+    page = page or 1
+    
+    local targetPlayer = Player.players[target]
+    if targetPlayer.openedWindow then targetPlayer.openedWindow:hide(target) end
+	shopWindow:show(target)
+	shop.displayPackInfo(target, "Default")
+
+    Panel.panels[520]:update(([[
+        Points: %s
+    %s
+    ]]):format(targetPlayer.points, ""), target)
+
+    local col, row, count = 0, 0, 0
+
+	for _, name in next, shop.packsBitList.featureArray do
+
+        local pack = shop.packs[name]
+        shopWindow:addPanelTemp(
+			Panel(560 + count, "", 380 + col * 120, 100 + row * 120, 100, 100, 0x1A3846, 0x1A3846, 1, true)
+				:addImageTemp(Image(pack.coverImage, "&1", 400 + col * 120, 100 + row * 120, target), target)
+				:addPanel(
+					Panel(560 + count + 1, ("<p align='center'><a href='event:%s'>%s</a></p>"):format(name, name),  385 + col * 120, 170 + row * 120, 90, 20, nil, 0x324650, 1, true)
+						:setActionListener(function(id, name, event)
+							shop.displayPackInfo(name, event)
+						end)
+				), target)
+
+		col = col + 1
+		count = count + 2
+		if col >= 3 then
+			row = row + 1
+			col = 0
+		end
+
+    end
+
+    targetPlayer.openedWindow = shopWindow
+end
+
+-- TODO: Add translations
+shop.displayPackInfo = function(target, packName)
+
+	local pack = shop.packs[packName]
+
+	Panel.panels[620]:addImageTemp(Image(pack.coverImage, "&1", 80, 80, target), target)
+
+	Panel.panels[620]:update(packName, target)
+	Panel.panels[650]:update("Buy " .. pack.price, target)
+	-- TODO: Replace description with description_locales[lang]
+	Panel.panels[651]:update(pack.description .. "\n" .. pack.author, pack.target)
+
+	Panel.panels[652]:hide(target)
+	Panel.panels[652]:show(target)
+		:addImageTemp(Image(pack.skins[ENUM_ITEMS.CANNON], "&1", 80, 160), target)	
+		:addImageTemp(Image(pack.skins[ENUM_ITEMS.ANVIL], "&1", 130, 150), target)
+		:addImageTemp(Image(pack.skins[ENUM_ITEMS.BLUE_BALOON], "&1", 200, 160), target)
+		:addImageTemp(Image(pack.skins[ENUM_ITEMS.BALL], "&1", 250, 160), target)
+		:addImageTemp(Image(pack.skins[ENUM_ITEMS.LARGE_BOX], "&1", 80, 220), target)
+		:addImageTemp(Image(pack.skins[ENUM_ITEMS.SMALL_BOX], "&1", 160, 220), target)
+		:addImageTemp(Image(pack.skins[ENUM_ITEMS.LARGE_PLANK], "&1", 80, 300), target)
+		:addImageTemp(Image(pack.skins[ENUM_ITEMS.SMALL_PLANK], "&1", 80, 320), target)
+
+end
+
 cmds = {
     ["profile"] = function(args, msg, author)
         local player = Player.players[args[1] or author] or Player.players[author]
@@ -1036,6 +1327,9 @@ cmds = {
     end,
     ["help"] = function(args, msg, author)
         displayHelp(author)
+    end,
+    ["shop"] = function(args, msg, author)
+        shop.displayShop(author)
     end,
     ["changelog"] = function(args, msg, author)
         displayChangelog(author)
@@ -1252,6 +1546,14 @@ do
         :addPanel(Panel(450, CHANGELOG, 70, 50, 670, 330, nil, nil, 0, true))
         :addImage(Image(assets.widgets.scrollbarBg, "&1", 720, 80))
         :addImage(Image(assets.widgets.scrollbarFg, "&1", 720, 90))
+
+    shopWindow = createPrettyUI(5, 360, 50, 380, 330, true, true) -- main shop window
+        :addPanel(  -- preview window 
+            createPrettyUI(6, 70, 50, 260, 330, true, false)
+                :addPanel(Panel(650, "", 80, 350, 240, 20, nil, 0x324650, 1, true))
+                :addPanel(Panel(651, "", 160, 60, 150, 90, nil, nil, 0, true))
+                :addPanel(Panel(652, "", 80, 160, 100, 100, nil, nil, 0, true))
+        )
 
 end
 
