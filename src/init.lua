@@ -19,7 +19,7 @@ local CHANGELOG =
 
     <font size='15' face='Lucida Console'><b><BV>v2.0.0.0</BV></b></font> <i>(09/09/2020)</i>
         Released an entirely new, rewritten version of #pewpew. Other than the original gameplay created by <b><V>Baasbase</V><font size='8'>#0095</font></b>, this version features
-        
+
         • A new stat system
             - Profiles
             - Leaderboards

@@ -50,14 +50,14 @@ shop.packs = {
 		description = "Meow!",
 		author = "King_seniru#5890",
 		price = 20,
-		
+
 		skins = {
 			[ENUM_ITEMS.SMALL_BOX] = "17404561700.png",
 			[ENUM_ITEMS.LARGE_BOX] = "17404561700.png",
 			[ENUM_ITEMS.SMALL_PLANK] = "17404561700.png"
 		}
 	},
-	
+
 	["Parkour Pigs"] = {
 		coverImage = "17404561700.png",
 		description = "Thanks to Tocu!",
@@ -88,7 +88,7 @@ shop.packsBitList = BitList {
 
 shop.displayShop = function(target, page)
     page = page or 1
-    
+
     local targetPlayer = Player.players[target]
     if targetPlayer.openedWindow then targetPlayer.openedWindow:hide(target) end
 	shopWindow:show(target)
@@ -140,7 +140,7 @@ shop.displayPackInfo = function(target, packName)
 
 	Panel.panels[652]:hide(target)
 	Panel.panels[652]:show(target)
-		:addImageTemp(Image(pack.skins[ENUM_ITEMS.CANNON], "&1", 80, 160), target)	
+		:addImageTemp(Image(pack.skins[ENUM_ITEMS.CANNON], "&1", 80, 160), target)
 		:addImageTemp(Image(pack.skins[ENUM_ITEMS.ANVIL], "&1", 130, 150), target)
 		:addImageTemp(Image(pack.skins[ENUM_ITEMS.BLUE_BALOON], "&1", 200, 160), target)
 		:addImageTemp(Image(pack.skins[ENUM_ITEMS.BALL], "&1", 250, 160), target)

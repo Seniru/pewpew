@@ -102,7 +102,7 @@ do
     })
 
     function Panel.new(id, text, x, y, w, h, background, border, opacity, fixed, hidden)
-    
+
         local self = setmetatable({
             id = id,
             text = text,
@@ -163,11 +163,11 @@ do
     end
 
     function Panel:hide(target)
-        
+
         ui.removeTextArea(10000 + self.id, target)
 
         for name in next, (target and { [target] = true } or tfm.get.room.playerList) do
-            
+
             for id, child in next, self.children do
 				child:hide(name)
             end
@@ -178,10 +178,10 @@ do
                 end
                 self.temporary[name] = {}
             end
-            
+
         end
 
-        
+
         if self.onclose then self.onclose(target) end
         return self
 
