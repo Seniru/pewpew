@@ -631,11 +631,11 @@ local leaderboard, shop
 
 local translations = {}
 
-translations["en"] = {
-	LIVES_LEFT = "<ROSE>You have <N>${lives} <ROSE>lives left. <VI>Respawning in 3...",
-	LOST_ALL =	"<ROSE>You have lost all your lives!",
-	SD =		"<VP>Sudden death! Everyone has <N>1 <VP>life left",
-	WELCOME =	"<VP>Welcome to pewpew, <N>duck <VP>or <N>spacebar <VP>to shoot items!",
+translations["en"] = {	
+	LIVES_LEFT = "<ROSE>You have <N>${lives} <ROSE>lives left. <VI>Respawning in 3...",	
+	LOST_ALL =	"<ROSE>You have lost all your lives!",	
+	SD =		"<VP>Sudden death! Everyone has <N>1 <VP>life left",	
+	WELCOME =	"<VP>Welcome to pewpew, <N>duck <VP>or <N>spacebar <VP>to shoot items!",	
     SOLE =		"<ROSE>${player} is the sole survivor!",
     SURVIVORS = "<ROSE>${winners} and ${winner} survived their lives this round!",
     SELF_RANK = "<p align='center'>Your rank: ${rank}</p>",
@@ -645,35 +645,35 @@ translations["en"] = {
     WON =       "<font face='Lucida console'><N2>Rounds won</N2></font>"
 }
 
-translations["br"] = {
-	LIVES_LEFT =    "<ROSE>Você possuí<N>${lives} <ROSE>vidas restantes. <VI>Renascendo em 3...",
-	LOST_ALL =      "<ROSE>Você perdeu todas as suas vidas!",
-	SD =            "<VP>Morte Súbita! Todos agora possuem <N>1 <VP>vida restante",
-	WELCOME =       "<VP>Bem vindo ao pewpew, <N>use a seta para baixo <VP>ou <N> a barra de espaço <VP>para atirar itens!",
+translations["br"] = {        
+	LIVES_LEFT =    "<ROSE>Você possuí<N>${lives} <ROSE>vidas restantes. <VI>Renascendo em 3...",        
+	LOST_ALL =      "<ROSE>Você perdeu todas as suas vidas!",        
+	SD =            "<VP>Morte Súbita! Todos agora possuem <N>1 <VP>vida restante",        
+	WELCOME =       "<VP>Bem vindo ao pewpew, <N>use a seta para baixo <VP>ou <N> a barra de espaço <VP>para atirar itens!",        
 	SOLE =          "<ROSE>${player} é o último sobrevivente!"
 }
 
-translations["es"] = {
-	LIVES_LEFT =    "<ROSE>Te quedan <N>${lives} <ROSE>vidas restantes. <VI>Renaciendo en 3...",
-	LOST_ALL =      "<ROSE>¡Has perdido todas tus vidas!",
-	SD =            "<VP>¡Muerte súbita! A todos le quedan <N>1 <VP>vida restante",
-	WELCOME =       "<VP>¡Bienvenido a pewpew, <N>agáchate <VP>o presiona <N>la barra de espacio <VP>para disparar ítems!",
+translations["es"] = {        
+	LIVES_LEFT =    "<ROSE>Te quedan <N>${lives} <ROSE>vidas restantes. <VI>Renaciendo en 3...",        
+	LOST_ALL =      "<ROSE>¡Has perdido todas tus vidas!",        
+	SD =            "<VP>¡Muerte súbita! A todos le quedan <N>1 <VP>vida restante",        
+	WELCOME =       "<VP>¡Bienvenido a pewpew, <N>agáchate <VP>o presiona <N>la barra de espacio <VP>para disparar ítems!",        
 	SOLE =          "<ROSE>¡${player} es el único superviviente!"
 }
 
-translations["fr"] = {
-	LIVES_LEFT =    "<ROSE>Il te reste <N>${lives} <ROSE>vies. <VI>Réapparition dans 3...",
-	LOST_ALL =      "<ROSE>Tu as perdu toutes tes vies !",
-	SD =            "<VP>Mort subite ! Il ne reste plus qu'<N>1 <VP>vie à tout le monde",
-	WELCOME =       "<VP>Bienvenue sur pewpew, <N>baisse toi <VP>ou utilise <N>la barre d'espace <VP>pour tirer des objets !",
+translations["fr"] = {        
+	LIVES_LEFT =    "<ROSE>Il te reste <N>${lives} <ROSE>vies. <VI>Réapparition dans 3...",        
+	LOST_ALL =      "<ROSE>Tu as perdu toutes tes vies !",        
+	SD =            "<VP>Mort subite ! Il ne reste plus qu'<N>1 <VP>vie à tout le monde",        
+	WELCOME =       "<VP>Bienvenue sur pewpew, <N>baisse toi <VP>ou utilise <N>la barre d'espace <VP>pour tirer des objets !",        
 	SOLE =          "<ROSE>${player} est le seul survivant !"
 }
 
-translations["tr"] = {
-	LIVES_LEFT =    "<N>${lives} <ROSE> can?n?z kald?. <VI>3 saniye içinde yeniden do?acaks?n?z...",
-	LOST_ALL =      "<ROSE>Bütün can?n?z? kaybettiniz!",
-	SD =            "<VP>Ani ölüm! Art?k herkesin <N>1<VP> can? kald?",
-	WELCOME =       "<VP>pewpew odas?na ho?geldiniz, e?yalar f?rlatmak için <N>e?ilin <VP>ya da <N>spacebar <VP>'a bas?n!",
+translations["tr"] = {        
+	LIVES_LEFT =    "<N>${lives} <ROSE> can?n?z kald?. <VI>3 saniye içinde yeniden do?acaks?n?z...",        
+	LOST_ALL =      "<ROSE>Bütün can?n?z? kaybettiniz!",        
+	SD =            "<VP>Ani ölüm! Art?k herkesin <N>1<VP> can? kald?",        
+	WELCOME =       "<VP>pewpew odas?na ho?geldiniz, e?yalar f?rlatmak için <N>e?ilin <VP>ya da <N>spacebar <VP>'a bas?n!",        
 	SOLE =          "<ROSE>Ya?ayan ki?i ${player}!"
 }
 
@@ -681,8 +681,8 @@ translations["ph"] = {
 	LIVES_LEFT = "<ROSE>Mayroon kang <N>${lives} <ROSE>buhay na natitira. <VI>Respawning sa 3...",
 	LOST_ALL =	"<ROSE>Nawala lahat nang buhay mo!",
 	SD =		"<VP>Biglaang kamatayan! Lahat ay mayroong <N>1 <VP>buhay na natitira",
-	WELCOME =	"<VP>Maligayang pagdating sa pewpew, <N>umiwas <VP>o <N>spacebar <VP>para bumaril nang items!",
-    SOLE =		"<ROSE>${player} ang mag isang nakaligtas!",
+	WELCOME =	"<VP>Maligayang pagdating sa pewpew, <N>bumaba <VP>o <N>spacebar <VP>para bumaril nang gamit!",
+    SOLE =		"<ROSE>${player} ang nag isang nakaligtas!",
     SURVIVORS = "<ROSE>${winners} at ${winner} ay nakaligtas ngayong round!",
     SELF_RANK = "<p align='center'>Ranggo mo: ${rank}</p>",
     ROUNDS  =   "<font face='Lucida console'><N2>Rounds na nalaro</N2></font>",
@@ -691,11 +691,11 @@ translations["ph"] = {
     WON =       "<font face='Lucida console'><N2>Rounds na nanalo</N2></font>"
 }
 
-translations["pl"] = {
+translations["pl"] = {	
 	LIVES_LEFT = "<ROSE>Pozostało ci <N>${lives} <ROSE>żyć! . <VI>Odrodzenie za 3...",
-	LOST_ALL =	"<ROSE>Straciłeś wszystkie życia!",
-	SD =		"<VP>Nagła śmierć! Każdy został z <N>1 <VP>życiem",
-	WELCOME =	"<VP>Witamy w Pewpew, kucnij, kliknij strzałkę w dół lub <N>spacje <VP>aby strzelać przedmiotami!",
+	LOST_ALL =	"<ROSE>Straciłeś wszystkie życia!",	
+	SD =		"<VP>Nagła śmierć! Każdy został z <N>1 <VP>życiem",	
+	WELCOME =	"<VP>Witamy w Pewpew, kucnij, kliknij strzałkę w dół lub <N>spacje <VP>aby strzelać przedmiotami!",	
     SOLE =		"<ROSE>${player} jest jedynym ocalałym!",
     SURVIVORS = "<ROSE>${winners} i ${winner} przeżyli tę runde!",
     SELF_RANK = "<p align='center'>Twoja range: ${rank}</p>",
@@ -707,8 +707,8 @@ translations["pl"] = {
 
 local translate = function(term, lang, page, kwargs)
     local translation
-    if translations[lang] then
-        translation = translations[lang][term] or translations.en[term]
+    if translations[lang] then 
+        translation = translations[lang][term] or translations.en[term] 
     else
         translation = translations.en[term]
     end
@@ -879,12 +879,12 @@ function eventNewPlayer(name)
 end
 
 function eventLoop(tc, tr)
-
+	
 	Timer.process()
 
 	if tr < 0 and initialized then
-		if not suddenDeath then
-			suddenDeath = true
+		if not suddenDeath then			
+			suddenDeath = true		
 			tfm.exec.chatMessage(translate("SD", tfm.get.room.community))
 			for name, player in next, Player.alive do
 				player:setLives(1)
@@ -910,7 +910,7 @@ function eventLoop(tc, tr)
                     end
                     local n, t = extractName(name)
 					winners = winners .. "<b><VI>" .. n .. "</VI><font size='8'><N2>" .. t .. "</N2></font></b>" .. ", "
-					aliveCount = aliveCount - 1
+					aliveCount = aliveCount - 1			
                 end
                 tfm.exec.chatMessage(translate("SURVIVORS", tfm.get.room.community, nil, { winners = winners, winner = winner }))
 			end
@@ -962,7 +962,7 @@ function eventPlayerDied(name)
 		tfm.exec.respawnPlayer(name)
 		return player:refresh()
     end
-
+    
 	player.lives = player.lives - 1
 	tfm.exec.setPlayerScore(name, player.lives)
 	player.alive = false
@@ -1004,6 +1004,7 @@ function eventPlayerDataLoaded(name, data)
     Player.players[name].equipped = shop.packsBitList:get(dHandler:get(name, "equipped"))
 
 end
+
 function eventFileLoaded(id, data)
 	-- print(table.tostring(leaderboard.leaders))
 	if id == leaderboard.FILE_ID or id == tostring(leaderboard.FILE_ID) then
@@ -1065,7 +1066,7 @@ leaderboard.dumpLeaderboard = function(lboard)
 	local res = ""
 	for i, entry in next, lboard do
   		res = res .. entry.name .. "," .. entry.rounds .. "," .. entry.survived .. "," .. entry.won .. "," .. entry.community .. "|"
-	end
+	end 
 	return res:sub(1, -2)
 end
 
@@ -1093,17 +1094,17 @@ leaderboard.addPlayer = function(player)
 end
 
 leaderboard.prepare = function(leaders)
-
-	local temp, res = {}, {}
-
+	
+	local temp, res = {}, {} 
+    
 	for name, leader in next, leaders do temp[#temp + 1] = leader end
-
+    
 	table.sort(temp, function(p1, p2)
 		return p1.score > p2.score
     end)
-
+    
     for i = 1, 50 do res[i] = temp[i] end
-
+    
 	return leaderboard.dumpLeaderboard(res), res
 
 end
@@ -1113,7 +1114,7 @@ leaderboard.displayLeaderboard = function(mode, page, target)
     if targetPlayer.openedWindow then targetPlayer.openedWindow:hide(target) end
 	leaderboardWindow:show(target)
 	local leaders = {}
-	local rankTxt, nameTxt, roundsTxt, deathsTxt, survivedTxt, wonTxt
+	local rankTxt, nameTxt, roundsTxt, deathsTxt, survivedTxt, wonTxt 
 		= "<br><br>", "<br><br>", "<br><br>", "<br><br>", "<br><br>", "<br><br>"
 
 	if mode == "global" then
@@ -1122,23 +1123,23 @@ leaderboard.displayLeaderboard = function(mode, page, target)
 		Panel.panels[357]:update("<a href='event:switch'>Global \t ▼</a>", target)
 	else
 		local selfRank
-
+		
 		for name, player in next, Player.players do
 			leaders[#leaders + 1] = player
 		end
-
+		
 		table.sort(leaders, function(p1, p2)
 			return leaderboard.scorePlayer(p1) > leaderboard.scorePlayer(p2)
 		end)
-
+		
 		for i, leader in ipairs(leaders) do if leader.name == target then selfRank = i break end end
 		-- TODO: Add translations v
 		Panel.panels[356]:update(translate("SELF_RANK", targetPlayer.community, nil, { rank = selfRank }), target)
         Panel.panels[357]:update("<a href='event:switch'>Room \t ▼</a>", target)
-
+        
 	end
-
-
+	
+	
     local counter = 0
     local rankPage = (page - 1) * 10
 	for i, leader in next, leaders do
@@ -1155,7 +1156,7 @@ leaderboard.displayLeaderboard = function(mode, page, target)
 		if counter >= 10 then break end
 	end
 
-	Panel.panels[350]:update(rankTxt, target)
+	Panel.panels[350]:update(rankTxt, target)	
 	Panel.panels[351]:update(nameTxt, target)
 	Panel.panels[352]:update(roundsTxt, target)
 	Panel.panels[353]:update(deathsTxt, target)
@@ -1305,7 +1306,7 @@ shop.displayPackInfo = function(target, packName)
 	Panel.panels[620]:update(packName, target)
 	Panel.panels[650]:update("Buy " .. pack.price, target)
 	-- TODO: Replace description with description_locales[lang]
-	Panel.panels[651]:update(pack.description .. "\n" .. pack.author, pack.target)
+	Panel.panels[651]:update(pack.description .. "\n" .. pack.author, target)
 
 	Panel.panels[652]:hide(target)
 	Panel.panels[652]:show(target)
@@ -1556,3 +1557,5 @@ do
         )
 
 end
+
+
