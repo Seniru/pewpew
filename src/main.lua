@@ -66,22 +66,22 @@ newRound = function()
 end
 
 getPos = function(item, stance)
-	if item == ENUM_ITEMS.CANNON then		
-		return { x = stance == -1 and 10 or -10, y = 18 }	
-	elseif item == ENUM_ITEMS.SPIRIT then		
-		return { x = 0, y = 10 }	
-	else		
-		return { x = stance == -1 and -10 or 10, y = 0 }	
+	if item == ENUM_ITEMS.CANNON then
+		return { x = stance == -1 and 10 or -10, y = 18 }
+	elseif item == ENUM_ITEMS.SPIRIT then
+		return { x = 0, y = 10 }
+	else
+		return { x = stance == -1 and -10 or 10, y = 0 }
 	end
 end
 
-getRot = function(item, stance)	
+getRot = function(item, stance)
 	if item == ENUM_ITEMS.RUNE or item == ENUM_ITEMS.CUPID_ARROW or item == ENUM_ITEMS.STABLE_RUNE then
-		return stance == -1 and 180 or 0	
+		return stance == -1 and 180 or 0
 	elseif item == ENUM_ITEMS.CANNON then
 		return stance == -1 and -90 or 90
 	else
-		return 0	
+		return 0
 	end
 end
 
@@ -226,7 +226,7 @@ do
         :addImage(Image(assets.widgets.scrollbarFg, "&1", 720, 90))
 
     shopWindow = createPrettyUI(5, 360, 50, 380, 330, true, true) -- main shop window
-        :addPanel(  -- preview window 
+        :addPanel(  -- preview window
             createPrettyUI(6, 70, 50, 260, 330, true, false)
                 :addPanel(
                     Panel(650, "", 80, 350, 240, 20, nil, 0x324650, 1, true)
@@ -247,4 +247,3 @@ do
         )
 
 end
-

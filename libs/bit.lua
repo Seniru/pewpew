@@ -1,4 +1,4 @@
--- Thanks to Turkitutu 
+-- Thanks to Turkitutu
 -- https://pastebin.com/raw/Nw3y1A42
 
 bit = {}

@@ -70,7 +70,7 @@ shop.packsBitList = BitList {
 
 shop.displayShop = function(target, page)
     page = page or 1
-    
+
     local targetPlayer = Player.players[target]
     if targetPlayer.openedWindow then targetPlayer.openedWindow:hide(target) end
 	shopWindow:show(target)

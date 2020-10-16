@@ -31,7 +31,7 @@ table.tostring = function(tbl, depth)
     return res:sub(1, res:len() - 2) .. "}"
 end
 
--- Thanks to Turkitutu 
+-- Thanks to Turkitutu
 -- https://pastebin.com/raw/Nw3y1A42
 
 bit = {}
@@ -255,7 +255,7 @@ do
     })
 
     function Panel.new(id, text, x, y, w, h, background, border, opacity, fixed, hidden)
-    
+
         local self = setmetatable({
             id = id,
             text = text,
@@ -316,11 +316,11 @@ do
     end
 
     function Panel:hide(target)
-        
+
         ui.removeTextArea(10000 + self.id, target)
 
         for name in next, (target and { [target] = true } or tfm.get.room.playerList) do
-            
+
             for id, child in next, self.children do
 				child:hide(name)
             end
@@ -331,10 +331,10 @@ do
                 end
                 self.temporary[name] = {}
             end
-            
+
         end
 
-        
+
         if self.onclose then self.onclose(target) end
         return self
 
@@ -412,7 +412,7 @@ local CHANGELOG =
 
     <font size='15' face='Lucida Console'><b><BV>v2.0.0.0</BV></b></font> <i>(09/09/2020)</i>
         Released an entirely new, rewritten version of #pewpew. Other than the original gameplay created by <b><V>Baasbase</V><font size='8'>#0095</font></b>, this version features
-        
+
         • A new stat system
             - Profiles
             - Leaderboards
@@ -678,11 +678,11 @@ translations["tr"] = {
 }
 
 translations["ph"] = {
-	LIVES_LEFT = "<ROSE>Mayroon kang <N>${lives} <ROSE>buhay na natitira. <VI>Respawning sa 3...",	
-	LOST_ALL =	"<ROSE>Nawala lahat nang buhay mo!",	
-	SD =		"<VP>Biglaang kamatayan! Lahat ay mayroong <N>1 <VP>buhay na natitira",	
-	WELCOME =	"<VP>Maligayang pagdating sa pewpew, <N>umiwas <VP>o <N>spacebar <VP>para bumaril nang items!",	
-    SOLE =		"<ROSE>${player} ang mag isang nakaligtas!",
+	LIVES_LEFT = "<ROSE>Mayroon kang <N>${lives} <ROSE>buhay na natitira. <VI>Respawning sa 3...",
+	LOST_ALL =	"<ROSE>Nawala lahat nang buhay mo!",
+	SD =		"<VP>Biglaang kamatayan! Lahat ay mayroong <N>1 <VP>buhay na natitira",
+	WELCOME =	"<VP>Maligayang pagdating sa pewpew, <N>bumaba <VP>o <N>spacebar <VP>para bumaril nang gamit!",
+    SOLE =		"<ROSE>${player} ang nag isang nakaligtas!",
     SURVIVORS = "<ROSE>${winners} at ${winner} ay nakaligtas ngayong round!",
     SELF_RANK = "<p align='center'>Ranggo mo: ${rank}</p>",
     ROUNDS  =   "<font face='Lucida console'><N2>Rounds na nalaro</N2></font>",
@@ -1017,6 +1017,7 @@ function eventPlayerDataLoaded(name, data)
     Player.players[name].equipped = shop.packsBitList:get(dHandler:get(name, "equipped"))
 
 end
+
 function eventFileLoaded(id, data)
 	-- print(table.tostring(leaderboard.leaders))
 	if id == leaderboard.FILE_ID or id == tostring(leaderboard.FILE_ID) then
@@ -1252,7 +1253,7 @@ shop.packsBitList = BitList {
 
 shop.displayShop = function(target, page)
     page = page or 1
-    
+
     local targetPlayer = Player.players[target]
     if targetPlayer.openedWindow then targetPlayer.openedWindow:hide(target) end
 	shopWindow:show(target)
@@ -1384,22 +1385,22 @@ newRound = function()
 end
 
 getPos = function(item, stance)
-	if item == ENUM_ITEMS.CANNON then		
-		return { x = stance == -1 and 10 or -10, y = 18 }	
-	elseif item == ENUM_ITEMS.SPIRIT then		
-		return { x = 0, y = 10 }	
-	else		
-		return { x = stance == -1 and -10 or 10, y = 0 }	
+	if item == ENUM_ITEMS.CANNON then
+		return { x = stance == -1 and 10 or -10, y = 18 }
+	elseif item == ENUM_ITEMS.SPIRIT then
+		return { x = 0, y = 10 }
+	else
+		return { x = stance == -1 and -10 or 10, y = 0 }
 	end
 end
 
-getRot = function(item, stance)	
+getRot = function(item, stance)
 	if item == ENUM_ITEMS.RUNE or item == ENUM_ITEMS.CUPID_ARROW or item == ENUM_ITEMS.STABLE_RUNE then
-		return stance == -1 and 180 or 0	
+		return stance == -1 and 180 or 0
 	elseif item == ENUM_ITEMS.CANNON then
 		return stance == -1 and -90 or 90
 	else
-		return 0	
+		return 0
 	end
 end
 
@@ -1544,7 +1545,7 @@ do
         :addImage(Image(assets.widgets.scrollbarFg, "&1", 720, 90))
 
     shopWindow = createPrettyUI(5, 360, 50, 380, 330, true, true) -- main shop window
-        :addPanel(  -- preview window 
+        :addPanel(  -- preview window
             createPrettyUI(6, 70, 50, 260, 330, true, false)
                 :addPanel(
                     Panel(650, "", 80, 350, 240, 20, nil, 0x324650, 1, true)
@@ -1565,6 +1566,5 @@ do
         )
 
 end
-
 
 
