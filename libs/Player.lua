@@ -76,10 +76,7 @@ function Player:shoot(x, y)
 		local rot = getRot(currentItem, stance)
 		local xSpeed = currentItem == 34 and 60 or 40
 
-		Timer("shootCooldown_" .. self.name, function(object)
-			tfm.exec.removeObject(object)
-			self.inCooldown = false
-		end, 1500, false, tfm.exec.addShamanObject(
+		local object = tfm.exec.addShamanObject(
 			currentItem,
 			x + pos.x,
 			y + pos.y,
@@ -87,7 +84,23 @@ function Player:shoot(x, y)
 			stance == -1 and -xSpeed or xSpeed,
 			0,
 			currentItem == 32 or currentItem == 62
-		))
+		)
+
+		local equippedPack = shop.packs[self.equipped]
+		local skin = equippedPack.skins[currentItem]
+		if self.equipped ~= "Default" and skin and skin.image then
+			tfm.exec.addImage(
+				skin.image,
+				"#" .. object,
+				skin.adj.x,
+				skin.adj.y
+			)
+		end
+
+		Timer("shootCooldown_" .. self.name, function(object)
+			tfm.exec.removeObject(object)
+			self.inCooldown = false
+		end, 1500, false, object)
 
 	end
 end

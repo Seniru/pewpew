@@ -798,10 +798,7 @@ function Player:shoot(x, y)
 		local rot = getRot(currentItem, stance)
 		local xSpeed = currentItem == 34 and 60 or 40
 
-		Timer("shootCooldown_" .. self.name, function(object)
-			tfm.exec.removeObject(object)
-			self.inCooldown = false
-		end, 1500, false, tfm.exec.addShamanObject(
+		local object = tfm.exec.addShamanObject(
 			currentItem,
 			x + pos.x,
 			y + pos.y,
@@ -809,7 +806,23 @@ function Player:shoot(x, y)
 			stance == -1 and -xSpeed or xSpeed,
 			0,
 			currentItem == 32 or currentItem == 62
-		))
+		)
+
+		local equippedPack = shop.packs[self.equipped]
+		local skin = equippedPack.skins[currentItem]
+		if self.equipped ~= "Default" and skin and skin.image then
+			tfm.exec.addImage(
+				skin.image,
+				"#" .. object,
+				skin.adj.x,
+				skin.adj.y
+			)
+		end
+
+		Timer("shootCooldown_" .. self.name, function(object)
+			tfm.exec.removeObject(object)
+			self.inCooldown = false
+		end, 1500, false, object)
 
 	end
 end
@@ -1168,6 +1181,19 @@ end
 leaderboard.leaders = leaderboard.parseLeaderboard(leaderboard.leaderboardData)
 
 shop = {}
+
+-- Images to display in shop if some items are missing in the pack
+shop.defaultItemImages = {
+	[ENUM_ITEMS.CANNON] = "175301924fd.png",
+	[ENUM_ITEMS.ANVIL] = "17530198302.png",
+	[ENUM_ITEMS.BALL] = "175301924fd.png",
+	[ENUM_ITEMS.BLUE_BALOON] = "175301b5151.png",
+	[ENUM_ITEMS.LARGE_BOX] = "175301a8692.png",
+	[ENUM_ITEMS.SMALL_BOX] = "175301adef2.png",
+	[ENUM_ITEMS.LARGE_PLANK] = "1753019e778.png",
+	[ENUM_ITEMS.SMALL_PLANK] = "175301a35c2.png"
+}
+
 -- Item packs that are used to display in the shop interface
 shop.packs = {
 
@@ -1182,14 +1208,14 @@ shop.packs = {
 		},
 
 		skins = {
-			[ENUM_ITEMS.CANNON] = "1752b1c10bc.png",
-			[ENUM_ITEMS.ANVIL] = "1752b1b9497.png",
-			[ENUM_ITEMS.BALL] = "1752b1bdeee.png",
-			[ENUM_ITEMS.BLUE_BALOON] = "1752b1aa57c.png",
-			[ENUM_ITEMS.LARGE_BOX] = "1752b1adb5e.png",
-			[ENUM_ITEMS.SMALL_BOX] = "1752b1b1cc6.png",
-			[ENUM_ITEMS.LARGE_PLANK] = "1752b1b5ac3.png",
-			[ENUM_ITEMS.SMALL_PLANK] = "1752b0918ed.png"
+			[ENUM_ITEMS.CANNON] = { image = "1752b1c10bc.png" },
+			[ENUM_ITEMS.ANVIL] = { image = "1752b1b9497.png" },
+			[ENUM_ITEMS.BALL] = { image = "1752b1bdeee.png" },
+			[ENUM_ITEMS.BLUE_BALOON] = { image = "1752b1aa57c.png" },
+			[ENUM_ITEMS.LARGE_BOX] = { image = "1752b1adb5e.png" },
+			[ENUM_ITEMS.SMALL_BOX] = { image = "1752b1b1cc6.png" },
+			[ENUM_ITEMS.LARGE_PLANK] = { image = "1752b1b5ac3.png" },
+			[ENUM_ITEMS.SMALL_PLANK] = { image = "1752b0918ed.png" }
 		}
 	},
 
@@ -1204,47 +1230,16 @@ shop.packs = {
 		},
 
 		skins = {
-			[ENUM_ITEMS.CANNON] = "174bb44115d.png",
-			[ENUM_ITEMS.BALL] = "174bb405fd4.png",
-			[ENUM_ITEMS.LARGE_BOX] = "174c530f384.png",
-			[ENUM_ITEMS.SMALL_BOX] = "174c532630c.png",
-			[ENUM_ITEMS.LARGE_PLANK] = "174c5311ea4.png",
-			[ENUM_ITEMS.SMALL_PLANK] = "174c5324b9b.png"
+			[ENUM_ITEMS.CANNON] =  { image = "174bb44115d.png", adj = { x = -16, y = -16 } },
+			[ENUM_ITEMS.ANVIL] = { },
+			[ENUM_ITEMS.BALL] =  { image = "174bb405fd4.png", adj = { x = -16, y = -16 } },
+			[ENUM_ITEMS.BLUE_BALOON] = { },
+			[ENUM_ITEMS.LARGE_BOX] =  { image = "174c530f384.png", adj = { x = -30, y = -30 } },
+			[ENUM_ITEMS.SMALL_BOX] =  { image = "174c532630c.png", adj = { x = -16, y = -16 } },
+			[ENUM_ITEMS.LARGE_PLANK] =  { image = "174c5311ea4.png", adj = { x = -104, y = -6 } },
+			[ENUM_ITEMS.SMALL_PLANK] =  { image = "174c5324b9b.png", adj = { x = -50, y = -6 } }
 		}
-
-    },
-
-    ["Catto"] = {
-        coverImage = "17404561700.png",
-		description = "Meow!",
-		author = "King_seniru#5890",
-		price = 20,
-		
-		skins = {
-			[ENUM_ITEMS.SMALL_BOX] = "17404561700.png",
-			[ENUM_ITEMS.LARGE_BOX] = "17404561700.png",
-			[ENUM_ITEMS.SMALL_PLANK] = "17404561700.png"
-		}
-	},
-	
-	["Parkour Pigs"] = {
-		coverImage = "17404561700.png",
-		description = "Thanks to Tocu!",
-		author = "Tocutoeltuco#0000",
-		price = 10,
-
-		skins = {
-			[ENUM_ITEMS.SMALL_BOX] = "17404561700.png",
-			[ENUM_ITEMS.LARGE_BOX] = "17404561700.png",
-			[ENUM_ITEMS.SMALL_PLANK] = "17404561700.png",
-			[ENUM_ITEMS.LARGE_PLANK] = "17404561700.png",
-			[ENUM_ITEMS.BALL] = "17404561700.png",
-			[ENUM_ITEMS.ANVIL] = "17404561700.png",
-			[ENUM_ITEMS.CANNON] = "17404561700.png",
-			[ENUM_ITEMS.BOMB] = "17404561700.png",
-			[ENUM_ITEMS.BLUE_BALOON] = "17404561700.png"
-		}
-	}
+    }
 
 }
 
@@ -1252,7 +1247,7 @@ shop.totalPacks = 0
 for pack in next, shop.packs do shop.totalPacks = shop.totalPacks + 1 end
 
 shop.packsBitList = BitList {
-    "Default", "Retro", "Catto", "Parkour Pigs"
+    "Default", "Retro"
 }
 
 shop.displayShop = function(target, page)
@@ -1303,20 +1298,21 @@ shop.displayPackInfo = function(target, packName)
 	Panel.panels[620]:addImageTemp(Image(pack.coverImage, "&1", 80, 80, target), target)
 
 	Panel.panels[620]:update(packName, target)
-	Panel.panels[650]:update("Buy " .. pack.price, target)
+	Panel.panels[650]:update("<p align='center'><a href='event:buy:" .. packName .. "'>Buy " .. pack.price .. "</a></p>", target)
 	-- TODO: Replace description with description_locales[lang]
-	Panel.panels[651]:update(pack.description .. "\n" .. pack.author, pack.target)
+	Panel.panels[651]:update(pack.description .. "\n" .. pack.author, target)
 
 	Panel.panels[652]:hide(target)
 	Panel.panels[652]:show(target)
-		:addImageTemp(Image(pack.skins[ENUM_ITEMS.CANNON], "&1", 80, 160), target)	
-		:addImageTemp(Image(pack.skins[ENUM_ITEMS.ANVIL], "&1", 130, 150), target)
-		:addImageTemp(Image(pack.skins[ENUM_ITEMS.BLUE_BALOON], "&1", 200, 160), target)
-		:addImageTemp(Image(pack.skins[ENUM_ITEMS.BALL], "&1", 250, 160), target)
-		:addImageTemp(Image(pack.skins[ENUM_ITEMS.LARGE_BOX], "&1", 80, 220), target)
-		:addImageTemp(Image(pack.skins[ENUM_ITEMS.SMALL_BOX], "&1", 160, 220), target)
-		:addImageTemp(Image(pack.skins[ENUM_ITEMS.LARGE_PLANK], "&1", 80, 300), target)
-		:addImageTemp(Image(pack.skins[ENUM_ITEMS.SMALL_PLANK], "&1", 80, 320), target)
+		:addImageTemp(Image(pack.skins[ENUM_ITEMS.CANNON].image or shop.defaultItemImages[ENUM_ITEMS.CANNON], "&1", 80, 160), target)
+		:addImageTemp(Image(pack.skins[ENUM_ITEMS.ANVIL].image or shop.defaultItemImages[ENUM_ITEMS.ANVIL], "&1", 130, 150), target)
+		:addImageTemp(Image(pack.skins[ENUM_ITEMS.BLUE_BALOON].image or shop.defaultItemImages[ENUM_ITEMS.BLUE_BALOON], "&1", 195, 160), target)
+		:addImageTemp(Image(pack.skins[ENUM_ITEMS.BALL].image or shop.defaultItemImages[ENUM_ITEMS.BALL], "&1", 250, 160), target)
+		:addImageTemp(Image(pack.skins[ENUM_ITEMS.LARGE_BOX].image or shop.defaultItemImages[ENUM_ITEMS.LARGE_BOX], "&1", 80, 220), target)
+		:addImageTemp(Image(pack.skins[ENUM_ITEMS.SMALL_BOX].image or shop.defaultItemImages[ENUM_ITEMS.SMALL_BOX], "&1", 160, 220), target)
+		:addImageTemp(Image(pack.skins[ENUM_ITEMS.LARGE_PLANK].image or shop.defaultItemImages[ENUM_ITEMS.LARGE_PLANK], "&1", 80, 300), target)
+		:addImageTemp(Image(pack.skins[ENUM_ITEMS.SMALL_PLANK].image or shop.defaultItemImages[ENUM_ITEMS.SMALL_PLANK], "&1", 80, 320), target)
+
 
 end
 
@@ -1550,7 +1546,20 @@ do
     shopWindow = createPrettyUI(5, 360, 50, 380, 330, true, true) -- main shop window
         :addPanel(  -- preview window 
             createPrettyUI(6, 70, 50, 260, 330, true, false)
-                :addPanel(Panel(650, "", 80, 350, 240, 20, nil, 0x324650, 1, true))
+                :addPanel(
+                    Panel(650, "", 80, 350, 240, 20, nil, 0x324650, 1, true)
+                        :setActionListener(function(id, name, event)
+                            local player = Player.players[name]
+                            local key, value = table.unpack(string.split(event, ":"))
+                            if key == "buy" then
+                                -- TODO: Add checks
+                                player.packs[value] = true
+                                player.equipped = value
+                                print(table.tostring(player.packs))
+                                print(shop.packsBitList:encode(player.packs))
+                            end
+                        end)
+                )
                 :addPanel(Panel(651, "", 160, 60, 150, 90, nil, nil, 0, true))
                 :addPanel(Panel(652, "", 80, 160, 100, 100, nil, nil, 0, true))
         )

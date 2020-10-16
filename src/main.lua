@@ -228,7 +228,20 @@ do
     shopWindow = createPrettyUI(5, 360, 50, 380, 330, true, true) -- main shop window
         :addPanel(  -- preview window 
             createPrettyUI(6, 70, 50, 260, 330, true, false)
-                :addPanel(Panel(650, "", 80, 350, 240, 20, nil, 0x324650, 1, true))
+                :addPanel(
+                    Panel(650, "", 80, 350, 240, 20, nil, 0x324650, 1, true)
+                        :setActionListener(function(id, name, event)
+                            local player = Player.players[name]
+                            local key, value = table.unpack(string.split(event, ":"))
+                            if key == "buy" then
+                                -- TODO: Add checks
+                                player.packs[value] = true
+                                player.equipped = value
+                                print(table.tostring(player.packs))
+                                print(shop.packsBitList:encode(player.packs))
+                            end
+                        end)
+                )
                 :addPanel(Panel(651, "", 160, 60, 150, 90, nil, nil, 0, true))
                 :addPanel(Panel(652, "", 80, 160, 100, 100, nil, nil, 0, true))
         )
