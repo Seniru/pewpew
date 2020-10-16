@@ -1240,7 +1240,30 @@ shop.packs = {
 			[ENUM_ITEMS.LARGE_PLANK] =  { image = "174c5311ea4.png", adj = { x = -104, y = -6 } },
 			[ENUM_ITEMS.SMALL_PLANK] =  { image = "174c5324b9b.png", adj = { x = -50, y = -6 } }
 		}
+	},
+	
+	["Catto"] = {
+		coverImage = "17404561700.png",
+		description = "Meow!",
+		author = "King_seniru#5890",
+		price = 100,
+
+		description_locales = {
+			en = "Meow!"
+		},
+
+		skins = {
+			[ENUM_ITEMS.CANNON] =  { image = "17530cc2bfb.png", adj = { x = -16, y = -16 } },
+			[ENUM_ITEMS.ANVIL] = { image = "17530cb9535.png", adj = { x = -24, y = -24 } },
+			[ENUM_ITEMS.BALL] =  { image = "17530cb1c03.png", adj = { x = -16, y = -16 } },
+			[ENUM_ITEMS.BLUE_BALOON] = { image = "17530cc8b06.png", adj = { x = -18, y = -18 } },
+			[ENUM_ITEMS.LARGE_BOX] =  { image = "17530ccf337.png", adj = { x = -30, y = -30 } },
+			[ENUM_ITEMS.SMALL_BOX] =  { image = "17530cd4a81.png", adj = { x = -16, y = -16 } },
+			[ENUM_ITEMS.LARGE_PLANK] =  { image = "17530cf135f.png", adj = { x = -100, y = -14 } },
+			[ENUM_ITEMS.SMALL_PLANK] =  { image = "17530cf9d23.png", adj = { x = -50, y = -14 } }
+		}
     }
+
 
 }
 
@@ -1248,7 +1271,7 @@ shop.totalPacks = 0
 for pack in next, shop.packs do shop.totalPacks = shop.totalPacks + 1 end
 
 shop.packsBitList = BitList {
-    "Default", "Retro"
+    "Default", "Retro", "Catto"
 }
 
 shop.displayShop = function(target, page)
