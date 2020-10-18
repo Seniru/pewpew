@@ -231,14 +231,24 @@ do
                 :addPanel(
                     Panel(650, "", 80, 350, 240, 20, nil, 0x324650, 1, true)
                         :setActionListener(function(id, name, event)
-                            local player = Player.players[name]
                             local key, value = table.unpack(string.split(event, ":"))
+                            local player = Player.players[name]
+                            local pack = shop.packs[value]
+                            if not pack then return end
                             if key == "buy" then
-                                -- TODO: Add checks
+                                -- Exit if the player already have the pack or if they dont have the required points
+                                if player.packs[value] or player.points < pack.price then return end
                                 player.packs[value] = true
                                 player.equipped = value
-                                print(table.tostring(player.packs))
-                                print(shop.packsBitList:encode(player.packs))
+                                player.points = player.points - pack.price
+                                shop.displayShop(name)
+                                player:savePlayerData()
+                            elseif key == "equip" then
+                                -- Exit if the player don't have the pack
+                                if not player.packs[value] then return end
+                                player.equipped =  value
+                                player:savePlayerData()
+                                shop.displayPackInfo(name, value)
                             end
                         end)
                 )

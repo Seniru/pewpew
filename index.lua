@@ -868,12 +868,14 @@ function Player:die()
 end
 
 function Player:savePlayerData()
-	if tfm.get.room.uniquePlayers < MIN_PLAYERS then return end
+	-- if tfm.get.room.uniquePlayers < MIN_PLAYERS then return end
 	local name = self.name
     dHandler:set(name, "rounds", self.rounds)
     dHandler:set(name, "survived", self.survived)
 	dHandler:set(name, "won", self.won)
 	dHandler:set(name, "points", self.points)
+	dHandler:set(name, "packs", shop.packsBitList:encode(self.packs))
+	dHandler:set(name, "equipped", shop.packsBitList:find(self.equipped))
     system.savePlayerData(name, "v2" .. dHandler:dumpPlayer(name))
 end
 
@@ -1224,7 +1226,7 @@ shop.packs = {
 		coverImage = "17404561700.png",
 		description = "Back in old days...",
 		author = "Transformice",
-		price = 100,
+		price = 10,
 
 		description_locales = {
 			en = "Back in old days..."
@@ -1246,7 +1248,7 @@ shop.packs = {
 		coverImage = "17404561700.png",
 		description = "Meow!",
 		author = "King_seniru#5890",
-		price = 100,
+		price = 10,
 
 		description_locales = {
 			en = "Meow!"
@@ -1282,10 +1284,7 @@ shop.displayShop = function(target, page)
 	shopWindow:show(target)
 	shop.displayPackInfo(target, "Default")
 
-    Panel.panels[520]:update(([[
-        Points: %s
-    %s
-    ]]):format(targetPlayer.points, ""), target)
+    Panel.panels[520]:update(("Points: " .. targetPlayer.points), target)
 
     local col, row, count = 0, 0, 0
 
@@ -1318,11 +1317,22 @@ end
 shop.displayPackInfo = function(target, packName)
 
 	local pack = shop.packs[packName]
+	local player = Player.players[target]
 
 	Panel.panels[620]:addImageTemp(Image(pack.coverImage, "&1", 80, 80, target), target)
 
 	Panel.panels[620]:update(packName, target)
-	Panel.panels[650]:update("<p align='center'><a href='event:buy:" .. packName .. "'>Buy " .. pack.price .. "</a></p>", target)
+	
+	local hasEquipped = player.equipped == packName
+	local hasBought = not not player.packs[packName]
+	local hasRequiredPoints = player.points >= pack.price
+	Panel.panels[650]:update(("<p align='center'><b><a href='event:%s:%s'>%s</a></b></p>")
+		:format(
+			hasEquipped and "none" or (hasBought and "equip" or (hasRequiredPoints and "buy" or "none")),
+			packName,
+			hasEquipped and "Equipped" or (hasBought and "Equip" or (hasRequiredPoints and ("Buy: " .. pack.price) or ("<N2>Buy: " .. pack.price .. "</N2>")))
+		)
+	, target)
 	-- TODO: Replace description with description_locales[lang]
 	Panel.panels[651]:update(pack.description .. "\n" .. pack.author, target)
 
@@ -1573,14 +1583,24 @@ do
                 :addPanel(
                     Panel(650, "", 80, 350, 240, 20, nil, 0x324650, 1, true)
                         :setActionListener(function(id, name, event)
-                            local player = Player.players[name]
                             local key, value = table.unpack(string.split(event, ":"))
+                            local player = Player.players[name]
+                            local pack = shop.packs[value]
+                            if not pack then return end
                             if key == "buy" then
-                                -- TODO: Add checks
+                                -- Exit if the player already have the pack or if they dont have the required points
+                                if player.packs[value] or player.points < pack.price then return end
                                 player.packs[value] = true
                                 player.equipped = value
-                                print(table.tostring(player.packs))
-                                print(shop.packsBitList:encode(player.packs))
+                                player.points = player.points - pack.price
+                                shop.displayShop(name)
+                                player:savePlayerData()
+                            elseif key == "equip" then
+                                -- Exit if the player don't have the pack
+                                if not player.packs[value] then return end
+                                player.equipped =  value
+                                player:savePlayerData()
+                                shop.displayPackInfo(name, value)
                             end
                         end)
                 )

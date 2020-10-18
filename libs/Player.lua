@@ -146,11 +146,13 @@ function Player:die()
 end
 
 function Player:savePlayerData()
-	if tfm.get.room.uniquePlayers < MIN_PLAYERS then return end
+	-- if tfm.get.room.uniquePlayers < MIN_PLAYERS then return end
 	local name = self.name
     dHandler:set(name, "rounds", self.rounds)
     dHandler:set(name, "survived", self.survived)
 	dHandler:set(name, "won", self.won)
 	dHandler:set(name, "points", self.points)
+	dHandler:set(name, "packs", shop.packsBitList:encode(self.packs))
+	dHandler:set(name, "equipped", shop.packsBitList:find(self.equipped))
     system.savePlayerData(name, "v2" .. dHandler:dumpPlayer(name))
 end
