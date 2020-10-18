@@ -58,7 +58,7 @@ shop.packs = {
 			[ENUM_ITEMS.SMALL_PLANK] =  { image = "174c5324b9b.png", adj = { x = -50, y = -6 } }
 		}
 	},
-	
+
 	["Catto"] = {
 		coverImage = "17404561700.png",
 		description = "Meow!",
@@ -80,7 +80,7 @@ shop.packs = {
 			[ENUM_ITEMS.SMALL_PLANK] =  { image = "17530cf9d23.png", adj = { x = -50, y = -14 } }
 		}
 	},
-	
+
 	["Dummy 1"] = {
 		coverImage = assets.dummy,
 		description = "Dummy",
@@ -325,7 +325,7 @@ shop.displayPackInfo = function(target, packName)
 	Panel.panels[620]:addImageTemp(Image(pack.coverImage, "&1", 80, 80, target), target)
 
 	Panel.panels[620]:update(packName, target)
-	
+
 	local hasEquipped = player.equipped == packName
 	local hasBought = not not player.packs[packName]
 	local hasRequiredPoints = player.points >= pack.price
