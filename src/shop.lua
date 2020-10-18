@@ -79,7 +79,175 @@ shop.packs = {
 			[ENUM_ITEMS.LARGE_PLANK] =  { image = "17530cf135f.png", adj = { x = -100, y = -14 } },
 			[ENUM_ITEMS.SMALL_PLANK] =  { image = "17530cf9d23.png", adj = { x = -50, y = -14 } }
 		}
-    }
+	},
+	
+	["Dummy 1"] = {
+		coverImage = assets.dummy,
+		description = "Dummy",
+		author = "-",
+		price = 10000,
+
+		description_locales = {
+			en = "Dummy"
+		},
+
+		skins = {}
+
+	},
+
+	["Dummy 2"] = {
+		coverImage = assets.dummy,
+		description = "Dummy",
+		author = "-",
+		price = 10000,
+
+		description_locales = {
+			en = "Dummy"
+		},
+
+		skins = {}
+
+	},
+
+	["Dummy 3"] = {
+		coverImage = assets.dummy,
+		description = "Dummy",
+		author = "-",
+		price = 10000,
+
+		description_locales = {
+			en = "Dummy"
+		},
+
+		skins = {}
+
+	},
+
+	["Dummy 4"] = {
+		coverImage = assets.dummy,
+		description = "Dummy",
+		author = "-",
+		price = 10000,
+
+		description_locales = {
+			en = "Dummy"
+		},
+
+		skins = {}
+
+	},
+
+	["Dummy 5"] = {
+		coverImage = assets.dummy,
+		description = "Dummy",
+		author = "-",
+		price = 10000,
+
+		description_locales = {
+			en = "Dummy"
+		},
+
+		skins = {}
+
+	},
+
+	["Dummy 6"] = {
+		coverImage = assets.dummy,
+		description = "Dummy",
+		author = "-",
+		price = 10000,
+
+		description_locales = {
+			en = "Dummy"
+		},
+
+		skins = {}
+
+	},
+
+	["Dummy 7"] = {
+		coverImage = assets.dummy,
+		description = "Dummy",
+		author = "-",
+		price = 10000,
+
+		description_locales = {
+			en = "Dummy"
+		},
+
+		skins = {}
+
+	},
+
+	["Dummy 8"] = {
+		coverImage = assets.dummy,
+		description = "Dummy",
+		author = "-",
+		price = 10000,
+
+		description_locales = {
+			en = "Dummy"
+		},
+
+		skins = {}
+
+	},
+
+	["Dummy 9"] = {
+		coverImage = assets.dummy,
+		description = "Dummy",
+		author = "-",
+		price = 10000,
+
+		description_locales = {
+			en = "Dummy"
+		},
+
+		skins = {}
+
+	},
+
+	["Dummy 10"] = {
+		coverImage = assets.dummy,
+		description = "Dummy",
+		author = "-",
+		price = 10000,
+
+		description_locales = {
+			en = "Dummy"
+		},
+
+		skins = {}
+
+	},
+
+	["Dummy 11"] = {
+		coverImage = assets.dummy,
+		description = "Dummy",
+		author = "-",
+		price = 10000,
+
+		description_locales = {
+			en = "Dummy"
+		},
+
+		skins = {}
+
+	},
+
+	["Dummy 12"] = {
+		coverImage = assets.dummy,
+		description = "Dummy",
+		author = "-",
+		price = 10000,
+
+		description_locales = {
+			en = "Dummy"
+		},
+
+		skins = {}
+
+	}
 
 
 }
@@ -87,23 +255,46 @@ shop.packs = {
 shop.totalPacks = 0
 for pack in next, shop.packs do shop.totalPacks = shop.totalPacks + 1 end
 
+shop.totalPages = math.ceil(shop.totalPacks / 6)
+
 shop.packsBitList = BitList {
-    "Default", "Retro", "Catto"
+    "Default", "Retro", "Catto", "Dummy 1", "Dummy 2", "Dummy 3", "Dummy 4", "Dummy 5", "Dummy 6", "Dummy 7", "Dummy 8", "Dummy 9", "Dummy 10", "Dummy 11", "Dummy 12"
 }
 
 shop.displayShop = function(target, page)
-    page = page or 1
+	page = page or 1
+	if page < 1 or page > shop.totalPages then return end
 
     local targetPlayer = Player.players[target]
     if targetPlayer.openedWindow then targetPlayer.openedWindow:hide(target) end
 	shopWindow:show(target)
 	shop.displayPackInfo(target, "Default")
 
-    Panel.panels[520]:update(("Points: " .. targetPlayer.points), target)
+	Panel.panels[520]:update(("Points: " .. targetPlayer.points), target)
+	Panel.panels[653]:update(("<a href='event:%s'><p align='center'><b>%s« Previous%s</b></p></a>")
+		:format(
+			page - 1,
+			page - 1 < 1 and "<N2>" or "",
+			page - 1 < 1 and "</N2>" or ""
+		)
+	, target)
+	Panel.panels[654]:update(("<a href='event:%s'><p align='center'><b>%sNext »%s</b></p></a>")
+		:format(
+			page + 1,
+			page + 1 > shop.totalPages and "<N2>" or "</N2>",
+			page + 1 > shop.totalPages and "</N2>" or "</N2>"
+		)
+	, target)
+
+	targetPlayer.openedWindow = shopWindow
 
     local col, row, count = 0, 0, 0
+	-- for _, name in next, shop.packsBitList.featureArray do
+	for i = (page - 1) * 6 + 1, page * 6 do
 
-	for _, name in next, shop.packsBitList.featureArray do
+		local name = shop.packsBitList:get(i)
+		print(name)
+		if not name then return	end
 
         local pack = shop.packs[name]
         shopWindow:addPanelTemp(
@@ -122,10 +313,7 @@ shop.displayShop = function(target, page)
 			row = row + 1
 			col = 0
 		end
-
     end
-
-    targetPlayer.openedWindow = shopWindow
 end
 
 -- TODO: Add translations
