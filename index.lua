@@ -430,6 +430,12 @@ tfm.exec.disableAutoScore()
 tfm.exec.disableAutoShaman()
 tfm.exec.disableAutoTimeLeft()
 
+local admins = {
+    ["King_seniru#5890"] = true,
+    ["Lightymouse#0421"] = true,
+    ["Overforyou#9290"] = true
+}
+
 local maps = { 521833, 401421, 541917, 541928, 541936, 541943, 527935, 559634, 559644, 888052, 878047, 885641, 770600, 770656, 772172, 891472, 589736, 589800, 589708, 900012, 901062, 754380, 901337, 901411, 892660, 907870, 910078, 1190467, 1252043, 1124380, 1016258, 1252299, 1255902, 1256808, 986790, 1285380, 1271249, 1255944, 1255983, 1085344, 1273114, 1276664, 1279258, 1286824, 1280135, 1280342, 1284861, 1287556, 1057753, 1196679, 1288489, 1292983, 1298164, 1298521, 1293189, 1296949, 1308378, 1311136, 1314419, 1314982, 1318248, 1312411, 1312589, 1312845, 1312933, 1313969, 1338762, 1339474, 1349878, 1297154, 644588, 1351237, 1354040, 1354375, 1362386, 1283234, 1370578, 1306592, 1360889, 1362753, 1408124, 1407949, 1407849, 1343986, 1408028, 1441370, 1443416, 1389255, 1427349, 1450527, 1424739, 869836, 1459902, 1392993, 1426457, 1542824, 1533474, 1561467, 1563534, 1566991, 1587241, 1416119, 1596270, 1601580, 1525751, 1582146, 1558167, 1420943, 1466487, 1642575, 1648013, 1646094, 1393097, 1643446, 1545219, 1583484, 1613092, 1627981, 1633374, 1633277, 1633251, 1585138, 1624034, 1616785, 1625916, 1667582, 1666996, 1675013, 1675316, 1531316, 1665413, 1681719, 1699880, 1688696, 623770, 1727243, 1531329, 1683915, 1689533, 1738601, 3756146, 7742371, 7781585, 7781591 }
 
 local ENUM_ITEMS = {
@@ -648,7 +654,8 @@ translations["en"] = {
     EQUIP =     "Equip",
     BUY =       "Buy",
     POINTS =    "<font face='Lucida console' size='12'>   <b>Points:</b> <V>${points}</V></font>",
-    PACK_DESC = "\n\n<font face='Lucida console' size='12' color='#cccccc'><i>“ ${desc} ”</i></font>\n<p align='right'><font size='10'>- ${author}</font></p>"
+    PACK_DESC = "\n\n<font face='Lucida console' size='12' color='#cccccc'><i>“ ${desc} ”</i></font>\n<p align='right'><font size='10'>- ${author}</font></p>",
+    GIFT_RECV = "<N>You have been rewarded with <ROSE><b>${gift}</b></ROSE> by <ROSE><b>${admin}</b></ROSE>"
 }
 
 translations["br"] = {        
@@ -1558,19 +1565,68 @@ shop.displayPackInfo = function(target, packName)
 end
 
 cmds = {
+
     ["profile"] = function(args, msg, author)
         local player = Player.players[args[1] or author] or Player.players[author]
         displayProfile(player, author)
     end,
+
     ["help"] = function(args, msg, author)
         displayHelp(author)
     end,
+
     ["shop"] = function(args, msg, author)
         shop.displayShop(author, 1)
     end,
+
     ["changelog"] = function(args, msg, author)
         displayChangelog(author)
+    end,
+
+    ["give"] = function(args, msg, author)
+        
+        if not admins[author] then return end
+        
+        local FORMAT_ERR_MSG = "<N>[</N><R>•</R><N>] <R><b>Error in command<br>\tUsage:</b><font face='Lucida console'> !give <i>[points|pack] [target] [value]</i></font></R>"
+        local TARGET_UNREACHABLE_ERR = "<N>[</N><R>•</R><N>] <R><b>Error: Target unreachable!</b></R>"
+
+        if (not args[1]) or (not args[2]) or (not args[3]) then return tfm.exec.chatMessage(FORMAT_ERR_MSG, author) end
+
+        local target = Player.players[args[2]]
+        local n, t = extractName(author)
+
+        if args[1] == "points" then
+            if not target then return tfm.exec.chatMessage(TARGET_UNREACHABLE_ERR, author) end
+            local points = tonumber(args[3])
+            if not points then return tfm.exec.chatMessage(FORMAT_ERR_MSG, author) end -- NaN
+            target.points = target.points + points
+            target:savePlayerData()
+            print(("[GIFT] %s has been rewarded with %s by %s"):format(args[2], points .. " Pts.", author))
+            tfm.exec.chatMessage(("<N>[</N><ROSE>•</ROSE><N>] Rewarded <ROSE>%s</ROSE> with <ROSE>%s</ROSE> points"):format(args[2], points))
+            tfm.exec.chatMessage(translate("GIFT_RECV", target.community, nil, {
+                admin = "<VI>" .. n .. "</VI><font size='8'><N2>" .. t .. "</N2></font>",
+                gift = points .. " Pts."
+            }), args[2])
+        elseif args[1] == "pack" then
+            if not target then return tfm.exec.chatMessage(TARGET_UNREACHABLE_ERR, author) end
+            local pack = msg:match("give pack .+#%d+ (.+)")
+            print(pack)
+            if not shop.packs[pack] then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error:</b> Could not find the pack</R>") end
+            if target.packs[pack] then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error: </b>Target already own that pack</R>") end
+            target.packs[pack] = true
+            target:savePlayerData()
+            print(("[GIFT] %s has been rewarded with %s by %s"):format(args[2], pack, author))
+            tfm.exec.chatMessage(("<N>[</N><ROSE>•</ROSE><N>] Rewarded <ROSE>%s</ROSE> with <ROSE>%s</ROSE>"):format(args[2], pack))
+            tfm.exec.chatMessage(translate("GIFT_RECV", target.community, nil, {
+                admin = "<VI>" .. n .. "</VI><font size='8'><N2>" .. t .. "</N2></font>",
+                gift = pack
+            }), args[2])
+        else
+            tfm.exec.chatMessage(FORMAT_ERR_MSG, author)
+        end
+
     end
+
 }
 
 local rotation, currentMapIndex = {}

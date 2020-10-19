@@ -1,19 +1,3 @@
-cmds = {
-    ["profile"] = function(args, msg, author)
-        local player = Player.players[args[1] or author] or Player.players[author]
-        displayProfile(player, author)
-    end,
-    ["help"] = function(args, msg, author)
-        displayHelp(author)
-    end,
-    ["shop"] = function(args, msg, author)
-        shop.displayShop(author, 1)
-    end,
-    ["changelog"] = function(args, msg, author)
-        displayChangelog(author)
-    end
-}
-
 local rotation, currentMapIndex = {}
 
 local shuffleMaps = function(maps)
