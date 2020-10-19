@@ -265,12 +265,13 @@ shop.displayShop = function(target, page)
 	page = page or 1
 	if page < 1 or page > shop.totalPages then return end
 
-    local targetPlayer = Player.players[target]
+	local targetPlayer = Player.players[target]
+	local commu = targetPlayer.community
     if targetPlayer.openedWindow then targetPlayer.openedWindow:hide(target) end
 	shopWindow:show(target)
 	shop.displayPackInfo(target, "Default")
 
-	Panel.panels[520]:update(("Points: " .. targetPlayer.points), target)
+	Panel.panels[520]:update(translate("POINTS", commu, nil, { points = targetPlayer.points }), target)
 	Panel.panels[653]:update(("<a href='event:%s'><p align='center'><b>%s« Previous%s</b></p></a>")
 		:format(
 			page - 1,
@@ -316,11 +317,11 @@ shop.displayShop = function(target, page)
     end
 end
 
--- TODO: Add translations
 shop.displayPackInfo = function(target, packName)
 
 	local pack = shop.packs[packName]
 	local player = Player.players[target]
+	local commu = player.community
 
 	Panel.panels[620]:addImageTemp(Image(pack.coverImage, "&1", 80, 80, target), target)
 
@@ -333,11 +334,16 @@ shop.displayPackInfo = function(target, packName)
 		:format(
 			hasEquipped and "none" or (hasBought and "equip" or (hasRequiredPoints and "buy" or "none")),
 			packName,
-			hasEquipped and "Equipped" or (hasBought and "Equip" or (hasRequiredPoints and ("Buy: " .. pack.price) or ("<N2>Buy: " .. pack.price .. "</N2>")))
+			hasEquipped	and translate("EQUIPPED", commu)
+				or (hasBought and translate("EQUIP", commu)
+					or (hasRequiredPoints and (translate("BUY", commu) .. ": " .. pack.price)
+						or ("<N2>" .. translate("BUY", commu) .. ": " .. pack.price .. "</N2>")
+					)
+				)
 		)
 	, target)
-	-- TODO: Replace description with description_locales[lang]
-	Panel.panels[651]:update(pack.description .. "\n" .. pack.author, target)
+	
+	Panel.panels[651]:update((pack.description_locales[commu] or pack.description) .. "\n" .. pack.author, target)
 
 	Panel.panels[652]:hide(target)
 	Panel.panels[652]:show(target)

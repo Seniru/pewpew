@@ -9,5 +9,9 @@ translations["en"] = {
     ROUNDS  =   "<font face='Lucida console'><N2>Rounds played</N2></font>",
     DEATHS =    "<font face='Lucida console'><N2>Deaths</N2></font>",
     SURVIVED =  "<font face='Lucida console'><N2>Rounds survived</N2></font>",
-    WON =       "<font face='Lucida console'><N2>Rounds won</N2></font>"
+    WON =       "<font face='Lucida console'><N2>Rounds won</N2></font>",
+    EQUIPPED =  "Equipped",
+    EQUIP =     "Equip",
+    BUY =       "Buy",
+    POINTS =    "Points: ${points}"
 }
