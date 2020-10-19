@@ -13,5 +13,6 @@ translations["en"] = {
     EQUIPPED =  "Equipped",
     EQUIP =     "Equip",
     BUY =       "Buy",
-    POINTS =    "Points: ${points}"
+    POINTS =    "<font face='Lucida console' size='12'>   <b>Points:</b> <V>${points}</V></font>",
+    PACK_DESC = "\n\n<font face='Lucida console' size='12' color='#cccccc'><i>“ ${desc} ”</i></font>\n<p align='right'><font size='10'>- ${author}</font></p>"
 }

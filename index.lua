@@ -646,7 +646,8 @@ translations["en"] = {
     EQUIPPED =  "Equipped",
     EQUIP =     "Equip",
     BUY =       "Buy",
-    POINTS =    "Points: ${points}"
+    POINTS =    "<font face='Lucida console' size='12'>   <b>Points:</b> <V>${points}</V></font>",
+    PACK_DESC = "\n\n<font face='Lucida console' size='12' color='#cccccc'><i>“ ${desc} ”</i></font>\n<p align='right'><font size='10'>- ${author}</font></p>"
 }
 
 translations["br"] = {        
@@ -1461,14 +1462,14 @@ shop.displayShop = function(target, page)
 	shop.displayPackInfo(target, "Default")
 
 	Panel.panels[520]:update(translate("POINTS", commu, nil, { points = targetPlayer.points }), target)
-	Panel.panels[653]:update(("<a href='event:%s'><p align='center'><b>%s« Previous%s</b></p></a>")
+	Panel.panels[653]:update(("<a href='event:%s'><p align='center'><b>%s〈%s</b></p></a>")
 		:format(
 			page - 1,
 			page - 1 < 1 and "<N2>" or "",
 			page - 1 < 1 and "</N2>" or ""
 		)
 	, target)
-	Panel.panels[654]:update(("<a href='event:%s'><p align='center'><b>%sNext »%s</b></p></a>")
+	Panel.panels[654]:update(("<a href='event:%s'><p align='center'><b>%s〉%s</b></p></a>")
 		:format(
 			page + 1,
 			page + 1 > shop.totalPages and "<N2>" or "</N2>",
@@ -1483,7 +1484,6 @@ shop.displayShop = function(target, page)
 	for i = (page - 1) * 6 + 1, page * 6 do
 
 		local name = shop.packsBitList:get(i)
-		print(name)
 		if not name then return	end
 
         local pack = shop.packs[name]
@@ -1514,7 +1514,7 @@ shop.displayPackInfo = function(target, packName)
 
 	Panel.panels[620]:addImageTemp(Image(pack.coverImage, "&1", 80, 80, target), target)
 
-	Panel.panels[620]:update(packName, target)
+	Panel.panels[620]:update(" <font size='15' face='Lucida console'><b><BV>" .. packName .. "</BV></b></font>", target)
 
 	local hasEquipped = player.equipped == packName
 	local hasBought = not not player.packs[packName]
@@ -1531,8 +1531,14 @@ shop.displayPackInfo = function(target, packName)
 				)
 		)
 	, target)
-	
-	Panel.panels[651]:update((pack.description_locales[commu] or pack.description) .. "\n" .. pack.author, target)
+
+	local n, t = extractName(pack.author)
+	Panel.panels[651]:update(translate("PACK_DESC", commu, nil,
+		{
+			desc = (pack.description_locales[commu] or pack.description),
+			author = "<V>" .. n .. "</V><N2>" .. t .. "</N2>"
+		}
+	), target)
 
 	Panel.panels[652]:hide(target)
 	Panel.panels[652]:show(target)
@@ -1805,13 +1811,13 @@ do
                 :addPanel(Panel(651, "", 160, 60, 150, 90, nil, nil, 0, true))
                 :addPanel(Panel(652, "", 80, 160, 100, 100, nil, nil, 0, true))
                 :addPanel(
-                    Panel(653, "«", 500, 350, 100, 20, nil, 0x324650, 1, true)
+                    Panel(653, "〈", 620, 350, 40, 20, nil, 0x324650, 1, true)
                         :setActionListener(function(id, name, event)
                             shop.displayShop(name, tonumber(event))
                         end)
                 )
                 :addPanel(
-                    Panel(654, "»", 620, 350, 100, 20, nil, 0x324650, 1, true)
+                    Panel(654, "〉", 680, 350, 40, 20, nil, 0x324650, 1, true)
                         :setActionListener(function(id, name, event)
                             shop.displayShop(name, tonumber(event))
                         end)

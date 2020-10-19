@@ -255,13 +255,13 @@ do
                 :addPanel(Panel(651, "", 160, 60, 150, 90, nil, nil, 0, true))
                 :addPanel(Panel(652, "", 80, 160, 100, 100, nil, nil, 0, true))
                 :addPanel(
-                    Panel(653, "«", 500, 350, 100, 20, nil, 0x324650, 1, true)
+                    Panel(653, "〈", 620, 350, 40, 20, nil, 0x324650, 1, true)
                         :setActionListener(function(id, name, event)
                             shop.displayShop(name, tonumber(event))
                         end)
                 )
                 :addPanel(
-                    Panel(654, "»", 620, 350, 100, 20, nil, 0x324650, 1, true)
+                    Panel(654, "〉", 680, 350, 40, 20, nil, 0x324650, 1, true)
                         :setActionListener(function(id, name, event)
                             shop.displayShop(name, tonumber(event))
                         end)

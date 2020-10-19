@@ -272,14 +272,14 @@ shop.displayShop = function(target, page)
 	shop.displayPackInfo(target, "Default")
 
 	Panel.panels[520]:update(translate("POINTS", commu, nil, { points = targetPlayer.points }), target)
-	Panel.panels[653]:update(("<a href='event:%s'><p align='center'><b>%s« Previous%s</b></p></a>")
+	Panel.panels[653]:update(("<a href='event:%s'><p align='center'><b>%s〈%s</b></p></a>")
 		:format(
 			page - 1,
 			page - 1 < 1 and "<N2>" or "",
 			page - 1 < 1 and "</N2>" or ""
 		)
 	, target)
-	Panel.panels[654]:update(("<a href='event:%s'><p align='center'><b>%sNext »%s</b></p></a>")
+	Panel.panels[654]:update(("<a href='event:%s'><p align='center'><b>%s〉%s</b></p></a>")
 		:format(
 			page + 1,
 			page + 1 > shop.totalPages and "<N2>" or "</N2>",
@@ -294,7 +294,6 @@ shop.displayShop = function(target, page)
 	for i = (page - 1) * 6 + 1, page * 6 do
 
 		local name = shop.packsBitList:get(i)
-		print(name)
 		if not name then return	end
 
         local pack = shop.packs[name]
@@ -325,7 +324,7 @@ shop.displayPackInfo = function(target, packName)
 
 	Panel.panels[620]:addImageTemp(Image(pack.coverImage, "&1", 80, 80, target), target)
 
-	Panel.panels[620]:update(packName, target)
+	Panel.panels[620]:update(" <font size='15' face='Lucida console'><b><BV>" .. packName .. "</BV></b></font>", target)
 
 	local hasEquipped = player.equipped == packName
 	local hasBought = not not player.packs[packName]
@@ -342,8 +341,14 @@ shop.displayPackInfo = function(target, packName)
 				)
 		)
 	, target)
-	
-	Panel.panels[651]:update((pack.description_locales[commu] or pack.description) .. "\n" .. pack.author, target)
+
+	local n, t = extractName(pack.author)
+	Panel.panels[651]:update(translate("PACK_DESC", commu, nil,
+		{
+			desc = (pack.description_locales[commu] or pack.description),
+			author = "<V>" .. n .. "</V><N2>" .. t .. "</N2>"
+		}
+	), target)
 
 	Panel.panels[652]:hide(target)
 	Panel.panels[652]:show(target)
