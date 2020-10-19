@@ -16,7 +16,7 @@ shop.defaultItemImages = {
 shop.packs = {
 
 	["Default"] = {
-		coverImage = "17404561700.png",
+		coverImage = "16c18dff3ab.png",
 		description = "Default item pack",
 		author = "Transformice",
 		price = 0,
@@ -37,8 +37,8 @@ shop.packs = {
 		}
 	},
 
-	["Retro"] = {
-		coverImage = "17404561700.png",
+	["Poisson"] = {
+		coverImage = "17540405f67.png",
 		description = "Back in old days...",
 		author = "Transformice",
 		price = 10,
@@ -258,7 +258,7 @@ for pack in next, shop.packs do shop.totalPacks = shop.totalPacks + 1 end
 shop.totalPages = math.ceil(shop.totalPacks / 6)
 
 shop.packsBitList = BitList {
-    "Default", "Retro", "Catto", "Dummy 1", "Dummy 2", "Dummy 3", "Dummy 4", "Dummy 5", "Dummy 6", "Dummy 7", "Dummy 8", "Dummy 9", "Dummy 10", "Dummy 11", "Dummy 12"
+    "Default", "Poisson", "Catto", "Dummy 1", "Dummy 2", "Dummy 3", "Dummy 4", "Dummy 5", "Dummy 6", "Dummy 7", "Dummy 8", "Dummy 9", "Dummy 10", "Dummy 11", "Dummy 12"
 }
 
 shop.displayShop = function(target, page)
@@ -272,14 +272,14 @@ shop.displayShop = function(target, page)
 	shop.displayPackInfo(target, "Default")
 
 	Panel.panels[520]:update(translate("POINTS", commu, nil, { points = targetPlayer.points }), target)
-	Panel.panels[653]:update(("<a href='event:%s'><p align='center'><b>%s〈%s</b></p></a>")
+	Panel.panels[551]:update(("<a href='event:%s'><p align='center'><b>%s〈%s</b></p></a>")
 		:format(
 			page - 1,
 			page - 1 < 1 and "<N2>" or "",
 			page - 1 < 1 and "</N2>" or ""
 		)
 	, target)
-	Panel.panels[654]:update(("<a href='event:%s'><p align='center'><b>%s〉%s</b></p></a>")
+	Panel.panels[552]:update(("<a href='event:%s'><p align='center'><b>%s〉%s</b></p></a>")
 		:format(
 			page + 1,
 			page + 1 > shop.totalPages and "<N2>" or "</N2>",
@@ -324,6 +324,7 @@ shop.displayPackInfo = function(target, packName)
 	local player = Player.players[target]
 	local commu = player.community
 
+	Panel.panels[610]:hide(target):show(target)
 	Panel.panels[620]:addImageTemp(Image(pack.coverImage, "&1", 80, 80, target), target)
 
 	Panel.panels[620]:update(" <font size='15' face='Lucida console'><b><BV>" .. packName .. "</BV></b></font>", target)
@@ -352,8 +353,8 @@ shop.displayPackInfo = function(target, packName)
 		}
 	), target)
 
-	Panel.panels[652]:hide(target)
-	Panel.panels[652]:show(target)
+	--Panel.panels[652]:hide(target)
+	Panel.panels[652]--:show(target)
 		:addImageTemp(Image(pack.skins[ENUM_ITEMS.CANNON].image or shop.defaultItemImages[ENUM_ITEMS.CANNON], "&1", 80, 160), target)
 		:addImageTemp(Image(pack.skins[ENUM_ITEMS.ANVIL].image or shop.defaultItemImages[ENUM_ITEMS.ANVIL], "&1", 130, 150), target)
 		:addImageTemp(Image(pack.skins[ENUM_ITEMS.BLUE_BALOON].image or shop.defaultItemImages[ENUM_ITEMS.BLUE_BALOON], "&1", 195, 160), target)
