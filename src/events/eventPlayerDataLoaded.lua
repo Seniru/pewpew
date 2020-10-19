@@ -9,6 +9,9 @@ function eventPlayerDataLoaded(name, data)
 
 	Player.players[name].rounds = dHandler:get(name, "rounds")
 	Player.players[name].survived = dHandler:get(name, "survived")
-	Player.players[name].won = dHandler:get(name, "won")
+    Player.players[name].won = dHandler:get(name, "won")
+    Player.players[name].points = dHandler:get(name, "points")
+    Player.players[name].packs = shop.packsBitList:decode(dHandler:get(name, "packs"))
+    Player.players[name].equipped = shop.packsBitList:get(dHandler:get(name, "equipped"))
 
 end

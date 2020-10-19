@@ -31,6 +31,8 @@ function Player.new(name)
 	self.won = 0
 	self.score = 0
 	self.points = 0
+	self.packs = 1
+	self.equipped = 1
 
     self.openedWindow = nil
 
@@ -74,10 +76,7 @@ function Player:shoot(x, y)
 		local rot = getRot(currentItem, stance)
 		local xSpeed = currentItem == 34 and 60 or 40
 
-		Timer("shootCooldown_" .. self.name, function(object)
-			tfm.exec.removeObject(object)
-			self.inCooldown = false
-		end, 1500, false, tfm.exec.addShamanObject(
+		local object = tfm.exec.addShamanObject(
 			currentItem,
 			x + pos.x,
 			y + pos.y,
@@ -85,7 +84,23 @@ function Player:shoot(x, y)
 			stance == -1 and -xSpeed or xSpeed,
 			0,
 			currentItem == 32 or currentItem == 62
-		))
+		)
+
+		local equippedPack = shop.packs[self.equipped]
+		local skin = equippedPack.skins[currentItem]
+		if self.equipped ~= "Default" and skin and skin.image then
+			tfm.exec.addImage(
+				skin.image,
+				"#" .. object,
+				skin.adj.x,
+				skin.adj.y
+			)
+		end
+
+		Timer("shootCooldown_" .. self.name, function(object)
+			tfm.exec.removeObject(object)
+			self.inCooldown = false
+		end, 1500, false, object)
 
 	end
 end
@@ -131,11 +146,13 @@ function Player:die()
 end
 
 function Player:savePlayerData()
-	if tfm.get.room.uniquePlayers < MIN_PLAYERS then return end
+	-- if tfm.get.room.uniquePlayers < MIN_PLAYERS then return end
 	local name = self.name
     dHandler:set(name, "rounds", self.rounds)
     dHandler:set(name, "survived", self.survived)
 	dHandler:set(name, "won", self.won)
 	dHandler:set(name, "points", self.points)
+	dHandler:set(name, "packs", shop.packsBitList:encode(self.packs))
+	dHandler:set(name, "equipped", shop.packsBitList:find(self.equipped))
     system.savePlayerData(name, "v2" .. dHandler:dumpPlayer(name))
 end

@@ -31,6 +31,126 @@ table.tostring = function(tbl, depth)
     return res:sub(1, res:len() - 2) .. "}"
 end
 
+-- Thanks to Turkitutu
+-- https://pastebin.com/raw/Nw3y1A42
+
+bit = {}
+
+bit.lshift = function(x, by) -- Left-shift of x by n bits
+    return x * 2 ^ by
+end
+
+bit.rshift = function(x, by) -- Logical right-shift of x by n bits
+    return math.floor(x / 2 ^ by)
+end
+
+bit.band = function(a, b) -- bitwise and of x1, x2
+    local p, c = 1, 0
+    while a > 0 and b > 0 do
+        local ra, rb = a % 2, b % 2
+        if ra + rb > 1 then
+          c = c + p
+        end
+        a, b, p = (a - ra) / 2, (b - rb) / 2, p * 2
+    end
+    return c
+end
+
+bit.bxor = function(a,b) -- Bitwise xor of x1, x2
+    local r = 0
+    for i = 0, 31 do
+        local x = a / 2 + b / 2
+        if x ~= math.floor(x) then
+            r = r + 2^i
+        end
+        a = math.floor(a / 2)
+        b = math.floor(b / 2)
+    end
+    return r
+end
+
+bit.bor = function(a,b) -- Bitwise or of x1, x2
+    local p, c= 1, 0
+    while a+b > 0 do
+        local ra, rb = a % 2, b % 2
+        if ra + rb > 0 then
+            c = c + p
+        end
+        a, b, p = (a - ra) / 2, (b - rb) / 2, p * 2
+    end
+    return c
+end
+
+bit.bnot = function(n) -- Bitwise not of x
+    local p, c = 1, 0
+    while n > 0 do
+        local r = n % 2
+        if r < 0 then
+            c = c + p
+        end
+        n, p = (n - r) / 2, p * 2
+    end
+    return c
+end
+
+local BitList = {}
+
+BitList.__index = BitList
+setmetatable(BitList, {
+    __call = function(cls, ...)
+        return cls.new(...)
+    end
+})
+
+do
+
+    function BitList.new(features)
+        local self = setmetatable({}, BitList)
+        self.featureArray = features
+
+        self.featureKeys = {}
+
+        for k, v in next, features do
+            self.featureKeys[v] = k
+        end
+
+        self.features = #self.featureArray
+
+        return self
+    end
+
+    function BitList:encode(featTbl)
+        local res = 0
+        for k, v in next, featTbl do
+            if v and self.featureKeys[k] then
+              res = bit.bor(res, bit.lshift(1, self.featureKeys[k] - 1))
+            end
+        end
+        return res
+    end
+
+    function BitList:decode(featInt)
+        local features, index = {}, 1
+        while (featInt > 0) do
+            feat = bit.band(featInt, 1) == 1
+            corrFeat = self.featureArray[index]
+            features[corrFeat] = feat
+            featInt = bit.rshift(featInt, 1)
+            index = index + 1
+        end
+        return features
+    end
+
+    function BitList:get(index)
+        return self.featureArray[index]
+    end
+
+    function BitList:find(feature)
+        return self.featureKeys[feature]
+    end
+
+end
+
 local Panel = {}
 local Image = {}
 
@@ -114,7 +234,8 @@ do
     end
 
     function Image:hide(target)
-		if target == nil then error("Target cannot be nil") end
+        if target == nil then error("Target cannot be nil") end
+        if not self.instances[target] then return end
         tfm.exec.removeImage(self.instances[target])
         self.instances[target] = nil
         return self
@@ -134,7 +255,7 @@ do
     })
 
     function Panel.new(id, text, x, y, w, h, background, border, opacity, fixed, hidden)
-    
+
         local self = setmetatable({
             id = id,
             text = text,
@@ -195,11 +316,11 @@ do
     end
 
     function Panel:hide(target)
-        
+
         ui.removeTextArea(10000 + self.id, target)
 
         for name in next, (target and { [target] = true } or tfm.get.room.playerList) do
-            
+
             for id, child in next, self.children do
 				child:hide(name)
             end
@@ -210,10 +331,10 @@ do
                 end
                 self.temporary[name] = {}
             end
-            
+
         end
 
-        
+
         if self.onclose then self.onclose(target) end
         return self
 
@@ -234,12 +355,14 @@ do
         if not self.temporary[target] then self.temporary[target] = {} end
         panel:show(target)
         self.temporary[target][panel.id] = panel
+        return self
     end
 
     function Panel:addImageTemp(image, target)
         if not self.temporary[target] then self.temporary[target] = {} end
         image:show(target)
         self.temporary[target]["i_" .. image.id] = image
+        return self
     end
 
     function Panel:setActionListener(fn)
@@ -289,7 +412,7 @@ local CHANGELOG =
 
     <font size='15' face='Lucida Console'><b><BV>v2.0.0.0</BV></b></font> <i>(09/09/2020)</i>
         Released an entirely new, rewritten version of #pewpew. Other than the original gameplay created by <b><V>Baasbase</V><font size='8'>#0095</font></b>, this version features
-        
+
         • A new stat system
             - Profiles
             - Leaderboards
@@ -306,6 +429,12 @@ tfm.exec.disableAutoNewGame()
 tfm.exec.disableAutoScore()
 tfm.exec.disableAutoShaman()
 tfm.exec.disableAutoTimeLeft()
+
+local admins = {
+    ["King_seniru#5890"] = true,
+    ["Lightymouse#0421"] = true,
+    ["Overforyou#9290"] = true
+}
 
 local maps = { 521833, 401421, 541917, 541928, 541936, 541943, 527935, 559634, 559644, 888052, 878047, 885641, 770600, 770656, 772172, 891472, 589736, 589800, 589708, 900012, 901062, 754380, 901337, 901411, 892660, 907870, 910078, 1190467, 1252043, 1124380, 1016258, 1252299, 1255902, 1256808, 986790, 1285380, 1271249, 1255944, 1255983, 1085344, 1273114, 1276664, 1279258, 1286824, 1280135, 1280342, 1284861, 1287556, 1057753, 1196679, 1288489, 1292983, 1298164, 1298521, 1293189, 1296949, 1308378, 1311136, 1314419, 1314982, 1318248, 1312411, 1312589, 1312845, 1312933, 1313969, 1338762, 1339474, 1349878, 1297154, 644588, 1351237, 1354040, 1354375, 1362386, 1283234, 1370578, 1306592, 1360889, 1362753, 1408124, 1407949, 1407849, 1343986, 1408028, 1441370, 1443416, 1389255, 1427349, 1450527, 1424739, 869836, 1459902, 1392993, 1426457, 1542824, 1533474, 1561467, 1563534, 1566991, 1587241, 1416119, 1596270, 1601580, 1525751, 1582146, 1558167, 1420943, 1466487, 1642575, 1648013, 1646094, 1393097, 1643446, 1545219, 1583484, 1613092, 1627981, 1633374, 1633277, 1633251, 1585138, 1624034, 1616785, 1625916, 1667582, 1666996, 1675013, 1675316, 1531316, 1665413, 1681719, 1699880, 1688696, 623770, 1727243, 1531329, 1683915, 1689533, 1738601, 3756146, 7742371, 7781585, 7781591 }
 
@@ -383,6 +512,7 @@ local assets = {
     iconDeaths = "17434d1c965.png",
     iconSurvived = "17434d0a87e.png",
     iconWon = "17434cff8bd.png",
+    lock = "1660271f4c6.png",
     items = {
         [ENUM_ITEMS.SMALL_BOX] = "17406985997.png",
         [ENUM_ITEMS.LARGE_BOX] = "174068e3bca.png",
@@ -479,19 +609,29 @@ local dHandler = DataHandler.new("pew", {
         index = 4,
         type = "number",
         default = 0
+    },
+    packs = {
+        index = 5,
+        type = "number",
+        default = 1
+    },
+    equipped = {
+        index = 6,
+        type = "number",
+        default = 1
     }
 })
 
 local MIN_PLAYERS = 4
 
-local profileWindow, leaderboardWindow, changelogWindow
+local profileWindow, leaderboardWindow, changelogWindow, shopWindow
 
 local initialized, newRoundStarted, suddenDeath = false
 local currentItem = ENUM_ITEMS.CANNON
 local isTribeHouse = tfm.get.room.isTribeHouse
 local statsEnabled = not isTribeHouse
 
-local leaderboard
+local leaderboard, shop
 
 
 --==[[ translations ]]==--
@@ -509,7 +649,13 @@ translations["en"] = {
     ROUNDS  =   "<font face='Lucida console'><N2>Rounds played</N2></font>",
     DEATHS =    "<font face='Lucida console'><N2>Deaths</N2></font>",
     SURVIVED =  "<font face='Lucida console'><N2>Rounds survived</N2></font>",
-    WON =       "<font face='Lucida console'><N2>Rounds won</N2></font>"
+    WON =       "<font face='Lucida console'><N2>Rounds won</N2></font>",
+    EQUIPPED =  "Equipped",
+    EQUIP =     "Equip",
+    BUY =       "Buy",
+    POINTS =    "<font face='Lucida console' size='12'>   <b>Points:</b> <V>${points}</V></font>",
+    PACK_DESC = "\n\n<font face='Lucida console' size='12' color='#cccccc'><i>“ ${desc} ”</i></font>\n<p align='right'><font size='10'>- ${author}</font></p>",
+    GIFT_RECV = "<N>You have been rewarded with <ROSE><b>${gift}</b></ROSE> by <ROSE><b>${admin}</b></ROSE>"
 }
 
 translations["br"] = {        
@@ -620,6 +766,8 @@ function Player.new(name)
 	self.won = 0
 	self.score = 0
 	self.points = 0
+	self.packs = 1
+	self.equipped = 1
 
     self.openedWindow = nil
 
@@ -663,10 +811,7 @@ function Player:shoot(x, y)
 		local rot = getRot(currentItem, stance)
 		local xSpeed = currentItem == 34 and 60 or 40
 
-		Timer("shootCooldown_" .. self.name, function(object)
-			tfm.exec.removeObject(object)
-			self.inCooldown = false
-		end, 1500, false, tfm.exec.addShamanObject(
+		local object = tfm.exec.addShamanObject(
 			currentItem,
 			x + pos.x,
 			y + pos.y,
@@ -674,7 +819,23 @@ function Player:shoot(x, y)
 			stance == -1 and -xSpeed or xSpeed,
 			0,
 			currentItem == 32 or currentItem == 62
-		))
+		)
+
+		local equippedPack = shop.packs[self.equipped]
+		local skin = equippedPack.skins[currentItem]
+		if self.equipped ~= "Default" and skin and skin.image then
+			tfm.exec.addImage(
+				skin.image,
+				"#" .. object,
+				skin.adj.x,
+				skin.adj.y
+			)
+		end
+
+		Timer("shootCooldown_" .. self.name, function(object)
+			tfm.exec.removeObject(object)
+			self.inCooldown = false
+		end, 1500, false, object)
 
 	end
 end
@@ -720,12 +881,14 @@ function Player:die()
 end
 
 function Player:savePlayerData()
-	if tfm.get.room.uniquePlayers < MIN_PLAYERS then return end
+	-- if tfm.get.room.uniquePlayers < MIN_PLAYERS then return end
 	local name = self.name
     dHandler:set(name, "rounds", self.rounds)
     dHandler:set(name, "survived", self.survived)
 	dHandler:set(name, "won", self.won)
 	dHandler:set(name, "points", self.points)
+	dHandler:set(name, "packs", shop.packsBitList:encode(self.packs))
+	dHandler:set(name, "equipped", shop.packsBitList:find(self.equipped))
     system.savePlayerData(name, "v2" .. dHandler:dumpPlayer(name))
 end
 
@@ -863,9 +1026,13 @@ function eventPlayerDataLoaded(name, data)
 
 	Player.players[name].rounds = dHandler:get(name, "rounds")
 	Player.players[name].survived = dHandler:get(name, "survived")
-	Player.players[name].won = dHandler:get(name, "won")
+    Player.players[name].won = dHandler:get(name, "won")
+    Player.players[name].points = dHandler:get(name, "points")
+    Player.players[name].packs = shop.packsBitList:decode(dHandler:get(name, "packs"))
+    Player.players[name].equipped = shop.packsBitList:get(dHandler:get(name, "equipped"))
 
 end
+
 function eventFileLoaded(id, data)
 	-- print(table.tostring(leaderboard.leaders))
 	if id == leaderboard.FILE_ID or id == tostring(leaderboard.FILE_ID) then
@@ -1029,17 +1196,437 @@ end
 
 leaderboard.leaders = leaderboard.parseLeaderboard(leaderboard.leaderboardData)
 
+shop = {}
+
+-- Images to display in shop if some items are missing in the pack
+shop.defaultItemImages = {
+	[ENUM_ITEMS.CANNON] = "175301924fd.png",
+	[ENUM_ITEMS.ANVIL] = "17530198302.png",
+	[ENUM_ITEMS.BALL] = "175301924fd.png",
+	[ENUM_ITEMS.BLUE_BALOON] = "175301b5151.png",
+	[ENUM_ITEMS.LARGE_BOX] = "175301a8692.png",
+	[ENUM_ITEMS.SMALL_BOX] = "175301adef2.png",
+	[ENUM_ITEMS.LARGE_PLANK] = "1753019e778.png",
+	[ENUM_ITEMS.SMALL_PLANK] = "175301a35c2.png"
+}
+
+-- Item packs that are used to display in the shop interface
+shop.packs = {
+
+	["Default"] = {
+		coverImage = "17404561700.png",
+		description = "Default item pack",
+		author = "Transformice",
+		price = 0,
+
+		description_locales = {
+			en = "Default item pack"
+		},
+
+		skins = {
+			[ENUM_ITEMS.CANNON] = { image = "1752b1c10bc.png" },
+			[ENUM_ITEMS.ANVIL] = { image = "1752b1b9497.png" },
+			[ENUM_ITEMS.BALL] = { image = "1752b1bdeee.png" },
+			[ENUM_ITEMS.BLUE_BALOON] = { image = "1752b1aa57c.png" },
+			[ENUM_ITEMS.LARGE_BOX] = { image = "1752b1adb5e.png" },
+			[ENUM_ITEMS.SMALL_BOX] = { image = "1752b1b1cc6.png" },
+			[ENUM_ITEMS.LARGE_PLANK] = { image = "1752b1b5ac3.png" },
+			[ENUM_ITEMS.SMALL_PLANK] = { image = "1752b0918ed.png" }
+		}
+	},
+
+	["Retro"] = {
+		coverImage = "17404561700.png",
+		description = "Back in old days...",
+		author = "Transformice",
+		price = 10,
+
+		description_locales = {
+			en = "Back in old days..."
+		},
+
+		skins = {
+			[ENUM_ITEMS.CANNON] =  { image = "174bb44115d.png", adj = { x = -16, y = -16 } },
+			[ENUM_ITEMS.ANVIL] = { },
+			[ENUM_ITEMS.BALL] =  { image = "174bb405fd4.png", adj = { x = -16, y = -16 } },
+			[ENUM_ITEMS.BLUE_BALOON] = { },
+			[ENUM_ITEMS.LARGE_BOX] =  { image = "174c530f384.png", adj = { x = -30, y = -30 } },
+			[ENUM_ITEMS.SMALL_BOX] =  { image = "174c532630c.png", adj = { x = -16, y = -16 } },
+			[ENUM_ITEMS.LARGE_PLANK] =  { image = "174c5311ea4.png", adj = { x = -104, y = -6 } },
+			[ENUM_ITEMS.SMALL_PLANK] =  { image = "174c5324b9b.png", adj = { x = -50, y = -6 } }
+		}
+	},
+
+	["Catto"] = {
+		coverImage = "17404561700.png",
+		description = "Meow!",
+		author = "King_seniru#5890",
+		price = 10,
+
+		description_locales = {
+			en = "Meow!"
+		},
+
+		skins = {
+			[ENUM_ITEMS.CANNON] =  { image = "17530cc2bfb.png", adj = { x = -16, y = -16 } },
+			[ENUM_ITEMS.ANVIL] = { image = "17530cb9535.png", adj = { x = -24, y = -24 } },
+			[ENUM_ITEMS.BALL] =  { image = "17530cb1c03.png", adj = { x = -16, y = -16 } },
+			[ENUM_ITEMS.BLUE_BALOON] = { image = "17530cc8b06.png", adj = { x = -18, y = -18 } },
+			[ENUM_ITEMS.LARGE_BOX] =  { image = "17530ccf337.png", adj = { x = -30, y = -30 } },
+			[ENUM_ITEMS.SMALL_BOX] =  { image = "17530cd4a81.png", adj = { x = -16, y = -16 } },
+			[ENUM_ITEMS.LARGE_PLANK] =  { image = "17530cf135f.png", adj = { x = -100, y = -14 } },
+			[ENUM_ITEMS.SMALL_PLANK] =  { image = "17530cf9d23.png", adj = { x = -50, y = -14 } }
+		}
+	},
+
+	["Dummy 1"] = {
+		coverImage = assets.dummy,
+		description = "Dummy",
+		author = "-",
+		price = 10000,
+
+		description_locales = {
+			en = "Dummy"
+		},
+
+		skins = {}
+
+	},
+
+	["Dummy 2"] = {
+		coverImage = assets.dummy,
+		description = "Dummy",
+		author = "-",
+		price = 10000,
+
+		description_locales = {
+			en = "Dummy"
+		},
+
+		skins = {}
+
+	},
+
+	["Dummy 3"] = {
+		coverImage = assets.dummy,
+		description = "Dummy",
+		author = "-",
+		price = 10000,
+
+		description_locales = {
+			en = "Dummy"
+		},
+
+		skins = {}
+
+	},
+
+	["Dummy 4"] = {
+		coverImage = assets.dummy,
+		description = "Dummy",
+		author = "-",
+		price = 10000,
+
+		description_locales = {
+			en = "Dummy"
+		},
+
+		skins = {}
+
+	},
+
+	["Dummy 5"] = {
+		coverImage = assets.dummy,
+		description = "Dummy",
+		author = "-",
+		price = 10000,
+
+		description_locales = {
+			en = "Dummy"
+		},
+
+		skins = {}
+
+	},
+
+	["Dummy 6"] = {
+		coverImage = assets.dummy,
+		description = "Dummy",
+		author = "-",
+		price = 10000,
+
+		description_locales = {
+			en = "Dummy"
+		},
+
+		skins = {}
+
+	},
+
+	["Dummy 7"] = {
+		coverImage = assets.dummy,
+		description = "Dummy",
+		author = "-",
+		price = 10000,
+
+		description_locales = {
+			en = "Dummy"
+		},
+
+		skins = {}
+
+	},
+
+	["Dummy 8"] = {
+		coverImage = assets.dummy,
+		description = "Dummy",
+		author = "-",
+		price = 10000,
+
+		description_locales = {
+			en = "Dummy"
+		},
+
+		skins = {}
+
+	},
+
+	["Dummy 9"] = {
+		coverImage = assets.dummy,
+		description = "Dummy",
+		author = "-",
+		price = 10000,
+
+		description_locales = {
+			en = "Dummy"
+		},
+
+		skins = {}
+
+	},
+
+	["Dummy 10"] = {
+		coverImage = assets.dummy,
+		description = "Dummy",
+		author = "-",
+		price = 10000,
+
+		description_locales = {
+			en = "Dummy"
+		},
+
+		skins = {}
+
+	},
+
+	["Dummy 11"] = {
+		coverImage = assets.dummy,
+		description = "Dummy",
+		author = "-",
+		price = 10000,
+
+		description_locales = {
+			en = "Dummy"
+		},
+
+		skins = {}
+
+	},
+
+	["Dummy 12"] = {
+		coverImage = assets.dummy,
+		description = "Dummy",
+		author = "-",
+		price = 10000,
+
+		description_locales = {
+			en = "Dummy"
+		},
+
+		skins = {}
+
+	}
+
+
+}
+
+shop.totalPacks = 0
+for pack in next, shop.packs do shop.totalPacks = shop.totalPacks + 1 end
+
+shop.totalPages = math.ceil(shop.totalPacks / 6)
+
+shop.packsBitList = BitList {
+    "Default", "Retro", "Catto", "Dummy 1", "Dummy 2", "Dummy 3", "Dummy 4", "Dummy 5", "Dummy 6", "Dummy 7", "Dummy 8", "Dummy 9", "Dummy 10", "Dummy 11", "Dummy 12"
+}
+
+shop.displayShop = function(target, page)
+	page = page or 1
+	if page < 1 or page > shop.totalPages then return end
+
+	local targetPlayer = Player.players[target]
+	local commu = targetPlayer.community
+    if targetPlayer.openedWindow then targetPlayer.openedWindow:hide(target) end
+	shopWindow:show(target)
+	shop.displayPackInfo(target, "Default")
+
+	Panel.panels[520]:update(translate("POINTS", commu, nil, { points = targetPlayer.points }), target)
+	Panel.panels[653]:update(("<a href='event:%s'><p align='center'><b>%s〈%s</b></p></a>")
+		:format(
+			page - 1,
+			page - 1 < 1 and "<N2>" or "",
+			page - 1 < 1 and "</N2>" or ""
+		)
+	, target)
+	Panel.panels[654]:update(("<a href='event:%s'><p align='center'><b>%s〉%s</b></p></a>")
+		:format(
+			page + 1,
+			page + 1 > shop.totalPages and "<N2>" or "</N2>",
+			page + 1 > shop.totalPages and "</N2>" or "</N2>"
+		)
+	, target)
+
+	targetPlayer.openedWindow = shopWindow
+
+    local col, row, count = 0, 0, 0
+	-- for _, name in next, shop.packsBitList.featureArray do
+	for i = (page - 1) * 6 + 1, page * 6 do
+
+		local name = shop.packsBitList:get(i)
+		if not name then return	end
+
+		local pack = shop.packs[name]
+		local packPanel = Panel(560 + count, "", 380 + col * 120, 100 + row * 120, 100, 100, 0x1A3846, 0x1A3846, 1, true)
+			:addImageTemp(Image(pack.coverImage, "&1", 400 + col * 120, 100 + row * 120, target), target)
+			:addPanel(
+				Panel(560 + count + 1, ("<p align='center'><a href='event:%s'>%s</a></p>"):format(name, name),  385 + col * 120, 170 + row * 120, 90, 20, nil, 0x324650, 1, true)
+					:setActionListener(function(id, name, event)
+						shop.displayPackInfo(name, event)
+					end)
+			)
+		if not targetPlayer.packs[name] then packPanel:addImageTemp(Image(assets.lock, "&1", 380 + col * 120, 80 + row * 120, target), target) end
+
+        shopWindow:addPanelTemp(packPanel, target)
+
+		col = col + 1
+		count = count + 2
+		if col >= 3 then
+			row = row + 1
+			col = 0
+		end
+    end
+end
+
+shop.displayPackInfo = function(target, packName)
+
+	local pack = shop.packs[packName]
+	local player = Player.players[target]
+	local commu = player.community
+
+	Panel.panels[620]:addImageTemp(Image(pack.coverImage, "&1", 80, 80, target), target)
+
+	Panel.panels[620]:update(" <font size='15' face='Lucida console'><b><BV>" .. packName .. "</BV></b></font>", target)
+
+	local hasEquipped = player.equipped == packName
+	local hasBought = not not player.packs[packName]
+	local hasRequiredPoints = player.points >= pack.price
+	Panel.panels[650]:update(("<p align='center'><b><a href='event:%s:%s'>%s</a></b></p>")
+		:format(
+			hasEquipped and "none" or (hasBought and "equip" or (hasRequiredPoints and "buy" or "none")),
+			packName,
+			hasEquipped	and translate("EQUIPPED", commu)
+				or (hasBought and translate("EQUIP", commu)
+					or (hasRequiredPoints and (translate("BUY", commu) .. ": " .. pack.price)
+						or ("<N2>" .. translate("BUY", commu) .. ": " .. pack.price .. "</N2>")
+					)
+				)
+		)
+	, target)
+
+	local n, t = extractName(pack.author)
+	Panel.panels[651]:update(translate("PACK_DESC", commu, nil,
+		{
+			desc = (pack.description_locales[commu] or pack.description),
+			author = "<V>" .. n .. "</V><N2>" .. t .. "</N2>"
+		}
+	), target)
+
+	Panel.panels[652]:hide(target)
+	Panel.panels[652]:show(target)
+		:addImageTemp(Image(pack.skins[ENUM_ITEMS.CANNON].image or shop.defaultItemImages[ENUM_ITEMS.CANNON], "&1", 80, 160), target)
+		:addImageTemp(Image(pack.skins[ENUM_ITEMS.ANVIL].image or shop.defaultItemImages[ENUM_ITEMS.ANVIL], "&1", 130, 150), target)
+		:addImageTemp(Image(pack.skins[ENUM_ITEMS.BLUE_BALOON].image or shop.defaultItemImages[ENUM_ITEMS.BLUE_BALOON], "&1", 195, 160), target)
+		:addImageTemp(Image(pack.skins[ENUM_ITEMS.BALL].image or shop.defaultItemImages[ENUM_ITEMS.BALL], "&1", 250, 160), target)
+		:addImageTemp(Image(pack.skins[ENUM_ITEMS.LARGE_BOX].image or shop.defaultItemImages[ENUM_ITEMS.LARGE_BOX], "&1", 80, 220), target)
+		:addImageTemp(Image(pack.skins[ENUM_ITEMS.SMALL_BOX].image or shop.defaultItemImages[ENUM_ITEMS.SMALL_BOX], "&1", 160, 220), target)
+		:addImageTemp(Image(pack.skins[ENUM_ITEMS.LARGE_PLANK].image or shop.defaultItemImages[ENUM_ITEMS.LARGE_PLANK], "&1", 80, 300), target)
+		:addImageTemp(Image(pack.skins[ENUM_ITEMS.SMALL_PLANK].image or shop.defaultItemImages[ENUM_ITEMS.SMALL_PLANK], "&1", 80, 320), target)
+
+
+end
+
 cmds = {
+
     ["profile"] = function(args, msg, author)
         local player = Player.players[args[1] or author] or Player.players[author]
         displayProfile(player, author)
     end,
+
     ["help"] = function(args, msg, author)
         displayHelp(author)
     end,
+
+    ["shop"] = function(args, msg, author)
+        shop.displayShop(author, 1)
+    end,
+
     ["changelog"] = function(args, msg, author)
         displayChangelog(author)
+    end,
+
+    ["give"] = function(args, msg, author)
+        
+        if not admins[author] then return end
+        
+        local FORMAT_ERR_MSG = "<N>[</N><R>•</R><N>] <R><b>Error in command<br>\tUsage:</b><font face='Lucida console'> !give <i>[points|pack] [target] [value]</i></font></R>"
+        local TARGET_UNREACHABLE_ERR = "<N>[</N><R>•</R><N>] <R><b>Error: Target unreachable!</b></R>"
+
+        if (not args[1]) or (not args[2]) or (not args[3]) then return tfm.exec.chatMessage(FORMAT_ERR_MSG, author) end
+
+        local target = Player.players[args[2]]
+        local n, t = extractName(author)
+
+        if args[1] == "points" then
+            if not target then return tfm.exec.chatMessage(TARGET_UNREACHABLE_ERR, author) end
+            local points = tonumber(args[3])
+            if not points then return tfm.exec.chatMessage(FORMAT_ERR_MSG, author) end -- NaN
+            target.points = target.points + points
+            target:savePlayerData()
+            print(("[GIFT] %s has been rewarded with %s by %s"):format(args[2], points .. " Pts.", author))
+            tfm.exec.chatMessage(("<N>[</N><ROSE>•</ROSE><N>] Rewarded <ROSE>%s</ROSE> with <ROSE>%s</ROSE> points"):format(args[2], points))
+            tfm.exec.chatMessage(translate("GIFT_RECV", target.community, nil, {
+                admin = "<VI>" .. n .. "</VI><font size='8'><N2>" .. t .. "</N2></font>",
+                gift = points .. " Pts."
+            }), args[2])
+        elseif args[1] == "pack" then
+            if not target then return tfm.exec.chatMessage(TARGET_UNREACHABLE_ERR, author) end
+            local pack = msg:match("give pack .+#%d+ (.+)")
+            print(pack)
+            if not shop.packs[pack] then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error:</b> Could not find the pack</R>") end
+            if target.packs[pack] then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error: </b>Target already own that pack</R>") end
+            target.packs[pack] = true
+            target:savePlayerData()
+            print(("[GIFT] %s has been rewarded with %s by %s"):format(args[2], pack, author))
+            tfm.exec.chatMessage(("<N>[</N><ROSE>•</ROSE><N>] Rewarded <ROSE>%s</ROSE> with <ROSE>%s</ROSE>"):format(args[2], pack))
+            tfm.exec.chatMessage(translate("GIFT_RECV", target.community, nil, {
+                admin = "<VI>" .. n .. "</VI><font size='8'><N2>" .. t .. "</N2></font>",
+                gift = pack
+            }), args[2])
+        else
+            tfm.exec.chatMessage(FORMAT_ERR_MSG, author)
+        end
+
     end
+
 }
 
 local rotation, currentMapIndex = {}
@@ -1094,22 +1681,22 @@ newRound = function()
 end
 
 getPos = function(item, stance)
-	if item == ENUM_ITEMS.CANNON then		
-		return { x = stance == -1 and 10 or -10, y = 18 }	
-	elseif item == ENUM_ITEMS.SPIRIT then		
-		return { x = 0, y = 10 }	
-	else		
-		return { x = stance == -1 and -10 or 10, y = 0 }	
+	if item == ENUM_ITEMS.CANNON then
+		return { x = stance == -1 and 10 or -10, y = 18 }
+	elseif item == ENUM_ITEMS.SPIRIT then
+		return { x = 0, y = 10 }
+	else
+		return { x = stance == -1 and -10 or 10, y = 0 }
 	end
 end
 
-getRot = function(item, stance)	
+getRot = function(item, stance)
 	if item == ENUM_ITEMS.RUNE or item == ENUM_ITEMS.CUPID_ARROW or item == ENUM_ITEMS.STABLE_RUNE then
-		return stance == -1 and 180 or 0	
+		return stance == -1 and 180 or 0
 	elseif item == ENUM_ITEMS.CANNON then
 		return stance == -1 and -90 or 90
 	else
-		return 0	
+		return 0
 	end
 end
 
@@ -1253,7 +1840,49 @@ do
         :addImage(Image(assets.widgets.scrollbarBg, "&1", 720, 80))
         :addImage(Image(assets.widgets.scrollbarFg, "&1", 720, 90))
 
-end
+    shopWindow = createPrettyUI(5, 360, 50, 380, 330, true, true) -- main shop window
+        :addPanel(  -- preview window
+            createPrettyUI(6, 70, 50, 260, 330, true, false)
+                :addPanel(
+                    Panel(650, "", 80, 350, 240, 20, nil, 0x324650, 1, true)
+                        :setActionListener(function(id, name, event)
+                            local key, value = table.unpack(string.split(event, ":"))
+                            local player = Player.players[name]
+                            local pack = shop.packs[value]
+                            if not pack then return end
+                            if key == "buy" then
+                                -- Exit if the player already have the pack or if they dont have the required points
+                                if player.packs[value] or player.points < pack.price then return end
+                                player.packs[value] = true
+                                player.equipped = value
+                                player.points = player.points - pack.price
+                                shop.displayShop(name)
+                                player:savePlayerData()
+                            elseif key == "equip" then
+                                -- Exit if the player don't have the pack
+                                if not player.packs[value] then return end
+                                player.equipped =  value
+                                player:savePlayerData()
+                                shop.displayPackInfo(name, value)
+                            end
+                        end)
+                )
+                :addPanel(Panel(651, "", 160, 60, 150, 90, nil, nil, 0, true))
+                :addPanel(Panel(652, "", 80, 160, 100, 100, nil, nil, 0, true))
+                :addPanel(
+                    Panel(653, "〈", 620, 350, 40, 20, nil, 0x324650, 1, true)
+                        :setActionListener(function(id, name, event)
+                            shop.displayShop(name, tonumber(event))
+                        end)
+                )
+                :addPanel(
+                    Panel(654, "〉", 680, 350, 40, 20, nil, 0x324650, 1, true)
+                        :setActionListener(function(id, name, event)
+                            shop.displayShop(name, tonumber(event))
+                        end)
+                )
+        )
 
+end
 
 

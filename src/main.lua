@@ -1,16 +1,3 @@
-cmds = {
-    ["profile"] = function(args, msg, author)
-        local player = Player.players[args[1] or author] or Player.players[author]
-        displayProfile(player, author)
-    end,
-    ["help"] = function(args, msg, author)
-        displayHelp(author)
-    end,
-    ["changelog"] = function(args, msg, author)
-        displayChangelog(author)
-    end
-}
-
 local rotation, currentMapIndex = {}
 
 local shuffleMaps = function(maps)
@@ -63,22 +50,22 @@ newRound = function()
 end
 
 getPos = function(item, stance)
-	if item == ENUM_ITEMS.CANNON then		
-		return { x = stance == -1 and 10 or -10, y = 18 }	
-	elseif item == ENUM_ITEMS.SPIRIT then		
-		return { x = 0, y = 10 }	
-	else		
-		return { x = stance == -1 and -10 or 10, y = 0 }	
+	if item == ENUM_ITEMS.CANNON then
+		return { x = stance == -1 and 10 or -10, y = 18 }
+	elseif item == ENUM_ITEMS.SPIRIT then
+		return { x = 0, y = 10 }
+	else
+		return { x = stance == -1 and -10 or 10, y = 0 }
 	end
 end
 
-getRot = function(item, stance)	
+getRot = function(item, stance)
 	if item == ENUM_ITEMS.RUNE or item == ENUM_ITEMS.CUPID_ARROW or item == ENUM_ITEMS.STABLE_RUNE then
-		return stance == -1 and 180 or 0	
+		return stance == -1 and 180 or 0
 	elseif item == ENUM_ITEMS.CANNON then
 		return stance == -1 and -90 or 90
 	else
-		return 0	
+		return 0
 	end
 end
 
@@ -222,5 +209,47 @@ do
         :addImage(Image(assets.widgets.scrollbarBg, "&1", 720, 80))
         :addImage(Image(assets.widgets.scrollbarFg, "&1", 720, 90))
 
-end
+    shopWindow = createPrettyUI(5, 360, 50, 380, 330, true, true) -- main shop window
+        :addPanel(  -- preview window
+            createPrettyUI(6, 70, 50, 260, 330, true, false)
+                :addPanel(
+                    Panel(650, "", 80, 350, 240, 20, nil, 0x324650, 1, true)
+                        :setActionListener(function(id, name, event)
+                            local key, value = table.unpack(string.split(event, ":"))
+                            local player = Player.players[name]
+                            local pack = shop.packs[value]
+                            if not pack then return end
+                            if key == "buy" then
+                                -- Exit if the player already have the pack or if they dont have the required points
+                                if player.packs[value] or player.points < pack.price then return end
+                                player.packs[value] = true
+                                player.equipped = value
+                                player.points = player.points - pack.price
+                                shop.displayShop(name)
+                                player:savePlayerData()
+                            elseif key == "equip" then
+                                -- Exit if the player don't have the pack
+                                if not player.packs[value] then return end
+                                player.equipped =  value
+                                player:savePlayerData()
+                                shop.displayPackInfo(name, value)
+                            end
+                        end)
+                )
+                :addPanel(Panel(651, "", 160, 60, 150, 90, nil, nil, 0, true))
+                :addPanel(Panel(652, "", 80, 160, 100, 100, nil, nil, 0, true))
+                :addPanel(
+                    Panel(653, "〈", 620, 350, 40, 20, nil, 0x324650, 1, true)
+                        :setActionListener(function(id, name, event)
+                            shop.displayShop(name, tonumber(event))
+                        end)
+                )
+                :addPanel(
+                    Panel(654, "〉", 680, 350, 40, 20, nil, 0x324650, 1, true)
+                        :setActionListener(function(id, name, event)
+                            shop.displayShop(name, tonumber(event))
+                        end)
+                )
+        )
 
+end

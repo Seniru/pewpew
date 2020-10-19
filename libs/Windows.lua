@@ -81,7 +81,8 @@ do
     end
 
     function Image:hide(target)
-		if target == nil then error("Target cannot be nil") end
+        if target == nil then error("Target cannot be nil") end
+        if not self.instances[target] then return end
         tfm.exec.removeImage(self.instances[target])
         self.instances[target] = nil
         return self
@@ -101,7 +102,7 @@ do
     })
 
     function Panel.new(id, text, x, y, w, h, background, border, opacity, fixed, hidden)
-    
+
         local self = setmetatable({
             id = id,
             text = text,
@@ -162,11 +163,11 @@ do
     end
 
     function Panel:hide(target)
-        
+
         ui.removeTextArea(10000 + self.id, target)
 
         for name in next, (target and { [target] = true } or tfm.get.room.playerList) do
-            
+
             for id, child in next, self.children do
 				child:hide(name)
             end
@@ -177,10 +178,10 @@ do
                 end
                 self.temporary[name] = {}
             end
-            
+
         end
 
-        
+
         if self.onclose then self.onclose(target) end
         return self
 
@@ -201,12 +202,14 @@ do
         if not self.temporary[target] then self.temporary[target] = {} end
         panel:show(target)
         self.temporary[target][panel.id] = panel
+        return self
     end
 
     function Panel:addImageTemp(image, target)
         if not self.temporary[target] then self.temporary[target] = {} end
         image:show(target)
         self.temporary[target]["i_" .. image.id] = image
+        return self
     end
 
     function Panel:setActionListener(fn)
