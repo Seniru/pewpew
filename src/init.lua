@@ -113,6 +113,7 @@ local assets = {
     iconDeaths = "17434d1c965.png",
     iconSurvived = "17434d0a87e.png",
     iconWon = "17434cff8bd.png",
+    lock = "1660271f4c6.png",
     items = {
         [ENUM_ITEMS.SMALL_BOX] = "17406985997.png",
         [ENUM_ITEMS.LARGE_BOX] = "174068e3bca.png",

@@ -296,16 +296,18 @@ shop.displayShop = function(target, page)
 		local name = shop.packsBitList:get(i)
 		if not name then return	end
 
-        local pack = shop.packs[name]
-        shopWindow:addPanelTemp(
-			Panel(560 + count, "", 380 + col * 120, 100 + row * 120, 100, 100, 0x1A3846, 0x1A3846, 1, true)
-				:addImageTemp(Image(pack.coverImage, "&1", 400 + col * 120, 100 + row * 120, target), target)
-				:addPanel(
-					Panel(560 + count + 1, ("<p align='center'><a href='event:%s'>%s</a></p>"):format(name, name),  385 + col * 120, 170 + row * 120, 90, 20, nil, 0x324650, 1, true)
-						:setActionListener(function(id, name, event)
-							shop.displayPackInfo(name, event)
-						end)
-				), target)
+		local pack = shop.packs[name]
+		local packPanel = Panel(560 + count, "", 380 + col * 120, 100 + row * 120, 100, 100, 0x1A3846, 0x1A3846, 1, true)
+			:addImageTemp(Image(pack.coverImage, "&1", 400 + col * 120, 100 + row * 120, target), target)
+			:addPanel(
+				Panel(560 + count + 1, ("<p align='center'><a href='event:%s'>%s</a></p>"):format(name, name),  385 + col * 120, 170 + row * 120, 90, 20, nil, 0x324650, 1, true)
+					:setActionListener(function(id, name, event)
+						shop.displayPackInfo(name, event)
+					end)
+			)
+		if not targetPlayer.packs[name] then packPanel:addImageTemp(Image(assets.lock, "&1", 380 + col * 120, 80 + row * 120, target), target) end
+
+        shopWindow:addPanelTemp(packPanel, target)
 
 		col = col + 1
 		count = count + 2
