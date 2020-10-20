@@ -36,7 +36,7 @@ cmds = {
             target.points = target.points + points
             target:savePlayerData()
             print(("[GIFT] %s has been rewarded with %s by %s"):format(args[2], points .. " Pts.", author))
-            tfm.exec.chatMessage(("<N>[</N><ROSE>•</ROSE><N>] Rewarded <ROSE>%s</ROSE> with <ROSE>%s</ROSE> points"):format(args[2], points))
+            tfm.exec.chatMessage(("<N>[</N><ROSE>•</ROSE><N>] Rewarded <ROSE>%s</ROSE> with <ROSE>%s</ROSE> points"):format(args[2], points), author)
             tfm.exec.chatMessage(translate("GIFT_RECV", target.community, nil, {
                 admin = "<VI>" .. n .. "</VI><font size='8'><N2>" .. t .. "</N2></font>",
                 gift = points .. " Pts."
@@ -50,7 +50,7 @@ cmds = {
             target.packs[pack] = true
             target:savePlayerData()
             print(("[GIFT] %s has been rewarded with %s by %s"):format(args[2], pack, author))
-            tfm.exec.chatMessage(("<N>[</N><ROSE>•</ROSE><N>] Rewarded <ROSE>%s</ROSE> with <ROSE>%s</ROSE>"):format(args[2], pack))
+            tfm.exec.chatMessage(("<N>[</N><ROSE>•</ROSE><N>] Rewarded <ROSE>%s</ROSE> with <ROSE>%s</ROSE>"):format(args[2], pack), author)
             tfm.exec.chatMessage(translate("GIFT_RECV", target.community, nil, {
                 admin = "<VI>" .. n .. "</VI><font size='8'><N2>" .. t .. "</N2></font>",
                 gift = pack

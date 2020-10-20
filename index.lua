@@ -1214,7 +1214,8 @@ shop.defaultItemImages = {
 shop.packs = {
 
 	["Default"] = {
-		coverImage = "16c18dff3ab.png",
+		coverImage = "175405f30a3.png",
+		coverAdj = { x = 15, y = 5 },
 		description = "Default item pack",
 		author = "Transformice",
 		price = 0,
@@ -1237,6 +1238,7 @@ shop.packs = {
 
 	["Poisson"] = {
 		coverImage = "17540405f67.png",
+		coverAdj = { x = 8, y = 8 },
 		description = "Back in old days...",
 		author = "Transformice",
 		price = 10,
@@ -1258,7 +1260,8 @@ shop.packs = {
 	},
 
 	["Catto"] = {
-		coverImage = "17404561700.png",
+		coverImage = "1754528ac5c.png",
+		coverAdj = { x = 8, y = 0 },
 		description = "Meow!",
 		author = "King_seniru#5890",
 		price = 10,
@@ -1496,7 +1499,7 @@ shop.displayShop = function(target, page)
 
 		local pack = shop.packs[name]
 		local packPanel = Panel(560 + count, "", 380 + col * 120, 100 + row * 120, 100, 100, 0x1A3846, 0x1A3846, 1, true)
-			:addImageTemp(Image(pack.coverImage, "&1", 400 + col * 120, 100 + row * 120, target), target)
+			:addImageTemp(Image(pack.coverImage, "&1", 400 + (pack.coverAdj and pack.coverAdj.x or 0) + col * 120, 100 + (pack.coverAdj and pack.coverAdj.y or 0) + row * 120, target), target)
 			:addPanel(
 				Panel(560 + count + 1, ("<p align='center'><a href='event:%s'>%s</a></p>"):format(name, name),  385 + col * 120, 170 + row * 120, 90, 20, nil, 0x324650, 1, true)
 					:setActionListener(function(id, name, event)
@@ -1523,7 +1526,7 @@ shop.displayPackInfo = function(target, packName)
 	local commu = player.community
 
 	Panel.panels[610]:hide(target):show(target)
-	Panel.panels[620]:addImageTemp(Image(pack.coverImage, "&1", 80, 80, target), target)
+	Panel.panels[620]:addImageTemp(Image(pack.coverImage, "&1", 80 + (pack.coverAdj and pack.coverAdj.x or 0), 80 + (pack.coverAdj and pack.coverAdj.y or 0), target), target)
 
 	Panel.panels[620]:update(" <font size='15' face='Lucida console'><b><BV>" .. packName .. "</BV></b></font>", target)
 
@@ -1551,8 +1554,7 @@ shop.displayPackInfo = function(target, packName)
 		}
 	), target)
 
-	--Panel.panels[652]:hide(target)
-	Panel.panels[652]--:show(target)
+	Panel.panels[652]
 		:addImageTemp(Image(pack.skins[ENUM_ITEMS.CANNON].image or shop.defaultItemImages[ENUM_ITEMS.CANNON], "&1", 80, 160), target)
 		:addImageTemp(Image(pack.skins[ENUM_ITEMS.ANVIL].image or shop.defaultItemImages[ENUM_ITEMS.ANVIL], "&1", 130, 150), target)
 		:addImageTemp(Image(pack.skins[ENUM_ITEMS.BLUE_BALOON].image or shop.defaultItemImages[ENUM_ITEMS.BLUE_BALOON], "&1", 195, 160), target)
@@ -1603,7 +1605,7 @@ cmds = {
             target.points = target.points + points
             target:savePlayerData()
             print(("[GIFT] %s has been rewarded with %s by %s"):format(args[2], points .. " Pts.", author))
-            tfm.exec.chatMessage(("<N>[</N><ROSE>•</ROSE><N>] Rewarded <ROSE>%s</ROSE> with <ROSE>%s</ROSE> points"):format(args[2], points))
+            tfm.exec.chatMessage(("<N>[</N><ROSE>•</ROSE><N>] Rewarded <ROSE>%s</ROSE> with <ROSE>%s</ROSE> points"):format(args[2], points), author)
             tfm.exec.chatMessage(translate("GIFT_RECV", target.community, nil, {
                 admin = "<VI>" .. n .. "</VI><font size='8'><N2>" .. t .. "</N2></font>",
                 gift = points .. " Pts."
@@ -1617,7 +1619,7 @@ cmds = {
             target.packs[pack] = true
             target:savePlayerData()
             print(("[GIFT] %s has been rewarded with %s by %s"):format(args[2], pack, author))
-            tfm.exec.chatMessage(("<N>[</N><ROSE>•</ROSE><N>] Rewarded <ROSE>%s</ROSE> with <ROSE>%s</ROSE>"):format(args[2], pack))
+            tfm.exec.chatMessage(("<N>[</N><ROSE>•</ROSE><N>] Rewarded <ROSE>%s</ROSE> with <ROSE>%s</ROSE>"):format(args[2], pack), author)
             tfm.exec.chatMessage(translate("GIFT_RECV", target.community, nil, {
                 admin = "<VI>" .. n .. "</VI><font size='8'><N2>" .. t .. "</N2></font>",
                 gift = pack
