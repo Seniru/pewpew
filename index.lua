@@ -397,6 +397,12 @@ local CHANGELOG =
 
 <p align='center'><font size='20'><b><V>CHANGELOG</V></b></font></p><font size='12' face='Lucide Console'>
 
+    <font size='15' face='Lucida Console'><b><BV>v2.1.0.0-beta</BV></b></font> <i>(10/21/2020)</i>
+        • Added the shop (accessible with !shop)
+        • Added a point system to buy packs
+        • Added custom items which can be purchased with shop and use in game
+
+
     <font size='15' face='Lucida Console'><b><BV>v2.0.2.0</BV></b></font> <i>(10/13/2020)</i>
         • Added new translations
             - Added PH Translations <i>(thanks to <b><V>Overforyou</V><N><font size='8'>#9290</font></N></b>)</i>
@@ -1241,7 +1247,7 @@ shop.packs = {
 		coverAdj = { x = 8, y = 8 },
 		description = "Back in old days...",
 		author = "Transformice",
-		price = 10,
+		price = 100,
 
 		description_locales = {
 			en = "Back in old days..."
@@ -1264,7 +1270,7 @@ shop.packs = {
 		coverAdj = { x = 8, y = 0 },
 		description = "Meow!",
 		author = "King_seniru#5890",
-		price = 10,
+		price = 300,
 
 		description_locales = {
 			en = "Meow!"
@@ -1280,176 +1286,7 @@ shop.packs = {
 			[ENUM_ITEMS.LARGE_PLANK] =  { image = "17530cf135f.png", adj = { x = -100, y = -14 } },
 			[ENUM_ITEMS.SMALL_PLANK] =  { image = "17530cf9d23.png", adj = { x = -50, y = -14 } }
 		}
-	},
-
-	["Dummy 1"] = {
-		coverImage = assets.dummy,
-		description = "Dummy",
-		author = "-",
-		price = 10000,
-
-		description_locales = {
-			en = "Dummy"
-		},
-
-		skins = {}
-
-	},
-
-	["Dummy 2"] = {
-		coverImage = assets.dummy,
-		description = "Dummy",
-		author = "-",
-		price = 10000,
-
-		description_locales = {
-			en = "Dummy"
-		},
-
-		skins = {}
-
-	},
-
-	["Dummy 3"] = {
-		coverImage = assets.dummy,
-		description = "Dummy",
-		author = "-",
-		price = 10000,
-
-		description_locales = {
-			en = "Dummy"
-		},
-
-		skins = {}
-
-	},
-
-	["Dummy 4"] = {
-		coverImage = assets.dummy,
-		description = "Dummy",
-		author = "-",
-		price = 10000,
-
-		description_locales = {
-			en = "Dummy"
-		},
-
-		skins = {}
-
-	},
-
-	["Dummy 5"] = {
-		coverImage = assets.dummy,
-		description = "Dummy",
-		author = "-",
-		price = 10000,
-
-		description_locales = {
-			en = "Dummy"
-		},
-
-		skins = {}
-
-	},
-
-	["Dummy 6"] = {
-		coverImage = assets.dummy,
-		description = "Dummy",
-		author = "-",
-		price = 10000,
-
-		description_locales = {
-			en = "Dummy"
-		},
-
-		skins = {}
-
-	},
-
-	["Dummy 7"] = {
-		coverImage = assets.dummy,
-		description = "Dummy",
-		author = "-",
-		price = 10000,
-
-		description_locales = {
-			en = "Dummy"
-		},
-
-		skins = {}
-
-	},
-
-	["Dummy 8"] = {
-		coverImage = assets.dummy,
-		description = "Dummy",
-		author = "-",
-		price = 10000,
-
-		description_locales = {
-			en = "Dummy"
-		},
-
-		skins = {}
-
-	},
-
-	["Dummy 9"] = {
-		coverImage = assets.dummy,
-		description = "Dummy",
-		author = "-",
-		price = 10000,
-
-		description_locales = {
-			en = "Dummy"
-		},
-
-		skins = {}
-
-	},
-
-	["Dummy 10"] = {
-		coverImage = assets.dummy,
-		description = "Dummy",
-		author = "-",
-		price = 10000,
-
-		description_locales = {
-			en = "Dummy"
-		},
-
-		skins = {}
-
-	},
-
-	["Dummy 11"] = {
-		coverImage = assets.dummy,
-		description = "Dummy",
-		author = "-",
-		price = 10000,
-
-		description_locales = {
-			en = "Dummy"
-		},
-
-		skins = {}
-
-	},
-
-	["Dummy 12"] = {
-		coverImage = assets.dummy,
-		description = "Dummy",
-		author = "-",
-		price = 10000,
-
-		description_locales = {
-			en = "Dummy"
-		},
-
-		skins = {}
-
 	}
-
 
 }
 
@@ -1459,7 +1296,7 @@ for pack in next, shop.packs do shop.totalPacks = shop.totalPacks + 1 end
 shop.totalPages = math.ceil(shop.totalPacks / 6)
 
 shop.packsBitList = BitList {
-    "Default", "Poisson", "Catto", "Dummy 1", "Dummy 2", "Dummy 3", "Dummy 4", "Dummy 5", "Dummy 6", "Dummy 7", "Dummy 8", "Dummy 9", "Dummy 10", "Dummy 11", "Dummy 12"
+    "Default", "Poisson", "Catto"
 }
 
 shop.displayShop = function(target, page)
@@ -1752,7 +1589,7 @@ end
 
 displayHelp = function(target)
     tfm.exec.chatMessage("<br>" .. translate("WELCOME", tfm.get.room.playerList[target].community), target)
-    tfm.exec.chatMessage("<N>Report any bug to </N><VP>King_seniru</VP><G>#5890</G><br><br><b><VI>Commands</VI></b><br><br>[ <b>H</b> ] <N><ROSE>!help</ROSE> (displays this help menu)</N><br>[ <b>P</b> ] <N><ROSE>!profile <i>[player]</i></ROSE> (displays the profile of the player)</N><br>[ <b>L</b> ] <N>(displays the leaderboard)</N><br><br><N><ROSE>!changelog</ROSE> (displays the changelog)</N><br>", target)
+    tfm.exec.chatMessage("<N>Report any bug to </N><VP>King_seniru</VP><G>#5890</G><br><br><b><VI>Commands</VI></b><br><br>[ <b>H</b> ] <N><ROSE>!help</ROSE> (displays this help menu)</N><br>[ <b>P</b> ] <N><ROSE>!profile <i>[player]</i></ROSE> (displays the profile of the player)</N><br>[ <b>L</b> ] <N>(displays the leaderboard)</N><br><br><N><ROSE>!changelog</ROSE> (displays the changelog)</N><br><N><ROSE>!shop</ROSE> (displays the shop)</N><br>", target)
 end
 
 displayChangelog = function(target)

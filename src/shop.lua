@@ -43,7 +43,7 @@ shop.packs = {
 		coverAdj = { x = 8, y = 8 },
 		description = "Back in old days...",
 		author = "Transformice",
-		price = 10,
+		price = 100,
 
 		description_locales = {
 			en = "Back in old days..."
@@ -66,7 +66,7 @@ shop.packs = {
 		coverAdj = { x = 8, y = 0 },
 		description = "Meow!",
 		author = "King_seniru#5890",
-		price = 10,
+		price = 300,
 
 		description_locales = {
 			en = "Meow!"
@@ -82,176 +82,7 @@ shop.packs = {
 			[ENUM_ITEMS.LARGE_PLANK] =  { image = "17530cf135f.png", adj = { x = -100, y = -14 } },
 			[ENUM_ITEMS.SMALL_PLANK] =  { image = "17530cf9d23.png", adj = { x = -50, y = -14 } }
 		}
-	},
-
-	["Dummy 1"] = {
-		coverImage = assets.dummy,
-		description = "Dummy",
-		author = "-",
-		price = 10000,
-
-		description_locales = {
-			en = "Dummy"
-		},
-
-		skins = {}
-
-	},
-
-	["Dummy 2"] = {
-		coverImage = assets.dummy,
-		description = "Dummy",
-		author = "-",
-		price = 10000,
-
-		description_locales = {
-			en = "Dummy"
-		},
-
-		skins = {}
-
-	},
-
-	["Dummy 3"] = {
-		coverImage = assets.dummy,
-		description = "Dummy",
-		author = "-",
-		price = 10000,
-
-		description_locales = {
-			en = "Dummy"
-		},
-
-		skins = {}
-
-	},
-
-	["Dummy 4"] = {
-		coverImage = assets.dummy,
-		description = "Dummy",
-		author = "-",
-		price = 10000,
-
-		description_locales = {
-			en = "Dummy"
-		},
-
-		skins = {}
-
-	},
-
-	["Dummy 5"] = {
-		coverImage = assets.dummy,
-		description = "Dummy",
-		author = "-",
-		price = 10000,
-
-		description_locales = {
-			en = "Dummy"
-		},
-
-		skins = {}
-
-	},
-
-	["Dummy 6"] = {
-		coverImage = assets.dummy,
-		description = "Dummy",
-		author = "-",
-		price = 10000,
-
-		description_locales = {
-			en = "Dummy"
-		},
-
-		skins = {}
-
-	},
-
-	["Dummy 7"] = {
-		coverImage = assets.dummy,
-		description = "Dummy",
-		author = "-",
-		price = 10000,
-
-		description_locales = {
-			en = "Dummy"
-		},
-
-		skins = {}
-
-	},
-
-	["Dummy 8"] = {
-		coverImage = assets.dummy,
-		description = "Dummy",
-		author = "-",
-		price = 10000,
-
-		description_locales = {
-			en = "Dummy"
-		},
-
-		skins = {}
-
-	},
-
-	["Dummy 9"] = {
-		coverImage = assets.dummy,
-		description = "Dummy",
-		author = "-",
-		price = 10000,
-
-		description_locales = {
-			en = "Dummy"
-		},
-
-		skins = {}
-
-	},
-
-	["Dummy 10"] = {
-		coverImage = assets.dummy,
-		description = "Dummy",
-		author = "-",
-		price = 10000,
-
-		description_locales = {
-			en = "Dummy"
-		},
-
-		skins = {}
-
-	},
-
-	["Dummy 11"] = {
-		coverImage = assets.dummy,
-		description = "Dummy",
-		author = "-",
-		price = 10000,
-
-		description_locales = {
-			en = "Dummy"
-		},
-
-		skins = {}
-
-	},
-
-	["Dummy 12"] = {
-		coverImage = assets.dummy,
-		description = "Dummy",
-		author = "-",
-		price = 10000,
-
-		description_locales = {
-			en = "Dummy"
-		},
-
-		skins = {}
-
 	}
-
 
 }
 
@@ -261,7 +92,7 @@ for pack in next, shop.packs do shop.totalPacks = shop.totalPacks + 1 end
 shop.totalPages = math.ceil(shop.totalPacks / 6)
 
 shop.packsBitList = BitList {
-    "Default", "Poisson", "Catto", "Dummy 1", "Dummy 2", "Dummy 3", "Dummy 4", "Dummy 5", "Dummy 6", "Dummy 7", "Dummy 8", "Dummy 9", "Dummy 10", "Dummy 11", "Dummy 12"
+    "Default", "Poisson", "Catto"
 }
 
 shop.displayShop = function(target, page)
