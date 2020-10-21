@@ -397,7 +397,7 @@ local CHANGELOG =
 
 <p align='center'><font size='20'><b><V>CHANGELOG</V></b></font></p><font size='12' face='Lucide Console'>
 
-    <font size='15' face='Lucida Console'><b><BV>v2.1.0.0-beta</BV></b></font> <i>(10/21/2020)</i>
+    <font size='15' face='Lucida Console'><b><BV>v2.1.0.0</BV></b></font> <i>(10/21/2020)</i>
         • Added the shop (accessible with !shop)
         • Added a point system to buy packs
         • Added custom items which can be purchased with shop and use in game
