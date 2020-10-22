@@ -42,6 +42,7 @@ tfm.exec.disableAutoNewGame()
 tfm.exec.disableAutoScore()
 tfm.exec.disableAutoShaman()
 tfm.exec.disableAutoTimeLeft()
+tfm.exec.disablePhysicalConsumables()
 
 local admins = {
     ["King_seniru#5890"] = true,
