@@ -51,7 +51,8 @@ function Player:refresh()
     if not Player.alive[self.name] then
 	    Player.alive[self.name] = self
         Player.aliveCount = Player.aliveCount + 1
-    end
+	end
+	setNameColor(self.name)
 end
 
 function Player:setLives(lives)

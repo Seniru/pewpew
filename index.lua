@@ -730,7 +730,7 @@ translations["pl"] = {
     WON =       "<font face='Lucida console'><N2>Wygrane rundy</N2></font>"
 }
 
-translations["en"] = {	
+translations["ru"] = {	
 	LIVES_LEFT = "<ROSE>Оставшиеся жизни: <N>${lives}. <VI>Вернёшься в игру через 3...",
 	LOST_ALL =	"<ROSE>Вы потеряли все cвои жизни!",
 	SD =		"<VP>Внезапная смерть! У всех осталась <N>1 <VP>жизнь.",
@@ -812,7 +812,8 @@ function Player:refresh()
     if not Player.alive[self.name] then
 	    Player.alive[self.name] = self
         Player.aliveCount = Player.aliveCount + 1
-    end
+	end
+	setNameColor(self.name)
 end
 
 function Player:setLives(lives)
@@ -929,7 +930,7 @@ function eventNewPlayer(name)
         tfm.exec.removeImage(image)
     end, 5000, false, tfm.exec.addImage(assets.banner, ":1", 120, -85, name))
     system.loadPlayerData(name)
-    -- statsEnabled = (not isTribeHouse) and tfm.get.room.uniquePlayers >= 4
+    setNameColor(name)
 end
 
 function eventLoop(tc, tr)
@@ -1027,6 +1028,7 @@ function eventPlayerDied(name)
 		tfm.exec.chatMessage(translate("LIVES_LEFT", player.community, nil, {lives = player.lives}), name)
 		Timer("respawn_" .. name, function()
 			tfm.exec.respawnPlayer(name)
+			setNameColor(name)
 			player:setLives(player.lives)
 			player.alive = true
 		end, 3000, false)
@@ -1589,6 +1591,11 @@ extractName = function(username)
     local name, tag = username:match("^(.+)(#%d+)$")
     if name and tag then return name, tag
     else return username, "" end
+end
+
+setNameColor = function(name)
+    if not admins[name] then return end
+    tfm.exec.setNameColor(name, 0xff5555)
 end
 
 createPrettyUI = function(id, x, y, w, h, fixed, closeButton)

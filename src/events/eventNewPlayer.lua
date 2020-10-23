@@ -6,5 +6,5 @@ function eventNewPlayer(name)
         tfm.exec.removeImage(image)
     end, 5000, false, tfm.exec.addImage(assets.banner, ":1", 120, -85, name))
     system.loadPlayerData(name)
-    -- statsEnabled = (not isTribeHouse) and tfm.get.room.uniquePlayers >= 4
+    setNameColor(name)
 end

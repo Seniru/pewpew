@@ -16,6 +16,7 @@ function eventPlayerDied(name)
 		tfm.exec.chatMessage(translate("LIVES_LEFT", player.community, nil, {lives = player.lives}), name)
 		Timer("respawn_" .. name, function()
 			tfm.exec.respawnPlayer(name)
+			setNameColor(name)
 			player:setLives(player.lives)
 			player.alive = true
 		end, 3000, false)

@@ -76,6 +76,11 @@ extractName = function(username)
     else return username, "" end
 end
 
+setNameColor = function(name)
+    if not admins[name] then return end
+    tfm.exec.setNameColor(name, 0xff5555)
+end
+
 createPrettyUI = function(id, x, y, w, h, fixed, closeButton)
 
     local window =  Panel(id * 100 + 10, "", x - 4, y - 4, w + 8, h + 8, 0x7f492d, 0x7f492d, 1, fixed)

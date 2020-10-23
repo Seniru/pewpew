@@ -1,4 +1,4 @@
-translations["en"] = {	
+translations["ru"] = {	
 	LIVES_LEFT = "<ROSE>Оставшиеся жизни: <N>${lives}. <VI>Вернёшься в игру через 3...",
 	LOST_ALL =	"<ROSE>Вы потеряли все cвои жизни!",
 	SD =		"<VP>Внезапная смерть! У всех осталась <N>1 <VP>жизнь.",
