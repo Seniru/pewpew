@@ -1,8 +1,16 @@
-local VERSION = "v2.1.0.1"
+local VERSION = "v2.1.0.2"
 local CHANGELOG =
 [[
 
-<p align='center'><font size='20'><b><V>CHANGELOG</V></b></font></p><font size='12' face='Lucide Console'>
+<p align='center'><font size='20'><b><V>CHANGELOG</V></b></font> <BV><a href='event:log'>[View all]</a></BV></p><font size='12' face='Lucide Console'>
+
+    <font size='15' face='Lucida Console'><b><BV>v2.1.0.2</BV></b></font> <i>(10/21/2020)</i>
+        • Added RU translations <i>(thanks to <b><V>Nuttysquirrel</V><N><font size='8'>#0000</font></N></b>)</i>
+        • New maps!
+        • Highlight pewpew-admin names in red
+        • Bug fixes
+            - Announcing a sole survivor after announcing winners (multiple) either because on survivor died or killed
+
 
     <font size='15' face='Lucida Console'><b><BV>v2.1.0.1</BV></b></font> <i>(10/21/2020)</i>
         • Added Royal kit <i>(by <b><V>Lightymouse</V><N><font size='8'>#0421</font></N></b>)</i>
@@ -26,19 +34,6 @@ local CHANGELOG =
 
     <font size='15' face='Lucida Console'><b><BV>v2.0.1.0</BV></b></font> <i>(09/13/2020)</i>
         • Fixed the bug of choosing a random winner
-
-
-    <font size='15' face='Lucida Console'><b><BV>v2.0.0.0</BV></b></font> <i>(09/09/2020)</i>
-        Released an entirely new, rewritten version of #pewpew. Other than the original gameplay created by <b><V>Baasbase</V><font size='8'>#0095</font></b>, this version features
-
-        • A new stat system
-            - Profiles
-            - Leaderboards
-
-        • Cool and helpful indicators
-            - Life count
-            - Current item
-
 
 </font>
 ]]

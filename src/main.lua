@@ -210,7 +210,12 @@ do
         )
 
     changelogWindow = createPrettyUI(4, 70, 50, 670, 330, true, true)
-        :addPanel(Panel(450, CHANGELOG, 70, 50, 670, 330, nil, nil, 0, true))
+        :addPanel(
+            Panel(450, CHANGELOG, 70, 50, 670, 330, nil, nil, 0, true)
+                :setActionListener(function(id, name, event)
+                    tfm.exec.chatMessage("<BV>• <u><i>https://github.com/Seniru/pewpew/releases</i></u></BV>", name)
+                end)
+        )
         :addImage(Image(assets.widgets.scrollbarBg, "&1", 720, 80))
         :addImage(Image(assets.widgets.scrollbarFg, "&1", 720, 90))
 

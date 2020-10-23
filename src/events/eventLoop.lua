@@ -3,8 +3,8 @@ function eventLoop(tc, tr)
 	Timer.process()
 
 	if tr < 0 and initialized then
-		if not suddenDeath then			
-			suddenDeath = true		
+		if not suddenDeath then	
+			suddenDeath = true
 			tfm.exec.chatMessage(translate("SD", tfm.get.room.community))
 			for name, player in next, Player.alive do
 				player:setLives(1)
@@ -34,6 +34,7 @@ function eventLoop(tc, tr)
                 end
                 tfm.exec.chatMessage(translate("SURVIVORS", tfm.get.room.community, nil, { winners = winners, winner = winner }))
 			end
+			newRoundStarted = false
 			Timer("newRound", newRound, 3 * 1000)
 			tfm.exec.setGameTime(4, true)
 		end

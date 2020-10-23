@@ -391,11 +391,19 @@ local a={}a.VERSION='1.5'a.__index=a;function a.new(b,c,d)local self=setmetatabl
 
 --==[[ init ]]==--
 
-local VERSION = "v2.1.0.1"
+local VERSION = "v2.1.0.2"
 local CHANGELOG =
 [[
 
-<p align='center'><font size='20'><b><V>CHANGELOG</V></b></font></p><font size='12' face='Lucide Console'>
+<p align='center'><font size='20'><b><V>CHANGELOG</V></b></font> <BV><a href='event:log'>[View all]</a></BV></p><font size='12' face='Lucide Console'>
+
+    <font size='15' face='Lucida Console'><b><BV>v2.1.0.2</BV></b></font> <i>(10/21/2020)</i>
+        • Added RU translations <i>(thanks to <b><V>Nuttysquirrel</V><N><font size='8'>#0000</font></N></b>)</i>
+        • New maps!
+        • Highlight pewpew-admin names in red
+        • Bug fixes
+            - Announcing a sole survivor after announcing winners (multiple) either because on survivor died or killed
+
 
     <font size='15' face='Lucida Console'><b><BV>v2.1.0.1</BV></b></font> <i>(10/21/2020)</i>
         • Added Royal kit <i>(by <b><V>Lightymouse</V><N><font size='8'>#0421</font></N></b>)</i>
@@ -419,19 +427,6 @@ local CHANGELOG =
 
     <font size='15' face='Lucida Console'><b><BV>v2.0.1.0</BV></b></font> <i>(09/13/2020)</i>
         • Fixed the bug of choosing a random winner
-
-
-    <font size='15' face='Lucida Console'><b><BV>v2.0.0.0</BV></b></font> <i>(09/09/2020)</i>
-        Released an entirely new, rewritten version of #pewpew. Other than the original gameplay created by <b><V>Baasbase</V><font size='8'>#0095</font></b>, this version features
-
-        • A new stat system
-            - Profiles
-            - Leaderboards
-
-        • Cool and helpful indicators
-            - Life count
-            - Current item
-
 
 </font>
 ]]
@@ -938,8 +933,8 @@ function eventLoop(tc, tr)
 	Timer.process()
 
 	if tr < 0 and initialized then
-		if not suddenDeath then			
-			suddenDeath = true		
+		if not suddenDeath then	
+			suddenDeath = true
 			tfm.exec.chatMessage(translate("SD", tfm.get.room.community))
 			for name, player in next, Player.alive do
 				player:setLives(1)
@@ -969,6 +964,7 @@ function eventLoop(tc, tr)
                 end
                 tfm.exec.chatMessage(translate("SURVIVORS", tfm.get.room.community, nil, { winners = winners, winner = winner }))
 			end
+			newRoundStarted = false
 			Timer("newRound", newRound, 3 * 1000)
 			tfm.exec.setGameTime(4, true)
 		end
@@ -1016,8 +1012,8 @@ function eventPlayerDied(name)
 	if not newRoundStarted then
 		tfm.exec.respawnPlayer(name)
 		return player:refresh()
-    end
-    
+	end
+
 	player.lives = player.lives - 1
 	tfm.exec.setPlayerScore(name, player.lives)
 	player.alive = false
@@ -1727,7 +1723,12 @@ do
         )
 
     changelogWindow = createPrettyUI(4, 70, 50, 670, 330, true, true)
-        :addPanel(Panel(450, CHANGELOG, 70, 50, 670, 330, nil, nil, 0, true))
+        :addPanel(
+            Panel(450, CHANGELOG, 70, 50, 670, 330, nil, nil, 0, true)
+                :setActionListener(function(id, name, event)
+                    tfm.exec.chatMessage("<BV>• <u><i>https://github.com/Seniru/pewpew/releases</i></u></BV>", name)
+                end)
+        )
         :addImage(Image(assets.widgets.scrollbarBg, "&1", 720, 80))
         :addImage(Image(assets.widgets.scrollbarFg, "&1", 720, 90))
 

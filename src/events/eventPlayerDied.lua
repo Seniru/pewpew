@@ -4,8 +4,8 @@ function eventPlayerDied(name)
 	if not newRoundStarted then
 		tfm.exec.respawnPlayer(name)
 		return player:refresh()
-    end
-    
+	end
+
 	player.lives = player.lives - 1
 	tfm.exec.setPlayerScore(name, player.lives)
 	player.alive = false
