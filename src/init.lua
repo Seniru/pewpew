@@ -1,8 +1,13 @@
-local VERSION = "v2.0.2.0"
+local VERSION = "v2.1.0.1"
 local CHANGELOG =
 [[
 
 <p align='center'><font size='20'><b><V>CHANGELOG</V></b></font></p><font size='12' face='Lucide Console'>
+
+    <font size='15' face='Lucida Console'><b><BV>v2.1.0.1</BV></b></font> <i>(10/21/2020)</i>
+        • Added Royal kit <i>(by <b><V>Lightymouse</V><N><font size='8'>#0421</font></N></b>)</i>
+        • Disabled consumables
+
 
     <font size='15' face='Lucida Console'><b><BV>v2.1.0.0</BV></b></font> <i>(10/21/2020)</i>
         • Added the shop (accessible with !shop)

@@ -391,11 +391,16 @@ local a={}a.VERSION='1.5'a.__index=a;function a.new(b,c,d)local self=setmetatabl
 
 --==[[ init ]]==--
 
-local VERSION = "v2.0.2.0"
+local VERSION = "v2.1.0.1"
 local CHANGELOG =
 [[
 
 <p align='center'><font size='20'><b><V>CHANGELOG</V></b></font></p><font size='12' face='Lucide Console'>
+
+    <font size='15' face='Lucida Console'><b><BV>v2.1.0.1</BV></b></font> <i>(10/21/2020)</i>
+        • Added Royal kit <i>(by <b><V>Lightymouse</V><N><font size='8'>#0421</font></N></b>)</i>
+        • Disabled consumables
+
 
     <font size='15' face='Lucida Console'><b><BV>v2.1.0.0</BV></b></font> <i>(10/21/2020)</i>
         • Added the shop (accessible with !shop)
@@ -1287,6 +1292,30 @@ shop.packs = {
 			[ENUM_ITEMS.LARGE_PLANK] =  { image = "17530cf135f.png", adj = { x = -100, y = -14 } },
 			[ENUM_ITEMS.SMALL_PLANK] =  { image = "17530cf9d23.png", adj = { x = -50, y = -14 } }
 		}
+	},
+
+	["Royal"] = {
+		coverImage = "1754f97c21c.png",
+		coverAdj = { x = 8, y = 0 },
+		description = "Only for the strongest kings!",
+		author = "Lightymouse#0421",
+		price = 300,
+
+		description_locales = {
+			en = "Only for the strongest kings!"
+		},
+
+		skins = {
+			[ENUM_ITEMS.CANNON] =  { image = "1754f9851c8.png", adj = { x = -17, y = -17 } },
+			[ENUM_ITEMS.ANVIL] = { image = "1754f98d0b8.png", adj = { x = -24, y = -34 } },
+			[ENUM_ITEMS.BALL] =  { image = "1754f9a7601.png", adj = { x = -16, y = -16 } },
+			[ENUM_ITEMS.BLUE_BALOON] = { image = "1754fca819f.png", adj = { x = -22, y = -22 } },
+			[ENUM_ITEMS.LARGE_BOX] =  { image = "1754f9b87a6.png", adj = { x = -35, y = -35 } },
+			[ENUM_ITEMS.SMALL_BOX] =  { image = "1754f9d18f6.png", adj = { x = -19, y = -19 } },
+			[ENUM_ITEMS.LARGE_PLANK] =  { image = "1754f9d7544.png", adj = { x = -100, y = -10 } },
+			[ENUM_ITEMS.SMALL_PLANK] =  { image = "1754f9dc2a0.png", adj = { x = -50, y = -10 } }
+		}
+
 	}
 
 }
@@ -1297,7 +1326,7 @@ for pack in next, shop.packs do shop.totalPacks = shop.totalPacks + 1 end
 shop.totalPages = math.ceil(shop.totalPacks / 6)
 
 shop.packsBitList = BitList {
-    "Default", "Poisson", "Catto"
+    "Default", "Poisson", "Catto", "Royal"
 }
 
 shop.displayShop = function(target, page)
