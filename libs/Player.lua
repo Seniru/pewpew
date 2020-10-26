@@ -34,6 +34,7 @@ function Player.new(name)
 	self.packs = 1
 	self.equipped = 1
 
+	self.tempEquipped = nil
     self.openedWindow = nil
 
     for key, code in next, keys do system.bindKeyboard(name, code, true, true) end
@@ -53,6 +54,7 @@ function Player:refresh()
         Player.aliveCount = Player.aliveCount + 1
 	end
 	setNameColor(self.name)
+	self.tempEquipped = nil
 end
 
 function Player:setLives(lives)
@@ -69,7 +71,10 @@ end
 
 function Player:shoot(x, y)
 	if newRoundStarted and self.alive and not self.inCooldown then
-
+		if self.equipped == "Random" and not self.tempEquipped then
+			self.tempEquipped = shop.packsBitList:get(math.random(2, shop.totalPacks))
+		end
+		
 		self.inCooldown = true
 
 		local stance = self.stance
@@ -87,7 +92,7 @@ function Player:shoot(x, y)
 			currentItem == 32 or currentItem == 62
 		)
 
-		local equippedPack = shop.packs[self.equipped]
+		local equippedPack = shop.packs[self.tempEquipped or self.equipped]
 		local skin = equippedPack.skins[currentItem]
 		if self.equipped ~= "Default" and skin and skin.image then
 			tfm.exec.addImage(
@@ -154,6 +159,6 @@ function Player:savePlayerData()
 	dHandler:set(name, "won", self.won)
 	dHandler:set(name, "points", self.points)
 	dHandler:set(name, "packs", shop.packsBitList:encode(self.packs))
-	dHandler:set(name, "equipped", shop.packsBitList:find(self.equipped))
+	dHandler:set(name, "equipped", self.equipped == "Random" and -1 or shop.packsBitList:find(self.equipped))
     system.savePlayerData(name, "v2" .. dHandler:dumpPlayer(name))
 end

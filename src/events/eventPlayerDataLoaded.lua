@@ -12,6 +12,8 @@ function eventPlayerDataLoaded(name, data)
     Player.players[name].won = dHandler:get(name, "won")
     Player.players[name].points = dHandler:get(name, "points")
     Player.players[name].packs = shop.packsBitList:decode(dHandler:get(name, "packs"))
-    Player.players[name].equipped = shop.packsBitList:get(dHandler:get(name, "equipped"))
+    Player.players[name].packs["Random"] = true
+    local equipped = dHandler:get(name, "equipped")
+    Player.players[name].equipped = equipped == -1 and "Random" or shop.packsBitList:get(equipped)
 
 end

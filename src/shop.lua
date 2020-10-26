@@ -15,6 +15,28 @@ shop.defaultItemImages = {
 -- Item packs that are used to display in the shop interface
 shop.packs = {
 
+	["Random"] = {
+		coverImage = assets.dummy,
+		description = "It's all random 0m0",
+		author = "rand",
+		price = 0,
+
+		description_locales = {
+			en = "It's all random 0m0"
+		},
+
+		skins = {
+			[ENUM_ITEMS.CANNON] = { },
+			[ENUM_ITEMS.ANVIL] = { },
+			[ENUM_ITEMS.BALL] = { },
+			[ENUM_ITEMS.BLUE_BALOON] = { },
+			[ENUM_ITEMS.LARGE_BOX] = { },
+			[ENUM_ITEMS.SMALL_BOX] = { },
+			[ENUM_ITEMS.LARGE_PLANK] = { },
+			[ENUM_ITEMS.SMALL_PLANK] = { }
+		}
+	},
+
 	["Default"] = {
 		coverImage = "175405f30a3.png",
 		coverAdj = { x = 15, y = 5 },
@@ -113,7 +135,7 @@ shop.packs = {
 shop.totalPacks = 0
 for pack in next, shop.packs do shop.totalPacks = shop.totalPacks + 1 end
 
-shop.totalPages = math.ceil(shop.totalPacks / 6)
+shop.totalPages = math.ceil((shop.totalPacks) / 6)
 
 shop.packsBitList = BitList {
     "Default", "Poisson", "Catto", "Royal"
@@ -148,10 +170,9 @@ shop.displayShop = function(target, page)
 	targetPlayer.openedWindow = shopWindow
 
     local col, row, count = 0, 0, 0
-	-- for _, name in next, shop.packsBitList.featureArray do
-	for i = (page - 1) * 6 + 1, page * 6 do
 
-		local name = shop.packsBitList:get(i)
+	for i = (page - 1) * 6 + 1, page * 6 do
+		local name = i == 1 and "Random" or shop.packsBitList:get(i - 1)
 		if not name then return	end
 
 		local pack = shop.packs[name]

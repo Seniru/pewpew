@@ -790,6 +790,7 @@ function Player.new(name)
 	self.packs = 1
 	self.equipped = 1
 
+	self.tempEquipped = nil
     self.openedWindow = nil
 
     for key, code in next, keys do system.bindKeyboard(name, code, true, true) end
@@ -809,6 +810,7 @@ function Player:refresh()
         Player.aliveCount = Player.aliveCount + 1
 	end
 	setNameColor(self.name)
+	self.tempEquipped = nil
 end
 
 function Player:setLives(lives)
@@ -825,7 +827,10 @@ end
 
 function Player:shoot(x, y)
 	if newRoundStarted and self.alive and not self.inCooldown then
-
+		if self.equipped == "Random" and not self.tempEquipped then
+			self.tempEquipped = shop.packsBitList:get(math.random(2, shop.totalPacks))
+		end
+		
 		self.inCooldown = true
 
 		local stance = self.stance
@@ -843,7 +848,7 @@ function Player:shoot(x, y)
 			currentItem == 32 or currentItem == 62
 		)
 
-		local equippedPack = shop.packs[self.equipped]
+		local equippedPack = shop.packs[self.tempEquipped or self.equipped]
 		local skin = equippedPack.skins[currentItem]
 		if self.equipped ~= "Default" and skin and skin.image then
 			tfm.exec.addImage(
@@ -910,7 +915,7 @@ function Player:savePlayerData()
 	dHandler:set(name, "won", self.won)
 	dHandler:set(name, "points", self.points)
 	dHandler:set(name, "packs", shop.packsBitList:encode(self.packs))
-	dHandler:set(name, "equipped", shop.packsBitList:find(self.equipped))
+	dHandler:set(name, "equipped", self.equipped == "Random" and -1 or shop.packsBitList:find(self.equipped))
     system.savePlayerData(name, "v2" .. dHandler:dumpPlayer(name))
 end
 
@@ -1053,7 +1058,9 @@ function eventPlayerDataLoaded(name, data)
     Player.players[name].won = dHandler:get(name, "won")
     Player.players[name].points = dHandler:get(name, "points")
     Player.players[name].packs = shop.packsBitList:decode(dHandler:get(name, "packs"))
-    Player.players[name].equipped = shop.packsBitList:get(dHandler:get(name, "equipped"))
+    Player.players[name].packs["Random"] = true
+    local equipped = dHandler:get(name, "equipped")
+    Player.players[name].equipped = equipped == -1 and "Random" or shop.packsBitList:get(equipped)
 
 end
 
@@ -1237,6 +1244,28 @@ shop.defaultItemImages = {
 -- Item packs that are used to display in the shop interface
 shop.packs = {
 
+	["Random"] = {
+		coverImage = assets.dummy,
+		description = "It's all random 0m0",
+		author = "rand",
+		price = 0,
+
+		description_locales = {
+			en = "It's all random 0m0"
+		},
+
+		skins = {
+			[ENUM_ITEMS.CANNON] = { },
+			[ENUM_ITEMS.ANVIL] = { },
+			[ENUM_ITEMS.BALL] = { },
+			[ENUM_ITEMS.BLUE_BALOON] = { },
+			[ENUM_ITEMS.LARGE_BOX] = { },
+			[ENUM_ITEMS.SMALL_BOX] = { },
+			[ENUM_ITEMS.LARGE_PLANK] = { },
+			[ENUM_ITEMS.SMALL_PLANK] = { }
+		}
+	},
+
 	["Default"] = {
 		coverImage = "175405f30a3.png",
 		coverAdj = { x = 15, y = 5 },
@@ -1335,7 +1364,7 @@ shop.packs = {
 shop.totalPacks = 0
 for pack in next, shop.packs do shop.totalPacks = shop.totalPacks + 1 end
 
-shop.totalPages = math.ceil(shop.totalPacks / 6)
+shop.totalPages = math.ceil((shop.totalPacks) / 6)
 
 shop.packsBitList = BitList {
     "Default", "Poisson", "Catto", "Royal"
@@ -1370,10 +1399,9 @@ shop.displayShop = function(target, page)
 	targetPlayer.openedWindow = shopWindow
 
     local col, row, count = 0, 0, 0
-	-- for _, name in next, shop.packsBitList.featureArray do
-	for i = (page - 1) * 6 + 1, page * 6 do
 
-		local name = shop.packsBitList:get(i)
+	for i = (page - 1) * 6 + 1, page * 6 do
+		local name = i == 1 and "Random" or shop.packsBitList:get(i - 1)
 		if not name then return	end
 
 		local pack = shop.packs[name]
