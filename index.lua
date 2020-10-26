@@ -1378,7 +1378,7 @@ shop.displayShop = function(target, page)
 	local commu = targetPlayer.community
     if targetPlayer.openedWindow then targetPlayer.openedWindow:hide(target) end
 	shopWindow:show(target)
-	shop.displayPackInfo(target, "Default")
+	shop.displayPackInfo(target, targetPlayer.equipped)
 
 	Panel.panels[520]:update(translate("POINTS", commu, nil, { points = targetPlayer.points }), target)
 	Panel.panels[551]:update(("<a href='event:%s'><p align='center'><b>%s〈%s</b></p></a>")
