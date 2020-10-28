@@ -16,9 +16,10 @@ shop.defaultItemImages = {
 shop.packs = {
 
 	["Random"] = {
-		coverImage = assets.dummy,
+		coverImage = "1756e10f5e0.png",
+		coverAdj = { x = 3, y = 0 },
 		description = "It's all random 0m0",
-		author = "rand",
+		author = "rand()",
 		price = 0,
 
 		description_locales = {
@@ -26,14 +27,14 @@ shop.packs = {
 		},
 
 		skins = {
-			[ENUM_ITEMS.CANNON] = { },
-			[ENUM_ITEMS.ANVIL] = { },
-			[ENUM_ITEMS.BALL] = { },
-			[ENUM_ITEMS.BLUE_BALOON] = { },
-			[ENUM_ITEMS.LARGE_BOX] = { },
-			[ENUM_ITEMS.SMALL_BOX] = { },
-			[ENUM_ITEMS.LARGE_PLANK] = { },
-			[ENUM_ITEMS.SMALL_PLANK] = { }
+			[ENUM_ITEMS.CANNON] = { image = "1756df9f351.png" },
+			[ENUM_ITEMS.ANVIL] = { image = "1756dfa81b1.png" },
+			[ENUM_ITEMS.BALL] = { image = "1756df9f351.png" },
+			[ENUM_ITEMS.BLUE_BALOON] = { image = "1756dfa3e9a.png" },
+			[ENUM_ITEMS.LARGE_BOX] = { image = "1756dfad0ff.png" },
+			[ENUM_ITEMS.SMALL_BOX] = { image = "1756dfafe31.png" },
+			[ENUM_ITEMS.LARGE_PLANK] = { image = "1756dfb428f.png" },
+			[ENUM_ITEMS.SMALL_PLANK] = { image = "1756e01b60d.png" }
 		}
 	},
 
