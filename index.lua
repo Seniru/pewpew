@@ -1542,6 +1542,15 @@ cmds = {
             tfm.exec.chatMessage(FORMAT_ERR_MSG, author)
         end
 
+    end,
+
+    ["pw"] = function(args, msg, author)
+        if not admins[author] then return end
+        local pw = msg:match("^pw (.+)")
+        tfm.exec.setRoomPassword(pw)
+        print(pw)
+        if (not pw) or pw == "" then tfm.exec.chatMessage("<N>[</N><ROSE>•</ROSE><N>] Removed the password!", author)
+        else tfm.exec.chatMessage(("<N>[</N><ROSE>•</ROSE><N>] Password: %s"):format(pw), author) end
     end
 
 }
