@@ -32,6 +32,7 @@ function Player.new(name)
 	self.score = 0
 	self.points = 0
 	self.packs = 1
+	self.packsArray = {}
 	self.equipped = 1
 
 	self.tempEquipped = nil
@@ -72,7 +73,7 @@ end
 function Player:shoot(x, y)
 	if newRoundStarted and self.alive and not self.inCooldown then
 		if self.equipped == "Random" and not self.tempEquipped then
-			self.tempEquipped = shop.packsBitList:get(math.random(2, shop.totalPacks))
+			self.tempEquipped = #self.packsArray == 0 and "Default" or self.packsArray[math.random(#self.packsArray)]
 		end
 		
 		self.inCooldown = true
@@ -92,9 +93,10 @@ function Player:shoot(x, y)
 			currentItem == 32 or currentItem == 62
 		)
 
-		local equippedPack = shop.packs[self.tempEquipped or self.equipped]
+		local equippedPackName = self.tempEquipped or self.equipped
+		local equippedPack = shop.packs[equippedPackName]
 		local skin = equippedPack.skins[currentItem]
-		if self.equipped ~= "Default" and skin and skin.image then
+		if (equippedPackName ~= "Default" and equippedPackName ~= "Random") and skin and skin.image then
 			tfm.exec.addImage(
 				skin.image,
 				"#" .. object,

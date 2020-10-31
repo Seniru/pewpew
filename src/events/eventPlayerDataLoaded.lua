@@ -7,13 +7,26 @@ function eventPlayerDataLoaded(name, data)
         dHandler:newPlayer(name, "")
     end
 
-	Player.players[name].rounds = dHandler:get(name, "rounds")
-	Player.players[name].survived = dHandler:get(name, "survived")
-    Player.players[name].won = dHandler:get(name, "won")
-    Player.players[name].points = dHandler:get(name, "points")
-    Player.players[name].packs = shop.packsBitList:decode(dHandler:get(name, "packs"))
-    Player.players[name].packs["Random"] = true
+    local player = Player.players[name]
+
+	player.rounds = dHandler:get(name, "rounds")
+	player.survived = dHandler:get(name, "survived")
+    player.won = dHandler:get(name, "won")
+    player.points = dHandler:get(name, "points")
+
+    player.packs = shop.packsBitList:decode(dHandler:get(name, "packs"))
+    local counter = 1
+    for name, pack in next, player.packs do 
+        if name ~= "Default" then
+            player.packsArray[counter] = name
+            counter = counter + 1
+        end
+    end
+    
+    player.packs["Random"] = true
+
     local equipped = dHandler:get(name, "equipped")
-    Player.players[name].equipped = equipped == -1 and "Random" or shop.packsBitList:get(equipped)
+    player.equipped = equipped == -1 and "Random" or shop.packsBitList:get(equipped)
+
 
 end

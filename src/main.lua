@@ -235,6 +235,7 @@ do
                                 player.packs[value] = true
                                 player.equipped = value
                                 player.points = player.points - pack.price
+                                player.packsArray[#player.packsArray + 1] = value
                                 shop.displayShop(name)
                                 player:savePlayerData()
                             elseif key == "equip" then

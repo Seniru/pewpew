@@ -794,6 +794,7 @@ function Player.new(name)
 	self.score = 0
 	self.points = 0
 	self.packs = 1
+	self.packsArray = {}
 	self.equipped = 1
 
 	self.tempEquipped = nil
@@ -834,7 +835,7 @@ end
 function Player:shoot(x, y)
 	if newRoundStarted and self.alive and not self.inCooldown then
 		if self.equipped == "Random" and not self.tempEquipped then
-			self.tempEquipped = shop.packsBitList:get(math.random(2, shop.totalPacks))
+			self.tempEquipped = #self.packsArray == 0 and "Default" or self.packsArray[math.random(#self.packsArray)]
 		end
 		
 		self.inCooldown = true
@@ -854,9 +855,11 @@ function Player:shoot(x, y)
 			currentItem == 32 or currentItem == 62
 		)
 
-		local equippedPack = shop.packs[self.tempEquipped or self.equipped]
+		local equippedPackName = self.tempEquipped or self.equipped
+		local equippedPack = shop.packs[equippedPackName]
 		local skin = equippedPack.skins[currentItem]
-		if self.equipped ~= "Default" and skin and skin.image then
+        print(equippedPackName)
+		if (equippedPackName ~= "Default" and equippedPackName ~= "Random") and skin and skin.image then
 			tfm.exec.addImage(
 				skin.image,
 				"#" .. object,
@@ -1059,14 +1062,27 @@ function eventPlayerDataLoaded(name, data)
         dHandler:newPlayer(name, "")
     end
 
-	Player.players[name].rounds = dHandler:get(name, "rounds")
-	Player.players[name].survived = dHandler:get(name, "survived")
-    Player.players[name].won = dHandler:get(name, "won")
-    Player.players[name].points = dHandler:get(name, "points")
-    Player.players[name].packs = shop.packsBitList:decode(dHandler:get(name, "packs"))
-    Player.players[name].packs["Random"] = true
+    local player = Player.players[name]
+
+	player.rounds = dHandler:get(name, "rounds")
+	player.survived = dHandler:get(name, "survived")
+    player.won = dHandler:get(name, "won")
+    player.points = dHandler:get(name, "points")
+
+    player.packs = shop.packsBitList:decode(dHandler:get(name, "packs"))
+    local counter = 1
+    for name, pack in next, player.packs do 
+        if name ~= "Default" then
+            player.packsArray[counter] = name
+            counter = counter + 1
+        end
+    end
+    
+    player.packs["Random"] = true
+
     local equipped = dHandler:get(name, "equipped")
-    Player.players[name].equipped = equipped == -1 and "Random" or shop.packsBitList:get(equipped)
+    player.equipped = equipped == -1 and "Random" or shop.packsBitList:get(equipped)
+
 
 end
 
@@ -1527,7 +1543,6 @@ cmds = {
         elseif args[1] == "pack" then
             if not target then return tfm.exec.chatMessage(TARGET_UNREACHABLE_ERR, author) end
             local pack = msg:match("give pack .+#%d+ (.+)")
-            print(pack)
             if not shop.packs[pack] then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error:</b> Could not find the pack</R>") end
             if target.packs[pack] then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error: </b>Target already own that pack</R>") end
             target.packs[pack] = true
@@ -1548,7 +1563,6 @@ cmds = {
         if not admins[author] then return end
         local pw = msg:match("^pw (.+)")
         tfm.exec.setRoomPassword(pw)
-        print(pw)
         if (not pw) or pw == "" then tfm.exec.chatMessage("<N>[</N><ROSE>•</ROSE><N>] Removed the password!", author)
         else tfm.exec.chatMessage(("<N>[</N><ROSE>•</ROSE><N>] Password: %s"):format(pw), author) end
     end
@@ -1792,6 +1806,7 @@ do
                                 player.packs[value] = true
                                 player.equipped = value
                                 player.points = player.points - pack.price
+                                player.packsArray[#player.packsArray + 1] = value
                                 shop.displayShop(name)
                                 player:savePlayerData()
                             elseif key == "equip" then

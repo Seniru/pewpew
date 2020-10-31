@@ -44,7 +44,6 @@ cmds = {
         elseif args[1] == "pack" then
             if not target then return tfm.exec.chatMessage(TARGET_UNREACHABLE_ERR, author) end
             local pack = msg:match("give pack .+#%d+ (.+)")
-            print(pack)
             if not shop.packs[pack] then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error:</b> Could not find the pack</R>") end
             if target.packs[pack] then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error: </b>Target already own that pack</R>") end
             target.packs[pack] = true
@@ -65,7 +64,6 @@ cmds = {
         if not admins[author] then return end
         local pw = msg:match("^pw (.+)")
         tfm.exec.setRoomPassword(pw)
-        print(pw)
         if (not pw) or pw == "" then tfm.exec.chatMessage("<N>[</N><ROSE>•</ROSE><N>] Removed the password!", author)
         else tfm.exec.chatMessage(("<N>[</N><ROSE>•</ROSE><N>] Password: %s"):format(pw), author) end
     end
