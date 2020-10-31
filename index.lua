@@ -858,7 +858,6 @@ function Player:shoot(x, y)
 		local equippedPackName = self.tempEquipped or self.equipped
 		local equippedPack = shop.packs[equippedPackName]
 		local skin = equippedPack.skins[currentItem]
-        print(equippedPackName)
 		if (equippedPackName ~= "Default" and equippedPackName ~= "Random") and skin and skin.image then
 			tfm.exec.addImage(
 				skin.image,
