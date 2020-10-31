@@ -391,12 +391,16 @@ local a={}a.VERSION='1.5'a.__index=a;function a.new(b,c,d)local self=setmetatabl
 
 --==[[ init ]]==--
 
-local VERSION = "v2.1.1.0"
+local VERSION = "v2.1.1.1"
 local CHANGELOG =
 [[
 
 <p align='center'><font size='20'><b><V>CHANGELOG</V></b></font> <BV><a href='event:log'>[View all]</a></BV></p><font size='12' face='Lucide Console'>
 
+    <font size='15' face='Lucida Console'><b><BV>v2.1.1.1</BV></b></font> <i>(10/31/2020)</i>
+        • Bug fixes
+            - Any player can use any pack using the "Random" pack even if they haven't bought it
+    
     <font size='15' face='Lucida Console'><b><BV>v2.1.1.0</BV></b></font> <i>(10/28/2020)</i>
         • Add the "random" pack (chooses a random pack from owned pack each round)
         • Display the current equipped pack in the pack preview menu (when opening the shop)
@@ -420,19 +424,6 @@ local CHANGELOG =
         • Added the shop (accessible with !shop)
         • Added a point system to buy packs
         • Added custom items which can be purchased with shop and use in game
-
-
-    <font size='15' face='Lucida Console'><b><BV>v2.0.2.0</BV></b></font> <i>(10/13/2020)</i>
-        • Added new translations
-            - Added PH Translations <i>(thanks to <b><V>Overforyou</V><N><font size='8'>#9290</font></N></b>)</i>
-            - Added PL Translations <i>(thanks to <b><V>Lightymouse</V><N><font size='8'>#0421</font></N></b>)</i>
-
-        • Added the changelog menu
-        • Added the discord link to the greeting mesesage
-
-
-    <font size='15' face='Lucida Console'><b><BV>v2.0.1.0</BV></b></font> <i>(09/13/2020)</i>
-        • Fixed the bug of choosing a random winner
 
 </font>
 ]]
@@ -1070,13 +1061,13 @@ function eventPlayerDataLoaded(name, data)
 
     player.packs = shop.packsBitList:decode(dHandler:get(name, "packs"))
     local counter = 1
-    for name, pack in next, player.packs do 
-        if name ~= "Default" then
-            player.packsArray[counter] = name
+    for pack, hasPack in next, player.packs do 
+        if pack ~= "Default" and hasPack then
+            player.packsArray[counter] = pack
             counter = counter + 1
         end
     end
-    
+
     player.packs["Random"] = true
 
     local equipped = dHandler:get(name, "equipped")

@@ -16,13 +16,13 @@ function eventPlayerDataLoaded(name, data)
 
     player.packs = shop.packsBitList:decode(dHandler:get(name, "packs"))
     local counter = 1
-    for name, pack in next, player.packs do 
-        if name ~= "Default" then
-            player.packsArray[counter] = name
+    for pack, hasPack in next, player.packs do 
+        if pack ~= "Default" and hasPack then
+            player.packsArray[counter] = pack
             counter = counter + 1
         end
     end
-    
+
     player.packs["Random"] = true
 
     local equipped = dHandler:get(name, "equipped")
