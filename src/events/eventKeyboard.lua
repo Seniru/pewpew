@@ -11,5 +11,7 @@ function eventKeyboard(name, key, down, x, y)
         displayProfile(Player.players[name], name)
     elseif key == keys.LETTER_L then
         leaderboard.displayLeaderboard("global", 1, name)
+    elseif key == keys.LETTER_O or key == keys.LETTER_U then
+	shop.displayShop(name, 1)
     end
 end
