@@ -129,6 +129,30 @@ shop.packs = {
 			[ENUM_ITEMS.SMALL_PLANK] =  { image = "1754f9dc2a0.png", adj = { x = -50, y = -10 } }
 		}
 
+	},
+
+	["Halloween 2020"] = {
+		coverImage = "175832f4631.png",
+		coverAdj = { x = 8, y = 0 },
+		description = "Trick or' Treat!?",
+		author = "Thetiger#6961",
+		price = 100,
+
+		description_locales = {
+			en = "Trick or Treat!?"
+		},
+
+		skins = {
+			[ENUM_ITEMS.CANNON] =  { image = "175829957ec.png", adj = { x = -17, y = -17 } },
+			[ENUM_ITEMS.ANVIL] = { image = "17582960dfd.png", adj = { x = -22, y = -24 } },
+			[ENUM_ITEMS.BALL] =  { image = "17582965a03.png", adj = { x = -17, y = -19 } },
+			[ENUM_ITEMS.BLUE_BALOON] = { image = "1758295cf4b.png", adj = { x = -22, y = -22 } },
+			[ENUM_ITEMS.LARGE_BOX] =  { image = "175829687b2.png", adj = { x = -32, y = -32 } },
+			[ENUM_ITEMS.SMALL_BOX] =  { image = "1758296be0c.png", adj = { x = -19, y = -19 } },
+			[ENUM_ITEMS.LARGE_PLANK] =  { image = "175829715e2.png", adj = { x = -100, y = -6 } },
+			[ENUM_ITEMS.SMALL_PLANK] =  { image = "17582976871.png", adj = { x = -50, y = -13 } }
+		}
+
 	}
 
 }
@@ -139,7 +163,7 @@ for pack in next, shop.packs do shop.totalPacks = shop.totalPacks + 1 end
 shop.totalPages = math.ceil((shop.totalPacks) / 6)
 
 shop.packsBitList = BitList {
-    "Default", "Poisson", "Catto", "Royal"
+    "Default", "Poisson", "Catto", "Royal", "Halloween 2020"
 }
 
 shop.displayShop = function(target, page)

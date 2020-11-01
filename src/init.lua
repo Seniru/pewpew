@@ -1,8 +1,13 @@
-local VERSION = "v2.1.1.1"
+local VERSION = "v2.1.1.2"
 local CHANGELOG =
 [[
 
 <p align='center'><font size='20'><b><V>CHANGELOG</V></b></font> <BV><a href='event:log'>[View all]</a></BV></p><font size='12' face='Lucide Console'>
+
+    <font size='15' face='Lucida Console'><b><BV>v2.1.1.2</BV></b></font> <i>(11/1/2020)</i>
+        • Added Halloween 2020 kit <i>(by <b><V>Thetiger</V><N><font size='8'>#6961</font></N></b>)</i>
+            - Get it before the sale ends :P
+    
 
     <font size='15' face='Lucida Console'><b><BV>v2.1.1.1</BV></b></font> <i>(10/31/2020)</i>
         • Bug fixes
