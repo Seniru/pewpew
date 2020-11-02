@@ -134,8 +134,8 @@ shop.packs = {
 	["Halloween 2020"] = {
 		coverImage = "175832f4631.png",
 		coverAdj = { x = 8, y = 0 },
-		description = "Trick or' Treat!?",
-		author = "Thetiger#6961",
+		description = "Trick or Treat!?",
+		author = "Thetiger56#6961",
 		price = 100,
 
 		description_locales = {

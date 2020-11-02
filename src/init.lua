@@ -1,11 +1,16 @@
-local VERSION = "v2.1.1.2"
+local VERSION = "v2.2.0.0"
 local CHANGELOG =
 [[
 
 <p align='center'><font size='20'><b><V>CHANGELOG</V></b></font> <BV><a href='event:log'>[View all]</a></BV></p><font size='12' face='Lucide Console'>
 
+    <font size='15' face='Lucida Console'><b><BV>v2.2.0.0</BV></b></font> <i>(11/2/2020)</i>
+        • Improve the help's user interface
+        • Support translations for the help menu
+        • Minor typo fixes
+
     <font size='15' face='Lucida Console'><b><BV>v2.1.1.2</BV></b></font> <i>(11/1/2020)</i>
-        • Added Halloween 2020 kit <i>(by <b><V>Thetiger</V><N><font size='8'>#6961</font></N></b>)</i>
+        • Added Halloween 2020 kit <i>(by <b><V>Thetiger56</V><N><font size='8'>#6961</font></N></b>)</i>
             - Get it before the sale ends :P
     
 
@@ -30,12 +35,6 @@ local CHANGELOG =
     <font size='15' face='Lucida Console'><b><BV>v2.1.0.1</BV></b></font> <i>(10/21/2020)</i>
         • Added Royal kit <i>(by <b><V>Lightymouse</V><N><font size='8'>#0421</font></N></b>)</i>
         • Disabled consumables
-
-
-    <font size='15' face='Lucida Console'><b><BV>v2.1.0.0</BV></b></font> <i>(10/21/2020)</i>
-        • Added the shop (accessible with !shop)
-        • Added a point system to buy packs
-        • Added custom items which can be purchased with shop and use in game
 
 </font>
 ]]
@@ -129,6 +128,14 @@ local assets = {
     iconSurvived = "17434d0a87e.png",
     iconWon = "17434cff8bd.png",
     lock = "1660271f4c6.png",
+    help = {
+        survive = "17587d5abed.png",
+        killAll = "17587d5ca0e.png",
+        shoot = "17587d6acaf.png",
+        creditors = "17587d609f1.png",
+        commands = "17587d64557.png",
+        weapon = "17587d67562.png"
+    },
     items = {
         [ENUM_ITEMS.SMALL_BOX] = "17406985997.png",
         [ENUM_ITEMS.LARGE_BOX] = "174068e3bca.png",
@@ -240,7 +247,7 @@ local dHandler = DataHandler.new("pew", {
 
 local MIN_PLAYERS = 4
 
-local profileWindow, leaderboardWindow, changelogWindow, shopWindow
+local profileWindow, leaderboardWindow, changelogWindow, shopWindow, helpWindow
 
 local initialized, newRoundStarted, suddenDeath = false
 local currentItem = ENUM_ITEMS.CANNON

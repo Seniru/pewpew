@@ -122,8 +122,20 @@ displayProfile = function(player, target)
 end
 
 displayHelp = function(target)
-    tfm.exec.chatMessage("<br>" .. translate("WELCOME", tfm.get.room.playerList[target].community), target)
-    tfm.exec.chatMessage("<N>Report any bug to </N><VP>King_seniru</VP><G>#5890</G><br><br><b><VI>Commands</VI></b><br><br>[ <b>H</b> ] <N><ROSE>!help</ROSE> (displays this help menu)</N><br>[ <b>P</b> ] <N><ROSE>!profile <i>[player]</i></ROSE> (displays the profile of the player)</N><br>[ <b>L</b> ] <N>(displays the leaderboard)</N><br><br><N><ROSE>!changelog</ROSE> (displays the changelog)</N><br><N><ROSE>!shop</ROSE> (displays the shop)</N><br>", target)
+    local targetPlayer = Player.players[target]
+    if targetPlayer.openedWindow then targetPlayer.openedWindow:hide(target) end
+    local commu = targetPlayer.community
+    helpWindow:show(target)
+    Panel.panels[820]:update(translate("COMMANDS", commu), target)
+    Panel.panels[705]:update(translate("CMD_TITLE",  commu), target)
+
+    Panel.panels[920]:update(translate("CREDITS", commu), target)
+    Panel.panels[706]:update(translate("CREDS_TITLE", commu), target)
+
+    Panel.panels[701]:update(translate("OBJECTIVE", commu), target)
+    Panel.panels[704]:update(translate("HELP_GOTIT", commu), target)
+
+    targetPlayer.openedWindow = helpWindow
 end
 
 displayChangelog = function(target)
@@ -260,5 +272,30 @@ do
                     shop.displayShop(name, tonumber(event))
                 end)
         )
+
+    helpWindow = Panel(700, ("<br><br>\t <G><b><a href='event:changelog'>%s</a></b></G>"):format(VERSION), 0, 0, 800, 400, 0x324650, 0x324650, 0, true)
+        :setActionListener(function(id, name, event) if event == "changelog" then displayChangelog(name) end end)
+        :addPanel(
+            Panel(701, "", 180, 150, 200, 20, 0x324650, 0x324650, 0.6, true)
+                :addImage(Image(assets.help.survive, ":1", 10, 10))
+                :addImage(Image(assets.help.killAll, ":1", 200, 10))
+        )
+        :addPanel(
+            createPrettyUI(8, 10, 220, 230, 165, true)
+                :addPanel(Panel(705, "", 90, 200, 300, 30, nil, nil, 0, true))
+                :addImage(Image(assets.help.commands, "&1", -55, 150))
+        )
+        :addPanel(
+            createPrettyUI(9, 270, 220, 230, 165, true)
+                :addPanel(Panel(706, "", 345, 200, 300, 30, nil, nil, 0, true))
+                :addImage(Image(assets.help.creditors, "&1", 260, 170))
+        )
+        :addImage(Image(assets.help.shoot, "&1", 521, 28))
+        :addImage(Image(assets.help.weapon, ":1", 480, 220))
+        :addPanel(
+            Panel(704, "", 585, 370, 100, 30, nil, nil, 0, true)
+                :addImage(Image("170970cdb9f.png", ":1", 550, 350))
+        )
+        :setCloseButton(704)
 
 end

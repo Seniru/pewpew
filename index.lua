@@ -391,14 +391,19 @@ local a={}a.VERSION='1.5'a.__index=a;function a.new(b,c,d)local self=setmetatabl
 
 --==[[ init ]]==--
 
-local VERSION = "v2.1.1.2"
+local VERSION = "v2.2.0.0"
 local CHANGELOG =
 [[
 
 <p align='center'><font size='20'><b><V>CHANGELOG</V></b></font> <BV><a href='event:log'>[View all]</a></BV></p><font size='12' face='Lucide Console'>
 
+    <font size='15' face='Lucida Console'><b><BV>v2.2.0.0</BV></b></font> <i>(11/2/2020)</i>
+        • Improve the help's user interface
+        • Support translations for the help menu
+        • Minor typo fixes
+
     <font size='15' face='Lucida Console'><b><BV>v2.1.1.2</BV></b></font> <i>(11/1/2020)</i>
-        • Added Halloween 2020 kit <i>(by <b><V>Thetiger</V><N><font size='8'>#6961</font></N></b>)</i>
+        • Added Halloween 2020 kit <i>(by <b><V>Thetiger56</V><N><font size='8'>#6961</font></N></b>)</i>
             - Get it before the sale ends :P
     
 
@@ -423,12 +428,6 @@ local CHANGELOG =
     <font size='15' face='Lucida Console'><b><BV>v2.1.0.1</BV></b></font> <i>(10/21/2020)</i>
         • Added Royal kit <i>(by <b><V>Lightymouse</V><N><font size='8'>#0421</font></N></b>)</i>
         • Disabled consumables
-
-
-    <font size='15' face='Lucida Console'><b><BV>v2.1.0.0</BV></b></font> <i>(10/21/2020)</i>
-        • Added the shop (accessible with !shop)
-        • Added a point system to buy packs
-        • Added custom items which can be purchased with shop and use in game
 
 </font>
 ]]
@@ -522,6 +521,14 @@ local assets = {
     iconSurvived = "17434d0a87e.png",
     iconWon = "17434cff8bd.png",
     lock = "1660271f4c6.png",
+    help = {
+        survive = "17587d5abed.png",
+        killAll = "17587d5ca0e.png",
+        shoot = "17587d6acaf.png",
+        creditors = "17587d609f1.png",
+        commands = "17587d64557.png",
+        weapon = "17587d67562.png"
+    },
     items = {
         [ENUM_ITEMS.SMALL_BOX] = "17406985997.png",
         [ENUM_ITEMS.LARGE_BOX] = "174068e3bca.png",
@@ -633,7 +640,7 @@ local dHandler = DataHandler.new("pew", {
 
 local MIN_PLAYERS = 4
 
-local profileWindow, leaderboardWindow, changelogWindow, shopWindow
+local profileWindow, leaderboardWindow, changelogWindow, shopWindow, helpWindow
 
 local initialized, newRoundStarted, suddenDeath = false
 local currentItem = ENUM_ITEMS.CANNON
@@ -664,7 +671,13 @@ translations["en"] = {
     BUY =       "Buy",
     POINTS =    "<font face='Lucida console' size='12'>   <b>Points:</b> <V>${points}</V></font>",
     PACK_DESC = "\n\n<font face='Lucida console' size='12' color='#cccccc'><i>“ ${desc} ”</i></font>\n<p align='right'><font size='10'>- ${author}</font></p>",
-    GIFT_RECV = "<N>You have been rewarded with <ROSE><b>${gift}</b></ROSE> by <ROSE><b>${admin}</b></ROSE>"
+    GIFT_RECV = "<N>You have been rewarded with <ROSE><b>${gift}</b></ROSE> by <ROSE><b>${admin}</b></ROSE>",
+    COMMANDS =  "\n\n<N2>[ <b>H</b> ]</N2> <N><ROSE>!help</ROSE> (displays this help menu)</N><br><N2>[ <b>P</b> ]</N2> <N><ROSE>!profile <i>[player]</i></ROSE> (displays the profile of the player)</N><br><N2>[ <b>L</b> ]</N2> <N>(displays the leaderboard)</N><br><br><N><ROSE>!changelog</ROSE> (displays the changelog)</N><br><N><ROSE>!shop</ROSE> (displays the shop)</N><br>",
+    CMD_TITLE = "<font size='25' face='Comic Sans'><b><J>Commands</J></b></font>",
+    CREDITS =   "\n\nArtist - <b><BV>Lightymouse</BV><G>#0421</G></b>\nTranslators - <b><BV>Overforyou</BV><G>#9290</G>, <BV>Nuttysquirrel</BV><G>#0000</G></b>\n\n\nAnd thank you for playing pewpew!",
+    CREDS_TITLE = "<font size='25' face='Comic Sans'><b><R>Credits</R></b></font>",
+    OBJECTIVE = "<b>Survive and kill others to win</b>",
+    HELP_GOTIT = "<font size='15'><J><b><a href='event:close'>Got it!</a></b></J></font>",
 }
 
 translations["br"] = {        
@@ -1380,8 +1393,8 @@ shop.packs = {
 	["Halloween 2020"] = {
 		coverImage = "175832f4631.png",
 		coverAdj = { x = 8, y = 0 },
-		description = "Trick or' Treat!?",
-		author = "Thetiger#6961",
+		description = "Trick or Treat!?",
+		author = "Thetiger56#6961",
 		price = 100,
 
 		description_locales = {
@@ -1712,8 +1725,20 @@ displayProfile = function(player, target)
 end
 
 displayHelp = function(target)
-    tfm.exec.chatMessage("<br>" .. translate("WELCOME", tfm.get.room.playerList[target].community), target)
-    tfm.exec.chatMessage("<N>Report any bug to </N><VP>King_seniru</VP><G>#5890</G><br><br><b><VI>Commands</VI></b><br><br>[ <b>H</b> ] <N><ROSE>!help</ROSE> (displays this help menu)</N><br>[ <b>P</b> ] <N><ROSE>!profile <i>[player]</i></ROSE> (displays the profile of the player)</N><br>[ <b>L</b> ] <N>(displays the leaderboard)</N><br><br><N><ROSE>!changelog</ROSE> (displays the changelog)</N><br><N><ROSE>!shop</ROSE> (displays the shop)</N><br>", target)
+    local targetPlayer = Player.players[target]
+    if targetPlayer.openedWindow then targetPlayer.openedWindow:hide(target) end
+    local commu = targetPlayer.community
+    helpWindow:show(target)
+    Panel.panels[820]:update(translate("COMMANDS", commu), target)
+    Panel.panels[705]:update(translate("CMD_TITLE",  commu), target)
+
+    Panel.panels[920]:update(translate("CREDITS", commu), target)
+    Panel.panels[706]:update(translate("CREDS_TITLE", commu), target)
+
+    Panel.panels[701]:update(translate("OBJECTIVE", commu), target)
+    Panel.panels[704]:update(translate("HELP_GOTIT", commu), target)
+
+    targetPlayer.openedWindow = helpWindow
 end
 
 displayChangelog = function(target)
@@ -1850,6 +1875,31 @@ do
                     shop.displayShop(name, tonumber(event))
                 end)
         )
+
+    helpWindow = Panel(700, ("<br><br>\t <G><b><a href='event:changelog'>%s</a></b></G>"):format(VERSION), 0, 0, 800, 400, 0x324650, 0x324650, 0, true)
+        :setActionListener(function(id, name, event) if event == "changelog" then displayChangelog(name) end end)
+        :addPanel(
+            Panel(701, "", 180, 150, 200, 20, 0x324650, 0x324650, 0.6, true)
+                :addImage(Image(assets.help.survive, ":1", 10, 10))
+                :addImage(Image(assets.help.killAll, ":1", 200, 10))
+        )
+        :addPanel(
+            createPrettyUI(8, 10, 220, 230, 165, true)
+                :addPanel(Panel(705, "", 90, 200, 300, 30, nil, nil, 0, true))
+                :addImage(Image(assets.help.commands, "&1", -55, 150))
+        )
+        :addPanel(
+            createPrettyUI(9, 270, 220, 230, 165, true)
+                :addPanel(Panel(706, "", 345, 200, 300, 30, nil, nil, 0, true))
+                :addImage(Image(assets.help.creditors, "&1", 260, 170))
+        )
+        :addImage(Image(assets.help.shoot, "&1", 521, 28))
+        :addImage(Image(assets.help.weapon, ":1", 480, 220))
+        :addPanel(
+            Panel(704, "", 585, 370, 100, 30, nil, nil, 0, true)
+                :addImage(Image("170970cdb9f.png", ":1", 550, 350))
+        )
+        :setCloseButton(704)
 
 end
 
