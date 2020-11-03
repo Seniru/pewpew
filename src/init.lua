@@ -113,6 +113,7 @@ local keys = {
     SPACE       = 32,
     LETTER_H    = 72,
     LETTER_L    = 76,
+    LETTER_O    = 79,
     LETTER_P    = 80,
 }
 
