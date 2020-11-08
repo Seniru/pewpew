@@ -391,17 +391,22 @@ local a={}a.VERSION='1.5'a.__index=a;function a.new(b,c,d)local self=setmetatabl
 
 --==[[ init ]]==--
 
-local VERSION = "v2.2.0.0"
+local VERSION = "v2.2.1.0"
 local CHANGELOG =
 [[
 
 <p align='center'><font size='20'><b><V>CHANGELOG</V></b></font> <BV><a href='event:log'>[View all]</a></BV></p><font size='12' face='Lucide Console'>
+
+    <font size='15' face='Lucida Console'><b><BV>v2.2.1.0</BV></b></font> <i>(11/8/2020)</i>
+        • Bind key O for the shop (press O to open the shop now ;P)
+
 
     <font size='15' face='Lucida Console'><b><BV>v2.2.0.0</BV></b></font> <i>(11/2/2020)</i>
         • Improve the help's user interface
         • Support translations for the help menu
         • Minor typo fixes
 
+        
     <font size='15' face='Lucida Console'><b><BV>v2.1.1.2</BV></b></font> <i>(11/1/2020)</i>
         • Added Halloween 2020 kit <i>(by <b><V>Thetiger56</V><N><font size='8'>#6961</font></N></b>)</i>
             - Get it before the sale ends :P
@@ -410,7 +415,8 @@ local CHANGELOG =
     <font size='15' face='Lucida Console'><b><BV>v2.1.1.1</BV></b></font> <i>(10/31/2020)</i>
         • Bug fixes
             - Any player can use any pack using the "Random" pack even if they haven't bought it
-    
+
+            
     <font size='15' face='Lucida Console'><b><BV>v2.1.1.0</BV></b></font> <i>(10/28/2020)</i>
         • Add the "random" pack (chooses a random pack from owned pack each round)
         • Display the current equipped pack in the pack preview menu (when opening the shop)
@@ -673,7 +679,7 @@ translations["en"] = {
     POINTS =    "<font face='Lucida console' size='12'>   <b>Points:</b> <V>${points}</V></font>",
     PACK_DESC = "\n\n<font face='Lucida console' size='12' color='#cccccc'><i>“ ${desc} ”</i></font>\n<p align='right'><font size='10'>- ${author}</font></p>",
     GIFT_RECV = "<N>You have been rewarded with <ROSE><b>${gift}</b></ROSE> by <ROSE><b>${admin}</b></ROSE>",
-    COMMANDS =  "\n\n<N2>[ <b>H</b> ]</N2> <N><ROSE>!help</ROSE> (displays this help menu)</N><br><N2>[ <b>P</b> ]</N2> <N><ROSE>!profile <i>[player]</i></ROSE> (displays the profile of the player)</N><br><N2>[ <b>L</b> ]</N2> <N>(displays the leaderboard)</N><br><br><N><ROSE>!changelog</ROSE> (displays the changelog)</N><br><N><ROSE>!shop</ROSE> (displays the shop)</N><br>",
+    COMMANDS =  "\n\n<N2>[ <b>H</b> ]</N2> <N><ROSE>!help</ROSE> (displays this help menu)</N><br><N2>[ <b>P</b> ]</N2> <N><ROSE>!profile <i>[player]</i></ROSE> (displays the profile of the player)</N><br></N><N2>[ <b>O</b> ]</N2> <N><ROSE>!shop</ROSE> (displays the shop)</N><br><N2>[ <b>L</b> ]</N2> <N>(displays the leaderboard)</N><br><br><N><ROSE>!changelog</ROSE> (displays the changelog)</N><br><br>",
     CMD_TITLE = "<font size='25' face='Comic Sans'><b><J>Commands</J></b></font>",
     CREDITS =   "\n\nArtist - <b><BV>Lightymouse</BV><G>#0421</G></b>\nTranslators - <b><BV>Overforyou</BV><G>#9290</G>, <BV>Nuttysquirrel</BV><G>#0000</G></b>\n\n\nAnd thank you for playing pewpew!",
     CREDS_TITLE = "<font size='25' face='Comic Sans'><b><R>Credits</R></b></font>",
