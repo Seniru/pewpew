@@ -66,8 +66,16 @@ leaderboard.prepare = function(leaders)
 end
 
 leaderboard.displayLeaderboard = function(mode, page, target)
-    local targetPlayer = Player.players[target]
-    if targetPlayer.openedWindow then targetPlayer.openedWindow:hide(target) end
+	local targetPlayer = Player.players[target]
+	
+	if targetPlayer.openedWindow then
+		targetPlayer.openedWindow:hide(target)
+		if targetPlayer.openedWindow == leaderboardWindow then
+			targetPlayer.openedWindow = nil
+			return
+		end
+	end
+
 	leaderboardWindow:show(target)
 	local leaders = {}
 	local rankTxt, nameTxt, roundsTxt, deathsTxt, survivedTxt, wonTxt 

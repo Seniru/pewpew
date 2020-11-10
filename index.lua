@@ -391,14 +391,18 @@ local a={}a.VERSION='1.5'a.__index=a;function a.new(b,c,d)local self=setmetatabl
 
 --==[[ init ]]==--
 
-local VERSION = "v2.2.1.1"
+local VERSION = "v2.2.2.0"
 local CHANGELOG =
 [[
 
 <p align='center'><font size='20'><b><V>CHANGELOG</V></b></font> <BV><a href='event:log'>[View all]</a></BV></p><font size='12' face='Lucide Console'>
 
+    <font size='15' face='Lucida Console'><b><BV>v2.2.2.0</BV></b></font> <i>(11/10/2020)</i>
+        • Toggle visiblity of windows when a request to open/close received (for example click O to open shop, and press O back to hide it)
+
+
     <font size='15' face='Lucida Console'><b><BV>v2.2.1.1</BV></b></font> <i>(11/10/2020)</i>
-        • Add new maps
+        • Added new maps
 
 
     <font size='15' face='Lucida Console'><b><BV>v2.2.1.0</BV></b></font> <i>(11/8/2020)</i>
@@ -426,14 +430,7 @@ local CHANGELOG =
         • Display the current equipped pack in the pack preview menu (when opening the shop)
         • New maps!
         
-
-    <font size='15' face='Lucida Console'><b><BV>v2.1.0.2</BV></b></font> <i>(10/21/2020)</i>
-        • Added RU translations <i>(thanks to <b><V>Nuttysquirrel</V><N><font size='8'>#0000</font></N></b>)</i>
-        • New maps!
-        • Highlight pewpew-admin names in red
-        • Bug fixes
-            - Announcing a sole survivor after announcing winners (multiple) either because on survivor died or killed
-
+        
 </font>
 ]]
 
@@ -1207,8 +1204,16 @@ leaderboard.prepare = function(leaders)
 end
 
 leaderboard.displayLeaderboard = function(mode, page, target)
-    local targetPlayer = Player.players[target]
-    if targetPlayer.openedWindow then targetPlayer.openedWindow:hide(target) end
+	local targetPlayer = Player.players[target]
+	
+	if targetPlayer.openedWindow then
+		targetPlayer.openedWindow:hide(target)
+		if targetPlayer.openedWindow == leaderboardWindow then
+			targetPlayer.openedWindow = nil
+			return
+		end
+	end
+
 	leaderboardWindow:show(target)
 	local leaders = {}
 	local rankTxt, nameTxt, roundsTxt, deathsTxt, survivedTxt, wonTxt 
@@ -1438,8 +1443,17 @@ shop.displayShop = function(target, page)
 	if page < 1 or page > shop.totalPages then return end
 
 	local targetPlayer = Player.players[target]
+
 	local commu = targetPlayer.community
-    if targetPlayer.openedWindow then targetPlayer.openedWindow:hide(target) end
+
+	if targetPlayer.openedWindow then
+		targetPlayer.openedWindow:hide(target)
+		if targetPlayer.openedWindow == shopWindow then	
+			targetPlayer.openedWindow = nil
+			return
+		end
+	end
+
 	shopWindow:show(target)
 	shop.displayPackInfo(target, targetPlayer.equipped)
 
@@ -1720,7 +1734,15 @@ end
 
 displayProfile = function(player, target)
     local targetPlayer = Player.players[target]
-    if targetPlayer.openedWindow then targetPlayer.openedWindow:hide(target) end
+
+    if targetPlayer.openedWindow then
+        targetPlayer.openedWindow:hide(target)
+        if targetPlayer.openedWindow == profileWindow then
+            targetPlayer.openedWindow = nil
+            return
+        end
+    end
+
     local name, tag = extractName(player.name)
     if (not name) or (not tag) then return end -- guest players
     profileWindow:show(target)
@@ -1734,7 +1756,15 @@ end
 
 displayHelp = function(target)
     local targetPlayer = Player.players[target]
-    if targetPlayer.openedWindow then targetPlayer.openedWindow:hide(target) end
+    
+    if targetPlayer.openedWindow then
+        targetPlayer.openedWindow:hide(target)
+        if targetPlayer.openedWindow == helpWindow then
+            targetPlayer.openedWindow = nil
+            return
+        end
+    end
+
     local commu = targetPlayer.community
     helpWindow:show(target)
     Panel.panels[820]:update(translate("COMMANDS", commu), target)
@@ -1751,7 +1781,15 @@ end
 
 displayChangelog = function(target)
     local targetPlayer = Player.players[target]
-    if targetPlayer.openedWindow then targetPlayer.openedWindow:hide(target) end
+    
+    if targetPlayer.openedWindow then
+        targetPlayer.openedWindow:hide(target)
+        if targetPlayer.openedWindow == changelogWindow then
+            targetPlayer.openedWindow = nil
+            return
+        end
+    end
+
     changelogWindow:show(target)
     targetPlayer.openedWindow = changelogWindow
 end

@@ -109,7 +109,15 @@ end
 
 displayProfile = function(player, target)
     local targetPlayer = Player.players[target]
-    if targetPlayer.openedWindow then targetPlayer.openedWindow:hide(target) end
+
+    if targetPlayer.openedWindow then
+        targetPlayer.openedWindow:hide(target)
+        if targetPlayer.openedWindow == profileWindow then
+            targetPlayer.openedWindow = nil
+            return
+        end
+    end
+
     local name, tag = extractName(player.name)
     if (not name) or (not tag) then return end -- guest players
     profileWindow:show(target)
@@ -123,7 +131,15 @@ end
 
 displayHelp = function(target)
     local targetPlayer = Player.players[target]
-    if targetPlayer.openedWindow then targetPlayer.openedWindow:hide(target) end
+    
+    if targetPlayer.openedWindow then
+        targetPlayer.openedWindow:hide(target)
+        if targetPlayer.openedWindow == helpWindow then
+            targetPlayer.openedWindow = nil
+            return
+        end
+    end
+
     local commu = targetPlayer.community
     helpWindow:show(target)
     Panel.panels[820]:update(translate("COMMANDS", commu), target)
@@ -140,7 +156,15 @@ end
 
 displayChangelog = function(target)
     local targetPlayer = Player.players[target]
-    if targetPlayer.openedWindow then targetPlayer.openedWindow:hide(target) end
+    
+    if targetPlayer.openedWindow then
+        targetPlayer.openedWindow:hide(target)
+        if targetPlayer.openedWindow == changelogWindow then
+            targetPlayer.openedWindow = nil
+            return
+        end
+    end
+
     changelogWindow:show(target)
     targetPlayer.openedWindow = changelogWindow
 end

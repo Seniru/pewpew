@@ -171,8 +171,17 @@ shop.displayShop = function(target, page)
 	if page < 1 or page > shop.totalPages then return end
 
 	local targetPlayer = Player.players[target]
+
 	local commu = targetPlayer.community
-    if targetPlayer.openedWindow then targetPlayer.openedWindow:hide(target) end
+
+	if targetPlayer.openedWindow then
+		targetPlayer.openedWindow:hide(target)
+		if targetPlayer.openedWindow == shopWindow then	
+			targetPlayer.openedWindow = nil
+			return
+		end
+	end
+
 	shopWindow:show(target)
 	shop.displayPackInfo(target, targetPlayer.equipped)
 
