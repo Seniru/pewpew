@@ -41,11 +41,6 @@ local CHANGELOG =
         • Bug fixes
             - Announcing a sole survivor after announcing winners (multiple) either because on survivor died or killed
 
-
-    <font size='15' face='Lucida Console'><b><BV>v2.1.0.1</BV></b></font> <i>(10/21/2020)</i>
-        • Added Royal kit <i>(by <b><V>Lightymouse</V><N><font size='8'>#0421</font></N></b>)</i>
-        • Disabled consumables
-
 </font>
 ]]
 
