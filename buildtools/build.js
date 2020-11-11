@@ -13,7 +13,7 @@ combine({
       "libs/DataHandler.lua",
     ],
   },
-  init: { files: ["src/init.lua"] },
+  init: { files: ["src/changelog.lua", "src/init.lua"] },
   translations: {
     header: "local translations = {}\n\n",
     files: [
