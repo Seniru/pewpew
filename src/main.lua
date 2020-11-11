@@ -107,12 +107,12 @@ createPrettyUI = function(id, x, y, w, h, fixed, closeButton)
 
 end
 
-displayProfile = function(player, target)
+displayProfile = function(player, target, keyPressed)
     local targetPlayer = Player.players[target]
 
     if targetPlayer.openedWindow then
         targetPlayer.openedWindow:hide(target)
-        if targetPlayer.openedWindow == profileWindow then
+        if targetPlayer.openedWindow == profileWindow and keyPressed then
             targetPlayer.openedWindow = nil
             return
         end
@@ -129,12 +129,12 @@ displayProfile = function(player, target)
     targetPlayer.openedWindow = profileWindow
 end
 
-displayHelp = function(target)
+displayHelp = function(target, keyPressed)
     local targetPlayer = Player.players[target]
     
     if targetPlayer.openedWindow then
         targetPlayer.openedWindow:hide(target)
-        if targetPlayer.openedWindow == helpWindow then
+        if targetPlayer.openedWindow == helpWindow and keyPressed then
             targetPlayer.openedWindow = nil
             return
         end

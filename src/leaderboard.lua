@@ -65,12 +65,12 @@ leaderboard.prepare = function(leaders)
 
 end
 
-leaderboard.displayLeaderboard = function(mode, page, target)
+leaderboard.displayLeaderboard = function(mode, page, target, keyPressed)
 	local targetPlayer = Player.players[target]
 	
 	if targetPlayer.openedWindow then
 		targetPlayer.openedWindow:hide(target)
-		if targetPlayer.openedWindow == leaderboardWindow then
+		if targetPlayer.openedWindow == leaderboardWindow and keyPressed then
 			targetPlayer.openedWindow = nil
 			return
 		end

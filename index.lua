@@ -391,11 +391,18 @@ local a={}a.VERSION='1.5'a.__index=a;function a.new(b,c,d)local self=setmetatabl
 
 --==[[ init ]]==--
 
-local VERSION = "v2.2.2.0"
+local VERSION = "v2.2.2.1"
 local CHANGELOG =
 [[
 
 <p align='center'><font size='20'><b><V>CHANGELOG</V></b></font> <BV><a href='event:log'>[View all]</a></BV></p><font size='12' face='Lucide Console'>
+
+    <font size='15' face='Lucida Console'><b><BV>v2.2.2.1</BV></b></font> <i>(11/11/2020)</i>
+        • Bug fixes
+            - Leaderboard will get closed if attempted to change modes or pages
+
+        • Toggle visibility of windows (shop, leaderboard, profile and help only) only if the hotkey is pressed
+
 
     <font size='15' face='Lucida Console'><b><BV>v2.2.2.0</BV></b></font> <i>(11/10/2020)</i>
         • Toggle visiblity of windows when a request to open/close received (for example click O to open shop, and press O back to hide it)
@@ -1004,13 +1011,13 @@ function eventKeyboard(name, key, down, x, y)
 	elseif key == keys.RIGHT then
 		Player.players[name].stance = 1
     elseif key == keys.LETTER_H then
-        displayHelp(name)
+        displayHelp(name, true)
     elseif key == keys.LETTER_P then
-        displayProfile(Player.players[name], name)
+        displayProfile(Player.players[name], name, true)
     elseif key == keys.LETTER_L then
-        leaderboard.displayLeaderboard("global", 1, name)
+        leaderboard.displayLeaderboard("global", 1, name, true)
     elseif key == keys.LETTER_O then
-        shop.displayShop(name, 1)
+        shop.displayShop(name, 1, true)
     end
 end
 
@@ -1203,12 +1210,12 @@ leaderboard.prepare = function(leaders)
 
 end
 
-leaderboard.displayLeaderboard = function(mode, page, target)
+leaderboard.displayLeaderboard = function(mode, page, target, keyPressed)
 	local targetPlayer = Player.players[target]
 	
 	if targetPlayer.openedWindow then
 		targetPlayer.openedWindow:hide(target)
-		if targetPlayer.openedWindow == leaderboardWindow then
+		if targetPlayer.openedWindow == leaderboardWindow and keyPressed then
 			targetPlayer.openedWindow = nil
 			return
 		end
@@ -1438,7 +1445,7 @@ shop.packsBitList = BitList {
     "Default", "Poisson", "Catto", "Royal", "Halloween 2020"
 }
 
-shop.displayShop = function(target, page)
+shop.displayShop = function(target, page, keyPressed)
 	page = page or 1
 	if page < 1 or page > shop.totalPages then return end
 
@@ -1448,7 +1455,7 @@ shop.displayShop = function(target, page)
 
 	if targetPlayer.openedWindow then
 		targetPlayer.openedWindow:hide(target)
-		if targetPlayer.openedWindow == shopWindow then	
+		if targetPlayer.openedWindow == shopWindow and keyPressed then	
 			targetPlayer.openedWindow = nil
 			return
 		end
@@ -1732,12 +1739,12 @@ createPrettyUI = function(id, x, y, w, h, fixed, closeButton)
 
 end
 
-displayProfile = function(player, target)
+displayProfile = function(player, target, keyPressed)
     local targetPlayer = Player.players[target]
 
     if targetPlayer.openedWindow then
         targetPlayer.openedWindow:hide(target)
-        if targetPlayer.openedWindow == profileWindow then
+        if targetPlayer.openedWindow == profileWindow and keyPressed then
             targetPlayer.openedWindow = nil
             return
         end
@@ -1754,12 +1761,12 @@ displayProfile = function(player, target)
     targetPlayer.openedWindow = profileWindow
 end
 
-displayHelp = function(target)
+displayHelp = function(target, keyPressed)
     local targetPlayer = Player.players[target]
     
     if targetPlayer.openedWindow then
         targetPlayer.openedWindow:hide(target)
-        if targetPlayer.openedWindow == helpWindow then
+        if targetPlayer.openedWindow == helpWindow and keyPressed then
             targetPlayer.openedWindow = nil
             return
         end

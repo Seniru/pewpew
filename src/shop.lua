@@ -166,7 +166,7 @@ shop.packsBitList = BitList {
     "Default", "Poisson", "Catto", "Royal", "Halloween 2020"
 }
 
-shop.displayShop = function(target, page)
+shop.displayShop = function(target, page, keyPressed)
 	page = page or 1
 	if page < 1 or page > shop.totalPages then return end
 
@@ -176,7 +176,7 @@ shop.displayShop = function(target, page)
 
 	if targetPlayer.openedWindow then
 		targetPlayer.openedWindow:hide(target)
-		if targetPlayer.openedWindow == shopWindow then	
+		if targetPlayer.openedWindow == shopWindow and keyPressed then	
 			targetPlayer.openedWindow = nil
 			return
 		end
