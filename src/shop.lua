@@ -136,7 +136,7 @@ shop.packs = {
 		coverAdj = { x = 8, y = 0 },
 		description = "Trick or Treat!?",
 		author = "Thetiger56#6961",
-		price = 100,
+		price = 400,
 
 		description_locales = {
 			en = "Trick or Treat!?"

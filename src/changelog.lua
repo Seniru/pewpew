@@ -1,8 +1,12 @@
-local VERSION = "v2.2.2.1"
+local VERSION = "v2.2.2.2"
 local CHANGELOG =
 [[
 
 <p align='center'><font size='20'><b><V>CHANGELOG</V></b></font> <BV><a href='event:log'>[View all]</a></BV></p><font size='12' face='Lucide Console'>
+
+    <font size='15' face='Lucida Console'><b><BV>v2.2.2.2</BV></b></font> <i>(11/15/2020)</i>
+        • Halloween sale ends!
+
 
     <font size='15' face='Lucida Console'><b><BV>v2.2.2.1</BV></b></font> <i>(11/11/2020)</i>
         • Bug fixes
@@ -38,12 +42,6 @@ local CHANGELOG =
         • Bug fixes
             - Any player can use any pack using the "Random" pack even if they haven't bought it
 
-            
-    <font size='15' face='Lucida Console'><b><BV>v2.1.1.0</BV></b></font> <i>(10/28/2020)</i>
-        • Add the "random" pack (chooses a random pack from owned pack each round)
-        • Display the current equipped pack in the pack preview menu (when opening the shop)
-        • New maps!
-        
-        
+                
 </font>
 ]]
