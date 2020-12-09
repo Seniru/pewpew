@@ -1633,6 +1633,9 @@ cmds = {
 
 }
 
+-- [[ aliases ]]
+cmds["p"] = cmds["profile"]
+
 local rotation, currentMapIndex = {}, 0
 
 local shuffleMaps = function(maps)
@@ -1755,7 +1758,7 @@ displayProfile = function(player, target, keyPressed)
 
     local lboardPos
     for i, p in next, leaderboard.indexed do
-        if p.name == target then
+        if p.name == player.name then
             lboardPos = i
             break
         end
@@ -1845,8 +1848,8 @@ do
                 :addPanel(Panel(153, "", 290, 200, 120, 50, nil, nil, 0, true))
                 :addImage(Image(assets.iconWon, "&1", 400, 185))
                 :addPanel(Panel(154, "", 460, 200, 120, 50, nil, nil, 0, true))
-                :addImage(Image(assets.iconTrophy, "&1", 400, 255))
-                :addPanel(Panel(155, "", 430, 260, 210, 30, nil, nil, 0, true))
+                :addImage(Image(assets.iconTrophy, "&1", 390, 255))
+                :addPanel(Panel(155, "", 420, 260, 210, 30, nil, nil, 0, true))
         )
 
     leaderboardWindow = createPrettyUI(3, 70, 50, 670, 330, true, true)

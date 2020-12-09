@@ -69,3 +69,6 @@ cmds = {
     end
 
 }
+
+-- [[ aliases ]]
+cmds["p"] = cmds["profile"]
