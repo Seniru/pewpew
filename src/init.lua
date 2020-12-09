@@ -87,6 +87,7 @@ local assets = {
     iconDeaths = "17434d1c965.png",
     iconSurvived = "17434d0a87e.png",
     iconWon = "17434cff8bd.png",
+    iconTrophy = "176463dbc3e.png",
     lock = "1660271f4c6.png",
     help = {
         survive = "17587d5abed.png",
@@ -209,7 +210,7 @@ local MIN_PLAYERS = 4
 
 local profileWindow, leaderboardWindow, changelogWindow, shopWindow, helpWindow
 
-local initialized, newRoundStarted, suddenDeath = false
+local initialized, newRoundStarted, suddenDeath = false, false, false
 local currentItem = ENUM_ITEMS.CANNON
 local isTribeHouse = tfm.get.room.isTribeHouse
 local statsEnabled = not isTribeHouse

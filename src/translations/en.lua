@@ -10,6 +10,7 @@ translations["en"] = {
     DEATHS =    "<font face='Lucida console'><N2>Deaths</N2></font>",
     SURVIVED =  "<font face='Lucida console'><N2>Rounds survived</N2></font>",
     WON =       "<font face='Lucida console'><N2>Rounds won</N2></font>",
+    LBOARD_POS = "<b><font face='Lucida console' color='#e3b134'>Global leaderboard: ${pos}</font></b>",
     EQUIPPED =  "Equipped",
     EQUIP =     "Equip",
     BUY =       "Buy",

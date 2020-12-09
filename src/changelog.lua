@@ -1,8 +1,12 @@
-local VERSION = "v2.2.2.3"
+local VERSION = "v2.2.3.0"
 local CHANGELOG =
 [[
 
 <p align='center'><font size='20'><b><V>CHANGELOG</V></b></font> <BV><a href='event:log'>[View all]</a></BV></p><font size='12' face='Lucide Console'>
+
+    <font size='15' face='Lucida Console'><b><BV>v2.2.3.0</BV></b></font> <i>(12/09/2020)</i>
+        • Added leaderboard position (global) to the profile
+
 
     <font size='15' face='Lucida Console'><b><BV>v2.2.2.3</BV></b></font> <i>(11/27/2020)</i>
         • Added new maps
@@ -41,11 +45,6 @@ local CHANGELOG =
         • Added Halloween 2020 kit <i>(by <b><V>Thetiger56</V><N><font size='8'>#6961</font></N></b>)</i>
             - Get it before the sale ends :P
     
-
-    <font size='15' face='Lucida Console'><b><BV>v2.1.1.1</BV></b></font> <i>(10/31/2020)</i>
-        • Bug fixes
-            - Any player can use any pack using the "Random" pack even if they haven't bought it
-
                 
 </font>
 ]]

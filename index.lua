@@ -391,11 +391,15 @@ local a={}a.VERSION='1.5'a.__index=a;function a.new(b,c,d)local self=setmetatabl
 
 --==[[ init ]]==--
 
-local VERSION = "v2.2.2.3"
+local VERSION = "v2.2.3.0"
 local CHANGELOG =
 [[
 
 <p align='center'><font size='20'><b><V>CHANGELOG</V></b></font> <BV><a href='event:log'>[View all]</a></BV></p><font size='12' face='Lucide Console'>
+
+    <font size='15' face='Lucida Console'><b><BV>v2.2.3.0</BV></b></font> <i>(12/09/2020)</i>
+        • Added leaderboard position (global) to the profile
+
 
     <font size='15' face='Lucida Console'><b><BV>v2.2.2.3</BV></b></font> <i>(11/27/2020)</i>
         • Added new maps
@@ -434,11 +438,6 @@ local CHANGELOG =
         • Added Halloween 2020 kit <i>(by <b><V>Thetiger56</V><N><font size='8'>#6961</font></N></b>)</i>
             - Get it before the sale ends :P
     
-
-    <font size='15' face='Lucida Console'><b><BV>v2.1.1.1</BV></b></font> <i>(10/31/2020)</i>
-        • Bug fixes
-            - Any player can use any pack using the "Random" pack even if they haven't bought it
-
                 
 </font>
 ]]
@@ -532,6 +531,7 @@ local assets = {
     iconDeaths = "17434d1c965.png",
     iconSurvived = "17434d0a87e.png",
     iconWon = "17434cff8bd.png",
+    iconTrophy = "176463dbc3e.png",
     lock = "1660271f4c6.png",
     help = {
         survive = "17587d5abed.png",
@@ -654,7 +654,7 @@ local MIN_PLAYERS = 4
 
 local profileWindow, leaderboardWindow, changelogWindow, shopWindow, helpWindow
 
-local initialized, newRoundStarted, suddenDeath = false
+local initialized, newRoundStarted, suddenDeath = false, false, false
 local currentItem = ENUM_ITEMS.CANNON
 local isTribeHouse = tfm.get.room.isTribeHouse
 local statsEnabled = not isTribeHouse
@@ -678,6 +678,7 @@ translations["en"] = {
     DEATHS =    "<font face='Lucida console'><N2>Deaths</N2></font>",
     SURVIVED =  "<font face='Lucida console'><N2>Rounds survived</N2></font>",
     WON =       "<font face='Lucida console'><N2>Rounds won</N2></font>",
+    LBOARD_POS = "<b><font face='Lucida console' color='#e3b134'>Global leaderboard: ${pos}</font></b>",
     EQUIPPED =  "Equipped",
     EQUIP =     "Equip",
     BUY =       "Buy",
@@ -1198,7 +1199,7 @@ end
 
 leaderboard.prepare = function(leaders)
 	
-	local temp, res = {}, {} 
+	local temp, res = {}, {}
     
 	for name, leader in next, leaders do temp[#temp + 1] = leader end
     
@@ -1632,7 +1633,7 @@ cmds = {
 
 }
 
-local rotation, currentMapIndex = {}
+local rotation, currentMapIndex = {}, 0
 
 local shuffleMaps = function(maps)
     local res = {}
@@ -1752,6 +1753,14 @@ displayProfile = function(player, target, keyPressed)
         end
     end
 
+    local lboardPos
+    for i, p in next, leaderboard.indexed do
+        if p.name == target then
+            lboardPos = i
+            break
+        end
+    end
+
     local name, tag = extractName(player.name)
     if (not name) or (not tag) then return end -- guest players
     profileWindow:show(target)
@@ -1760,6 +1769,7 @@ displayProfile = function(player, target, keyPressed)
     Panel.panels[152]:update(translate("DEATHS", player.community) .. "<br><b><BV><font size='14'>" .. player.rounds - player.survived .. "</font></BV>", target)
     Panel.panels[153]:update(translate("SURVIVED", player.community) .. "<br><b><BV><font size='14'>" .. player.survived .. "</font></BV>     <font size='10'>(" .. math.floor(player.survived / player.rounds * 100) .."%)</font>", target)
     Panel.panels[154]:update(translate("WON", player.community) .. "<br><b><BV><font size='14'>" .. player.won .. "</font></BV>     <font size='10'>(" .. math.floor(player.won / player.rounds * 100) .."%)</font>", target)
+    Panel.panels[155]:update(translate("LBOARD_POS", player.community, nil, { pos = lboardPos or "N/A" }), target)
     targetPlayer.openedWindow = profileWindow
 end
 
@@ -1835,6 +1845,8 @@ do
                 :addPanel(Panel(153, "", 290, 200, 120, 50, nil, nil, 0, true))
                 :addImage(Image(assets.iconWon, "&1", 400, 185))
                 :addPanel(Panel(154, "", 460, 200, 120, 50, nil, nil, 0, true))
+                :addImage(Image(assets.iconTrophy, "&1", 400, 255))
+                :addPanel(Panel(155, "", 430, 260, 210, 30, nil, nil, 0, true))
         )
 
     leaderboardWindow = createPrettyUI(3, 70, 50, 670, 330, true, true)

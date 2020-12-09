@@ -1,4 +1,4 @@
-local rotation, currentMapIndex = {}
+local rotation, currentMapIndex = {}, 0
 
 local shuffleMaps = function(maps)
     local res = {}
@@ -118,6 +118,14 @@ displayProfile = function(player, target, keyPressed)
         end
     end
 
+    local lboardPos
+    for i, p in next, leaderboard.indexed do
+        if p.name == target then
+            lboardPos = i
+            break
+        end
+    end
+
     local name, tag = extractName(player.name)
     if (not name) or (not tag) then return end -- guest players
     profileWindow:show(target)
@@ -126,6 +134,7 @@ displayProfile = function(player, target, keyPressed)
     Panel.panels[152]:update(translate("DEATHS", player.community) .. "<br><b><BV><font size='14'>" .. player.rounds - player.survived .. "</font></BV>", target)
     Panel.panels[153]:update(translate("SURVIVED", player.community) .. "<br><b><BV><font size='14'>" .. player.survived .. "</font></BV>     <font size='10'>(" .. math.floor(player.survived / player.rounds * 100) .."%)</font>", target)
     Panel.panels[154]:update(translate("WON", player.community) .. "<br><b><BV><font size='14'>" .. player.won .. "</font></BV>     <font size='10'>(" .. math.floor(player.won / player.rounds * 100) .."%)</font>", target)
+    Panel.panels[155]:update(translate("LBOARD_POS", player.community, nil, { pos = lboardPos or "N/A" }), target)
     targetPlayer.openedWindow = profileWindow
 end
 
@@ -201,6 +210,8 @@ do
                 :addPanel(Panel(153, "", 290, 200, 120, 50, nil, nil, 0, true))
                 :addImage(Image(assets.iconWon, "&1", 400, 185))
                 :addPanel(Panel(154, "", 460, 200, 120, 50, nil, nil, 0, true))
+                :addImage(Image(assets.iconTrophy, "&1", 400, 255))
+                :addPanel(Panel(155, "", 430, 260, 210, 30, nil, nil, 0, true))
         )
 
     leaderboardWindow = createPrettyUI(3, 70, 50, 670, 330, true, true)

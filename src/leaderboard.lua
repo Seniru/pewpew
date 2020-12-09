@@ -51,7 +51,7 @@ end
 
 leaderboard.prepare = function(leaders)
 	
-	local temp, res = {}, {} 
+	local temp, res = {}, {}
     
 	for name, leader in next, leaders do temp[#temp + 1] = leader end
     
