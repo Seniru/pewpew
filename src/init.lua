@@ -95,7 +95,10 @@ local assets = {
         shoot = "17587d6acaf.png",
         creditors = "17587d609f1.png",
         commands = "17587d64557.png",
-        weapon = "17587d67562.png"
+        weapon = "17587d67562.png",
+        github = "1764b681c20.png",
+        discord = "1764b73dad6.png",
+        map = "1764b7a7692.png"
     },
     items = {
         [ENUM_ITEMS.SMALL_BOX] = "17406985997.png",

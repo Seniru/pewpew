@@ -23,4 +23,7 @@ translations["en"] = {
     CREDS_TITLE = "<font size='25' face='Comic Sans'><b><R>Credits</R></b></font>",
     OBJECTIVE = "<b>Survive and kill others to win</b>",
     HELP_GOTIT = "<font size='15'><J><b><a href='event:close'>Got it!</a></b></J></font>",
+    HELP_GITHUB = "<N>Want to contribute this module? Cool! Check out</N> <VI><b><i>https://github.com/Seniru/pewpew</i></b></VI>",
+    HELP_DISCORD = "<N>Discord:</N> <VI><b><i>https://discord.gg/vaqgrgp</i></b></VI>",
+    HELP_MAP = "<N>Want to add your maps to pewpew? Check out</N> <VI><b><i>https://atelier801.com/topic?f=6&t=892550</i></b></VI>"
 }

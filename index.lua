@@ -391,11 +391,15 @@ local a={}a.VERSION='1.5'a.__index=a;function a.new(b,c,d)local self=setmetatabl
 
 --==[[ init ]]==--
 
-local VERSION = "v2.2.3.0"
+local VERSION = "v2.2.4.0"
 local CHANGELOG =
 [[
 
 <p align='center'><font size='20'><b><V>CHANGELOG</V></b></font> <BV><a href='event:log'>[View all]</a></BV></p><font size='12' face='Lucide Console'>
+
+    <font size='15' face='Lucida Console'><b><BV>v2.2.4.0</BV></b></font> <i>(12/10/2020)</i>
+        • Added important links (github, discord and map submission thread) to the help menu
+
 
     <font size='15' face='Lucida Console'><b><BV>v2.2.3.0</BV></b></font> <i>(12/09/2020)</i>
         • Added leaderboard position (global) to the profile
@@ -432,13 +436,7 @@ local CHANGELOG =
         • Improve the help's user interface
         • Support translations for the help menu
         • Minor typo fixes
-
-        
-    <font size='15' face='Lucida Console'><b><BV>v2.1.1.2</BV></b></font> <i>(11/1/2020)</i>
-        • Added Halloween 2020 kit <i>(by <b><V>Thetiger56</V><N><font size='8'>#6961</font></N></b>)</i>
-            - Get it before the sale ends :P
-    
-                
+               
 </font>
 ]]
 
@@ -539,7 +537,10 @@ local assets = {
         shoot = "17587d6acaf.png",
         creditors = "17587d609f1.png",
         commands = "17587d64557.png",
-        weapon = "17587d67562.png"
+        weapon = "17587d67562.png",
+        github = "1764b681c20.png",
+        discord = "1764b73dad6.png",
+        map = "1764b7a7692.png"
     },
     items = {
         [ENUM_ITEMS.SMALL_BOX] = "17406985997.png",
@@ -691,6 +692,9 @@ translations["en"] = {
     CREDS_TITLE = "<font size='25' face='Comic Sans'><b><R>Credits</R></b></font>",
     OBJECTIVE = "<b>Survive and kill others to win</b>",
     HELP_GOTIT = "<font size='15'><J><b><a href='event:close'>Got it!</a></b></J></font>",
+    HELP_GITHUB = "<N>Want to contribute this module? Cool! Check out</N> <VI><b><i>https://github.com/Seniru/pewpew</i></b></VI>",
+    HELP_DISCORD = "<N>Discord:</N> <VI><b><i>https://discord.gg/vaqgrgp</i></b></VI>",
+    HELP_MAP = "<N>Want to add your maps to pewpew? Check out</N> <VI><b><i>https://atelier801.com/topic?f=6&t=892550</i></b></VI>"
 }
 
 translations["br"] = {        
@@ -1946,8 +1950,12 @@ do
                 end)
         )
 
-    helpWindow = Panel(700, ("<br><br>\t <G><b><a href='event:changelog'>%s</a></b></G>"):format(VERSION), 0, 0, 800, 400, 0x324650, 0x324650, 0, true)
-        :setActionListener(function(id, name, event) if event == "changelog" then displayChangelog(name) end end)
+    helpWindow = Panel(700, ("<br><br>\t <J><b><a href='event:changelog'>%s</a></b></J>        <a href='event:github'>  </a>   <a href='event:discord'>  </a>    <a href='event:map'>  </a>"):format(VERSION), 0, 0, 800, 50, 0x324650, 0x324650, 0, true)
+        :setActionListener(function(id, name, event) 
+            if event == "changelog" then displayChangelog(name) end end)
+        :addImage(Image(assets.help.github, ":1", 120, 30))
+        :addImage(Image(assets.help.discord, ":1", 144, 30))
+        :addImage(Image(assets.help.map, ":1", 170, 30))
         :addPanel(
             Panel(701, "", 180, 150, 200, 20, 0x324650, 0x324650, 0.6, true)
                 :addImage(Image(assets.help.survive, ":1", 10, 10))
@@ -1970,6 +1978,24 @@ do
                 :addImage(Image("170970cdb9f.png", ":1", 550, 350))
         )
         :setCloseButton(704)
+        :addPanel(
+            Panel(710, "<a href='event:github'>\n\n\n\n</a>", 120, 25, 18, 20, nil, nil, 0, true)
+                :setActionListener(function(id, name, event)
+                    tfm.exec.chatMessage(translate("HELP_GITHUB", Player.players[name].community), name)
+                end)
+        )
+        :addPanel(
+            Panel(711, "<a href='event:discord'>\n\n\n\n</a>", 144, 25, 18, 20, nil, nil, 0, true)
+                :setActionListener(function(id, name, event)
+                    tfm.exec.chatMessage(translate("HELP_DISCORD", Player.players[name].community), name)
+                end)
+        )
+        :addPanel(
+            Panel(712, "<a href='event:map'>\n\n\n\n</a>", 170, 25, 18, 20, nil, nil, 0, true)
+                :setActionListener(function(id, name, event)
+                    tfm.exec.chatMessage(translate("HELP_MAP", Player.players[name].community), name)
+                end)
+        )
 
 end
 

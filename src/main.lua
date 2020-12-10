@@ -308,8 +308,12 @@ do
                 end)
         )
 
-    helpWindow = Panel(700, ("<br><br>\t <G><b><a href='event:changelog'>%s</a></b></G>"):format(VERSION), 0, 0, 800, 400, 0x324650, 0x324650, 0, true)
-        :setActionListener(function(id, name, event) if event == "changelog" then displayChangelog(name) end end)
+    helpWindow = Panel(700, ("<br><br>\t <J><b><a href='event:changelog'>%s</a></b></J>        <a href='event:github'>  </a>   <a href='event:discord'>  </a>    <a href='event:map'>  </a>"):format(VERSION), 0, 0, 800, 50, 0x324650, 0x324650, 0, true)
+        :setActionListener(function(id, name, event) 
+            if event == "changelog" then displayChangelog(name) end end)
+        :addImage(Image(assets.help.github, ":1", 120, 30))
+        :addImage(Image(assets.help.discord, ":1", 144, 30))
+        :addImage(Image(assets.help.map, ":1", 170, 30))
         :addPanel(
             Panel(701, "", 180, 150, 200, 20, 0x324650, 0x324650, 0.6, true)
                 :addImage(Image(assets.help.survive, ":1", 10, 10))
@@ -332,5 +336,23 @@ do
                 :addImage(Image("170970cdb9f.png", ":1", 550, 350))
         )
         :setCloseButton(704)
+        :addPanel(
+            Panel(710, "<a href='event:github'>\n\n\n\n</a>", 120, 25, 18, 20, nil, nil, 0, true)
+                :setActionListener(function(id, name, event)
+                    tfm.exec.chatMessage(translate("HELP_GITHUB", Player.players[name].community), name)
+                end)
+        )
+        :addPanel(
+            Panel(711, "<a href='event:discord'>\n\n\n\n</a>", 144, 25, 18, 20, nil, nil, 0, true)
+                :setActionListener(function(id, name, event)
+                    tfm.exec.chatMessage(translate("HELP_DISCORD", Player.players[name].community), name)
+                end)
+        )
+        :addPanel(
+            Panel(712, "<a href='event:map'>\n\n\n\n</a>", 170, 25, 18, 20, nil, nil, 0, true)
+                :setActionListener(function(id, name, event)
+                    tfm.exec.chatMessage(translate("HELP_MAP", Player.players[name].community), name)
+                end)
+        )
 
 end

@@ -1,8 +1,12 @@
-local VERSION = "v2.2.3.0"
+local VERSION = "v2.2.4.0"
 local CHANGELOG =
 [[
 
 <p align='center'><font size='20'><b><V>CHANGELOG</V></b></font> <BV><a href='event:log'>[View all]</a></BV></p><font size='12' face='Lucide Console'>
+
+    <font size='15' face='Lucida Console'><b><BV>v2.2.4.0</BV></b></font> <i>(12/10/2020)</i>
+        • Added important links (github, discord and map submission thread) to the help menu
+
 
     <font size='15' face='Lucida Console'><b><BV>v2.2.3.0</BV></b></font> <i>(12/09/2020)</i>
         • Added leaderboard position (global) to the profile
@@ -39,12 +43,6 @@ local CHANGELOG =
         • Improve the help's user interface
         • Support translations for the help menu
         • Minor typo fixes
-
-        
-    <font size='15' face='Lucida Console'><b><BV>v2.1.1.2</BV></b></font> <i>(11/1/2020)</i>
-        • Added Halloween 2020 kit <i>(by <b><V>Thetiger56</V><N><font size='8'>#6961</font></N></b>)</i>
-            - Get it before the sale ends :P
-    
-                
+               
 </font>
 ]]
