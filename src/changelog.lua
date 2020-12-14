@@ -1,8 +1,12 @@
-local VERSION = "v2.2.4.0"
+local VERSION = "v2.2.4.1"
 local CHANGELOG =
 [[
 
 <p align='center'><font size='20'><b><V>CHANGELOG</V></b></font> <BV><a href='event:log'>[View all]</a></BV></p><font size='12' face='Lucide Console'>
+
+    <font size='15' face='Lucida Console'><b><BV>v2.2.4.1</BV></b></font> <i>(12/14/2020)</i>
+        • Added christmas 2020 pack (Thanks for Thetiger#6961), get it before the sale ends :P
+
 
     <font size='15' face='Lucida Console'><b><BV>v2.2.4.0</BV></b></font> <i>(12/10/2020)</i>
         • Added important links (github, discord and map submission thread) to the help menu
@@ -38,11 +42,5 @@ local CHANGELOG =
     <font size='15' face='Lucida Console'><b><BV>v2.2.1.0</BV></b></font> <i>(11/8/2020)</i>
         • Bind key O for the shop (press O to open the shop now ;P)
 
-
-    <font size='15' face='Lucida Console'><b><BV>v2.2.0.0</BV></b></font> <i>(11/2/2020)</i>
-        • Improve the help's user interface
-        • Support translations for the help menu
-        • Minor typo fixes
-               
 </font>
 ]]

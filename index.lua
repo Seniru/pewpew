@@ -391,11 +391,15 @@ local a={}a.VERSION='1.5'a.__index=a;function a.new(b,c,d)local self=setmetatabl
 
 --==[[ init ]]==--
 
-local VERSION = "v2.2.4.0"
+local VERSION = "v2.2.4.1"
 local CHANGELOG =
 [[
 
 <p align='center'><font size='20'><b><V>CHANGELOG</V></b></font> <BV><a href='event:log'>[View all]</a></BV></p><font size='12' face='Lucide Console'>
+
+    <font size='15' face='Lucida Console'><b><BV>v2.2.4.1</BV></b></font> <i>(12/14/2020)</i>
+        • Added christmas 2020 pack (Thanks for Thetiger#6961), get it before the sale ends :P
+
 
     <font size='15' face='Lucida Console'><b><BV>v2.2.4.0</BV></b></font> <i>(12/10/2020)</i>
         • Added important links (github, discord and map submission thread) to the help menu
@@ -431,12 +435,6 @@ local CHANGELOG =
     <font size='15' face='Lucida Console'><b><BV>v2.2.1.0</BV></b></font> <i>(11/8/2020)</i>
         • Bind key O for the shop (press O to open the shop now ;P)
 
-
-    <font size='15' face='Lucida Console'><b><BV>v2.2.0.0</BV></b></font> <i>(11/2/2020)</i>
-        • Improve the help's user interface
-        • Support translations for the help menu
-        • Minor typo fixes
-               
 </font>
 ]]
 
@@ -1439,7 +1437,32 @@ shop.packs = {
 			[ENUM_ITEMS.SMALL_PLANK] =  { image = "17582976871.png", adj = { x = -50, y = -13 } }
 		}
 
-	}
+	},
+
+	["Christmas 2020"] = {
+		coverImage = "1765abc248e.png",
+		coverAdj = { x = 0, y = 0 },
+		description = "Ho ho ho, Merry Christmas!!",
+		author = "Thetiger56#6961",
+		price = 200,
+
+		description_locales = {
+			en = "Ho ho ho, Merry Christmas!!"
+		},
+
+		skins = {
+			[ENUM_ITEMS.CANNON] =  { image = "1765abff096.png", adj = { x = -17, y = -17 } },
+			[ENUM_ITEMS.ANVIL] = { image = "1765ac2ed92.png", adj = { x = -24, y = -28 } },
+			[ENUM_ITEMS.BALL] =  { image = "1765ac10519.png", adj = { x = -17, y = -18 } },
+			[ENUM_ITEMS.BLUE_BALOON] = { image = "17660481ac5.png", adj = { x = -25, y = -24 } },
+			[ENUM_ITEMS.LARGE_BOX] =  { image = "1765aca14d3.png", adj = { x = -32, y = -32 } },
+			[ENUM_ITEMS.SMALL_BOX] =  { image = "1765ad54bea.png", adj = { x = -17, y = -17 } },
+			[ENUM_ITEMS.LARGE_PLANK] =  { image = "1765ad8d77d.png", adj = { x = -100, y = -17 } },
+			[ENUM_ITEMS.SMALL_PLANK] =  { image = "1765ad9f608.png", adj = { x = -50, y = -18 } }
+		}
+
+	},
+
 
 }
 
@@ -1449,7 +1472,7 @@ for pack in next, shop.packs do shop.totalPacks = shop.totalPacks + 1 end
 shop.totalPages = math.ceil((shop.totalPacks) / 6)
 
 shop.packsBitList = BitList {
-    "Default", "Poisson", "Catto", "Royal", "Halloween 2020"
+    "Default", "Poisson", "Catto", "Royal", "Halloween 2020", "Christmas 2020"
 }
 
 shop.displayShop = function(target, page, keyPressed)
