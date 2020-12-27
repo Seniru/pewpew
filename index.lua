@@ -1630,6 +1630,7 @@ end
 roles.removeRole = function(player, role)
     player.roles[role] = nil
     player.highestRole = roles.getHighestRole(player)
+    tfm.exec.setNameColor(player.name, 0) -- set it to default color in case of all the colors are removed
     setNameColor(player.name)
     player:savePlayerData()
 end
