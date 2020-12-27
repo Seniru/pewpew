@@ -25,5 +25,7 @@ translations["en"] = {
     HELP_GOTIT = "<font size='15'><J><b><a href='event:close'>Got it!</a></b></J></font>",
     HELP_GITHUB = "<N>Want to contribute this module? Cool! Check out</N> <VI><b><i>https://github.com/Seniru/pewpew</i></b></VI>",
     HELP_DISCORD = "<N>Discord:</N> <VI><b><i>https://discord.gg/vaqgrgp</i></b></VI>",
-    HELP_MAP = "<N>Want to add your maps to pewpew? Check out</N> <VI><b><i>https://atelier801.com/topic?f=6&t=892550</i></b></VI>"
+    HELP_MAP = "<N>Want to add your maps to pewpew? Check out</N> <VI><b><i>https://atelier801.com/topic?f=6&t=892550</i></b></VI>",
+    NEW_ROLE = "<N><ROSE><b>${player}</b></ROSE> is now a <ROSE><b>${role}</b></ROSE>",
+    KICK_ROLE = "<N><ROSE><b>${player}</b></ROSE> is not a <ROSE><b>${role}</b></ROSE> anymore! ;c",
 }

@@ -78,11 +78,8 @@ end
 
 setNameColor = function(name)
     local player = Player.players[name]
-    print(name)
-    print(player.highestRole)
     if player.highestRole == "default" then return end
     tfm.exec.setNameColor(name, roles.colors[player.highestRole])
-    print(roles.colors[player.highestRole])
 end
 
 createPrettyUI = function(id, x, y, w, h, fixed, closeButton)

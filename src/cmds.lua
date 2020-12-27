@@ -44,8 +44,8 @@ cmds = {
         elseif args[1] == "pack" then
             if not target then return tfm.exec.chatMessage(TARGET_UNREACHABLE_ERR, author) end
             local pack = msg:match("give pack .+#%d+ (.+)")
-            if not shop.packs[pack] then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error:</b> Could not find the pack</R>") end
-            if target.packs[pack] then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error: </b>Target already own that pack</R>") end
+            if not shop.packs[pack] then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error:</b> Could not find the pack</R>", author) end
+            if target.packs[pack] then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error: </b>Target already own that pack</R>", author) end
             target.packs[pack] = true
             target:savePlayerData()
             print(("[GIFT] %s has been rewarded with %s by %s"):format(args[2], pack, author))
@@ -70,22 +70,20 @@ cmds = {
 
     ["setrole"] = function(args, msg, author)
         if not admins[author] then return end
-        if not (args[1] or args[2]) then return end
+        if not (args[1] or args[2]) then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error in command<br>\tUsage:</b><font face='Lucida console'> !setrole <i> [target] [role]</i></font>\n\tAvailable roles - <font face='Lucida Console'>admin, mod, developer, artist, translator, mapper</font></R>", author) end
         local target = Player.players[args[1]]
-        if not target then return end
-        if not roles.list:find(args[2]) then return end
+        if not target then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error: Target unreachable!</b></R>", author) end
+        if not roles.list:find(args[2]) then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error:</b> Could not find the role</R>", author) end
         roles.addRole(target, args[2])
-        tfm.exec.chatMessage("Added!")
     end,
 
     ["remrole"] = function(args, msg, author)
         if not admins[author] then return end
-        if not (args[1] or args[2]) then return end
+        if not (args[1] or args[2]) then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error in command<br>\tUsage:</b><font face='Lucida console'> !remrole <i> [target] [role]</i></font>\n\tAvailable roles - <font face='Lucida Console'>admin, mod, developer, artist, translator, mapper</font></R>", author) end
         local target = Player.players[args[1]]
-        if not target then return end
-        if not roles.list:find(args[2]) then return end
+        if not target then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error: Target unreachable!</b></R>", author) end
+        if not roles.list:find(args[2]) then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error:</b> Could not find the role</R>", author) end
         roles.removeRole(target, args[2])
-        tfm.exec.chatMessage("Removed!")
     end
 
 }

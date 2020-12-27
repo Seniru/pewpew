@@ -29,9 +29,7 @@ function eventPlayerDataLoaded(name, data)
     player.equipped = equipped == -1 and "Random" or shop.packsBitList:get(equipped)
 
     player.roles = roles.list:decode(dHandler:get(name, "roles"))
-    print(table.tostring(player.roles))
     player.highestRole = roles.getHighestRole(player)
-    print(player.highestRole)
     setNameColor(name)
 
 end

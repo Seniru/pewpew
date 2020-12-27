@@ -391,11 +391,16 @@ local a={}a.VERSION='1.5'a.__index=a;function a.new(b,c,d)local self=setmetatabl
 
 --==[[ init ]]==--
 
-local VERSION = "v2.2.4.1"
+local VERSION = "v2.3.0.0"
 local CHANGELOG =
 [[
 
 <p align='center'><font size='20'><b><V>CHANGELOG</V></b></font> <BV><a href='event:log'>[View all]</a></BV></p><font size='12' face='Lucide Console'>
+
+
+    <font size='15' face='Lucida Console'><b><BV>v2.3.0.0</BV></b></font> <i>(12/27/2020)</i>
+        • Added a new role system, basically it will give you a special name color depending on your role
+
 
     <font size='15' face='Lucida Console'><b><BV>v2.2.4.1</BV></b></font> <i>(12/14/2020)</i>
         • Added christmas 2020 pack (Thanks for Thetiger#6961), get it before the sale ends :P
@@ -431,9 +436,6 @@ local CHANGELOG =
     <font size='15' face='Lucida Console'><b><BV>v2.2.1.1</BV></b></font> <i>(11/10/2020)</i>
         • Added new maps
 
-
-    <font size='15' face='Lucida Console'><b><BV>v2.2.1.0</BV></b></font> <i>(11/8/2020)</i>
-        • Bind key O for the shop (press O to open the shop now ;P)
 
 </font>
 ]]
@@ -697,7 +699,9 @@ translations["en"] = {
     HELP_GOTIT = "<font size='15'><J><b><a href='event:close'>Got it!</a></b></J></font>",
     HELP_GITHUB = "<N>Want to contribute this module? Cool! Check out</N> <VI><b><i>https://github.com/Seniru/pewpew</i></b></VI>",
     HELP_DISCORD = "<N>Discord:</N> <VI><b><i>https://discord.gg/vaqgrgp</i></b></VI>",
-    HELP_MAP = "<N>Want to add your maps to pewpew? Check out</N> <VI><b><i>https://atelier801.com/topic?f=6&t=892550</i></b></VI>"
+    HELP_MAP = "<N>Want to add your maps to pewpew? Check out</N> <VI><b><i>https://atelier801.com/topic?f=6&t=892550</i></b></VI>",
+    NEW_ROLE = "<N><ROSE><b>${player}</b></ROSE> is now a <ROSE><b>${role}</b></ROSE>",
+    KICK_ROLE = "<N><ROSE><b>${player}</b></ROSE> is not a <ROSE><b>${role}</b></ROSE> anymore! ;c",
 }
 
 translations["br"] = {        
@@ -1116,9 +1120,7 @@ function eventPlayerDataLoaded(name, data)
     player.equipped = equipped == -1 and "Random" or shop.packsBitList:get(equipped)
 
     player.roles = roles.list:decode(dHandler:get(name, "roles"))
-    print(table.tostring(player.roles))
     player.highestRole = roles.getHighestRole(player)
-    print(player.highestRole)
     setNameColor(name)
 
 end
@@ -1612,25 +1614,28 @@ roles.list = BitList {
 }
 
 roles.colors = {
-    ["admin"] = 0xff5555,
-    ["mod"] = 0xe49a5e,
-    ["developer"] = 0x6fa9de,
-    ["artist"] = 0xad7ec2,
-    ["translator"] = 0xe47871,
-    ["mapper"] = 0x1c9043
+    ["admin"] = 0xFF5555,
+    ["mod"] = 0xF3D165,
+    ["developer"] = 0x7BC7F7,
+    ["artist"] = 0xFF69B4,
+    ["translator"] = 0xB69EFD,
+    ["mapper"] = 0x87DF87
 }
 
 roles.addRole = function(player, role)
     player.roles[role] = true
     player.highestRole = roles.getHighestRole(player)
     setNameColor(player.name)
+    tfm.exec.chatMessage(translate("NEW_ROLE", tfm.get.room.community, nil, { player = player.name, role = role }))
     player:savePlayerData()
 end
 
 roles.removeRole = function(player, role)
     player.roles[role] = nil
     player.highestRole = roles.getHighestRole(player)
+    tfm.exec.setNameColor(player.name, 0) -- set it to default color in case of all the colors are removed
     setNameColor(player.name)
+    tfm.exec.chatMessage(translate("KICK_ROLE", tfm.get.room.community, nil, { player = player.name, role = role }))
     player:savePlayerData()
 end
 
@@ -1687,8 +1692,8 @@ cmds = {
         elseif args[1] == "pack" then
             if not target then return tfm.exec.chatMessage(TARGET_UNREACHABLE_ERR, author) end
             local pack = msg:match("give pack .+#%d+ (.+)")
-            if not shop.packs[pack] then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error:</b> Could not find the pack</R>") end
-            if target.packs[pack] then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error: </b>Target already own that pack</R>") end
+            if not shop.packs[pack] then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error:</b> Could not find the pack</R>", author) end
+            if target.packs[pack] then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error: </b>Target already own that pack</R>", author) end
             target.packs[pack] = true
             target:savePlayerData()
             print(("[GIFT] %s has been rewarded with %s by %s"):format(args[2], pack, author))
@@ -1713,22 +1718,20 @@ cmds = {
 
     ["setrole"] = function(args, msg, author)
         if not admins[author] then return end
-        if not (args[1] or args[2]) then return end
+        if not (args[1] or args[2]) then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error in command<br>\tUsage:</b><font face='Lucida console'> !setrole <i> [target] [role]</i></font>\n\tAvailable roles - <font face='Lucida Console'>admin, mod, developer, artist, translator, mapper</font></R>", author) end
         local target = Player.players[args[1]]
-        if not target then return end
-        if not roles.list:find(args[2]) then return end
+        if not target then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error: Target unreachable!</b></R>", author) end
+        if not roles.list:find(args[2]) then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error:</b> Could not find the role</R>", author) end
         roles.addRole(target, args[2])
-        tfm.exec.chatMessage("Added!")
     end,
 
     ["remrole"] = function(args, msg, author)
         if not admins[author] then return end
-        if not (args[1] or args[2]) then return end
+        if not (args[1] or args[2]) then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error in command<br>\tUsage:</b><font face='Lucida console'> !remrole <i> [target] [role]</i></font>\n\tAvailable roles - <font face='Lucida Console'>admin, mod, developer, artist, translator, mapper</font></R>", author) end
         local target = Player.players[args[1]]
-        if not target then return end
-        if not roles.list:find(args[2]) then return end
+        if not target then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error: Target unreachable!</b></R>", author) end
+        if not roles.list:find(args[2]) then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error:</b> Could not find the role</R>", author) end
         roles.removeRole(target, args[2])
-        tfm.exec.chatMessage("Removed!")
     end
 
 }
@@ -1816,11 +1819,8 @@ end
 
 setNameColor = function(name)
     local player = Player.players[name]
-    print(name)
-    print(player.highestRole)
     if player.highestRole == "default" then return end
     tfm.exec.setNameColor(name, roles.colors[player.highestRole])
-    print(roles.colors[player.highestRole])
 end
 
 createPrettyUI = function(id, x, y, w, h, fixed, closeButton)
