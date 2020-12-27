@@ -34,6 +34,7 @@ function Player.new(name)
 	self.packs = 1
 	self.packsArray = {}
 	self.equipped = 1
+	self.roles = {}
 
 	self.tempEquipped = nil
     self.openedWindow = nil
@@ -162,5 +163,6 @@ function Player:savePlayerData()
 	dHandler:set(name, "points", self.points)
 	dHandler:set(name, "packs", shop.packsBitList:encode(self.packs))
 	dHandler:set(name, "equipped", self.equipped == "Random" and -1 or shop.packsBitList:find(self.equipped))
+	dHandler:set(name, "roles", roles.list:encode(self.roles))
     system.savePlayerData(name, "v2" .. dHandler:dumpPlayer(name))
 end

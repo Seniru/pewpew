@@ -66,6 +66,26 @@ cmds = {
         tfm.exec.setRoomPassword(pw)
         if (not pw) or pw == "" then tfm.exec.chatMessage("<N>[</N><ROSE>•</ROSE><N>] Removed the password!", author)
         else tfm.exec.chatMessage(("<N>[</N><ROSE>•</ROSE><N>] Password: %s"):format(pw), author) end
+    end,
+
+    ["setrole"] = function(args, msg, author)
+        if not admins[author] then return end
+        if not (args[1] or args[2]) then return end
+        local target = Player.players[args[1]]
+        if not target then return end
+        if not roles.list:find(args[2]) then return end
+        roles.addRole(target, args[2])
+        tfm.exec.chatMessage("Added!")
+    end,
+
+    ["remrole"] = function(args, msg, author)
+        if not admins[author] then return end
+        if not (args[1] or args[2]) then return end
+        local target = Player.players[args[1]]
+        if not target then return end
+        if not roles.list:find(args[2]) then return end
+        roles.removeRole(target, args[2])
+        tfm.exec.chatMessage("Removed!")
     end
 
 }

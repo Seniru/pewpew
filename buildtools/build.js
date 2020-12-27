@@ -44,7 +44,7 @@ combine({
       "src/events/eventTextAreaCallback.lua",
     ],
   },
-  main: { files: ["src/leaderboard.lua", "src/shop.lua", "src/cmds.lua", "src/main.lua"] },
+  main: { files: ["src/leaderboard.lua", "src/shop.lua", "src/roles.lua", "src/cmds.lua", "src/main.lua"] },
 }).then((res) => {
   console.log("\x1b[1m\x1b[32m%s\x1b[0m", "Build completed!");
 });

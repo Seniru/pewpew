@@ -206,6 +206,11 @@ local dHandler = DataHandler.new("pew", {
         index = 6,
         type = "number",
         default = 1
+    },
+    roles = {
+        index = 7,
+        type = "number",
+        default = 0
     }
 })
 
@@ -218,4 +223,4 @@ local currentItem = ENUM_ITEMS.CANNON
 local isTribeHouse = tfm.get.room.isTribeHouse
 local statsEnabled = not isTribeHouse
 
-local leaderboard, shop
+local leaderboard, shop, roles

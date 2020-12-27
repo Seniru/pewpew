@@ -646,6 +646,11 @@ local dHandler = DataHandler.new("pew", {
         index = 6,
         type = "number",
         default = 1
+    },
+    roles = {
+        index = 7,
+        type = "number",
+        default = 0
     }
 })
 
@@ -658,7 +663,7 @@ local currentItem = ENUM_ITEMS.CANNON
 local isTribeHouse = tfm.get.room.isTribeHouse
 local statsEnabled = not isTribeHouse
 
-local leaderboard, shop
+local leaderboard, shop, roles
 
 
 --==[[ translations ]]==--
@@ -820,6 +825,7 @@ function Player.new(name)
 	self.packs = 1
 	self.packsArray = {}
 	self.equipped = 1
+	self.roles = {}
 
 	self.tempEquipped = nil
     self.openedWindow = nil
@@ -948,6 +954,7 @@ function Player:savePlayerData()
 	dHandler:set(name, "points", self.points)
 	dHandler:set(name, "packs", shop.packsBitList:encode(self.packs))
 	dHandler:set(name, "equipped", self.equipped == "Random" and -1 or shop.packsBitList:find(self.equipped))
+	dHandler:set(name, "roles", roles.list:encode(self.roles))
     system.savePlayerData(name, "v2" .. dHandler:dumpPlayer(name))
 end
 
@@ -1108,6 +1115,11 @@ function eventPlayerDataLoaded(name, data)
     local equipped = dHandler:get(name, "equipped")
     player.equipped = equipped == -1 and "Random" or shop.packsBitList:get(equipped)
 
+    player.roles = roles.list:decode(dHandler:get(name, "roles"))
+    print(table.tostring(player.roles))
+    player.highestRole = roles.getHighestRole(player)
+    print(player.highestRole)
+    setNameColor(name)
 
 end
 
@@ -1588,6 +1600,47 @@ shop.displayPackInfo = function(target, packName)
 
 end
 
+roles = {}
+
+roles.list = BitList {
+    "admin",
+    "mod",
+    "developer",
+    "artist",
+    "translator",
+    "mapper"
+}
+
+roles.colors = {
+    ["admin"] = 0xff5555,
+    ["mod"] = 0xe49a5e,
+    ["developer"] = 0x6fa9de,
+    ["artist"] = 0xad7ec2,
+    ["translator"] = 0xe47871,
+    ["mapper"] = 0x1c9043
+}
+
+roles.addRole = function(player, role)
+    player.roles[role] = true
+    player.highestRole = roles.getHighestRole(player)
+    setNameColor(player.name)
+    player:savePlayerData()
+end
+
+roles.removeRole = function(player, role)
+    player.roles[role] = nil
+    player.highestRole = roles.getHighestRole(player)
+    setNameColor(player.name)
+    player:savePlayerData()
+end
+
+roles.getHighestRole = function(player)
+    for i, rank in next, roles.list.featureArray do
+        if player.roles[rank] then return rank end
+    end
+    return "default"
+end
+
 cmds = {
 
     ["profile"] = function(args, msg, author)
@@ -1656,6 +1709,26 @@ cmds = {
         tfm.exec.setRoomPassword(pw)
         if (not pw) or pw == "" then tfm.exec.chatMessage("<N>[</N><ROSE>•</ROSE><N>] Removed the password!", author)
         else tfm.exec.chatMessage(("<N>[</N><ROSE>•</ROSE><N>] Password: %s"):format(pw), author) end
+    end,
+
+    ["setrole"] = function(args, msg, author)
+        if not admins[author] then return end
+        if not (args[1] or args[2]) then return end
+        local target = Player.players[args[1]]
+        if not target then return end
+        if not roles.list:find(args[2]) then return end
+        roles.addRole(target, args[2])
+        tfm.exec.chatMessage("Added!")
+    end,
+
+    ["remrole"] = function(args, msg, author)
+        if not admins[author] then return end
+        if not (args[1] or args[2]) then return end
+        local target = Player.players[args[1]]
+        if not target then return end
+        if not roles.list:find(args[2]) then return end
+        roles.removeRole(target, args[2])
+        tfm.exec.chatMessage("Removed!")
     end
 
 }
@@ -1742,8 +1815,12 @@ extractName = function(username)
 end
 
 setNameColor = function(name)
-    if not admins[name] then return end
-    tfm.exec.setNameColor(name, 0xff5555)
+    local player = Player.players[name]
+    print(name)
+    print(player.highestRole)
+    if player.highestRole == "default" then return end
+    tfm.exec.setNameColor(name, roles.colors[player.highestRole])
+    print(roles.colors[player.highestRole])
 end
 
 createPrettyUI = function(id, x, y, w, h, fixed, closeButton)
