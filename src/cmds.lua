@@ -70,7 +70,7 @@ cmds = {
 
     ["setrole"] = function(args, msg, author)
         if not admins[author] then return end
-        if not (args[1] or args[2]) then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error in command<br>\tUsage:</b><font face='Lucida console'> !setrole <i> [target] [role]</i></font>\n\tAvailable roles - <font face='Lucida Console'>admin, mod, developer, artist, translator, mapper</font></R>", author) end
+        if not (args[1] or args[2]) then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error in command<br>\tUsage:</b><font face='Lucida console'> !setrole <i> [target] [role]</i></font>\n\tAvailable roles - <font face='Lucida Console'>admin, staff, developer, artist, translator, mapper</font></R>", author) end
         local target = Player.players[args[1]]
         if not target then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error: Target unreachable!</b></R>", author) end
         if not roles.list:find(args[2]) then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error:</b> Could not find the role</R>", author) end
@@ -79,7 +79,7 @@ cmds = {
 
     ["remrole"] = function(args, msg, author)
         if not admins[author] then return end
-        if not (args[1] or args[2]) then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error in command<br>\tUsage:</b><font face='Lucida console'> !remrole <i> [target] [role]</i></font>\n\tAvailable roles - <font face='Lucida Console'>admin, mod, developer, artist, translator, mapper</font></R>", author) end
+        if not (args[1] or args[2]) then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error in command<br>\tUsage:</b><font face='Lucida console'> !remrole <i> [target] [role]</i></font>\n\tAvailable roles - <font face='Lucida Console'>admin, staff, developer, artist, translator, mapper</font></R>", author) end
         local target = Player.players[args[1]]
         if not target then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error: Target unreachable!</b></R>", author) end
         if not roles.list:find(args[2]) then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error:</b> Could not find the role</R>", author) end

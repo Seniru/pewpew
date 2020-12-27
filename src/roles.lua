@@ -2,7 +2,7 @@ roles = {}
 
 roles.list = BitList {
     "admin",
-    "mod",
+    "staff",
     "developer",
     "artist",
     "translator",
@@ -11,7 +11,7 @@ roles.list = BitList {
 
 roles.colors = {
     ["admin"] = 0xFF5555,
-    ["mod"] = 0xF3D165,
+    ["staff"] = 0xF3D165,
     ["developer"] = 0x7BC7F7,
     ["artist"] = 0xFF69B4,
     ["translator"] = 0xB69EFD,
