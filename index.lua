@@ -399,7 +399,7 @@ local CHANGELOG =
 
 
     <font size='15' face='Lucida Console'><b><BV>v2.3.0.0</BV></b></font> <i>(12/27/2020)</i>
-        • Added a new role system, basically it will give you a special name color depending on your role
+        • Added a new role system. This is meant to give more recognition to the players who have contributed to pewpew. This is done through adding a name color to those players according to their roles (highest role). There will be more releases related to this role system soon!
 
 
     <font size='15' face='Lucida Console'><b><BV>v2.2.4.1</BV></b></font> <i>(12/14/2020)</i>
