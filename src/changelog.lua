@@ -1,8 +1,11 @@
-local VERSION = "v2.3.0.0"
+local VERSION = "v2.3.0.1"
 local CHANGELOG =
 [[
 
 <p align='center'><font size='20'><b><V>CHANGELOG</V></b></font> <BV><a href='event:log'>[View all]</a></BV></p><font size='12' face='Lucide Console'>
+
+    <font size='15' face='Lucida Console'><b><BV>v2.3.0.1</BV></b></font> <i>(11/29/2020)</i>
+        • Added new maps
 
 
     <font size='15' face='Lucida Console'><b><BV>v2.3.0.0</BV></b></font> <i>(12/27/2020)</i>
@@ -38,10 +41,6 @@ local CHANGELOG =
 
     <font size='15' face='Lucida Console'><b><BV>v2.2.2.0</BV></b></font> <i>(11/10/2020)</i>
         • Toggle visiblity of windows when a request to open/close received (for example click O to open shop, and press O back to hide it)
-
-
-    <font size='15' face='Lucida Console'><b><BV>v2.2.1.1</BV></b></font> <i>(11/10/2020)</i>
-        • Added new maps
 
 
 </font>
