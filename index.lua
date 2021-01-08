@@ -391,11 +391,20 @@ local a={}a.VERSION='1.5'a.__index=a;function a.new(b,c,d)local self=setmetatabl
 
 --==[[ init ]]==--
 
-local VERSION = "v2.3.0.1"
+local VERSION = "v2.3.0.2"
 local CHANGELOG =
 [[
 
 <p align='center'><font size='20'><b><V>CHANGELOG</V></b></font> <BV><a href='event:log'>[View all]</a></BV></p><font size='12' face='Lucide Console'>
+
+    
+
+    <font size='15' face='Lucida Console'><b><BV>v2.3.0.2</BV></b></font> <i>(1/08/2021)</i>
+        • End of christmas sale!
+        • Added new maps
+        • Minor fixes with the new role color system
+        • Quick patch to get rid from farmers and hackers (will be a better system in future)
+
 
     <font size='15' face='Lucida Console'><b><BV>v2.3.0.1</BV></b></font> <i>(11/29/2020)</i>
         • Added new maps
@@ -425,16 +434,6 @@ local CHANGELOG =
         • Halloween sale ends!
 
 
-    <font size='15' face='Lucida Console'><b><BV>v2.2.2.1</BV></b></font> <i>(11/11/2020)</i>
-        • Bug fixes
-            - Leaderboard will get closed if attempted to change modes or pages
-
-        • Toggle visibility of windows (shop, leaderboard, profile and help only) only if the hotkey is pressed
-
-
-    <font size='15' face='Lucida Console'><b><BV>v2.2.2.0</BV></b></font> <i>(11/10/2020)</i>
-        • Toggle visiblity of windows when a request to open/close received (for example click O to open shop, and press O back to hide it)
-
 
 </font>
 ]]
@@ -451,7 +450,12 @@ local admins = {
     ["Overforyou#9290"] = true
 }
 
-local maps = { 521833, 401421, 541917, 541928, 541936, 541943, 527935, 559634, 559644, 888052, 878047, 885641, 770600, 770656, 772172, 891472, 589736, 589800, 589708, 900012, 901062, 754380, 901337, 901411, 892660, 907870, 910078, 1190467, 1252043, 1124380, 1016258, 1252299, 1255902, 1256808, 986790, 1285380, 1271249, 1255944, 1255983, 1085344, 1273114, 1276664, 1279258, 1286824, 1280135, 1280342, 1284861, 1287556, 1057753, 1196679, 1288489, 1292983, 1298164, 1298521, 1293189, 1296949, 1308378, 1311136, 1314419, 1314982, 1318248, 1312411, 1312589, 1312845, 1312933, 1313969, 1338762, 1339474, 1349878, 1297154, 644588, 1351237, 1354040, 1354375, 1362386, 1283234, 1370578, 1306592, 1360889, 1362753, 1408124, 1407949, 1407849, 1343986, 1408028, 1441370, 1443416, 1389255, 1427349, 1450527, 1424739, 869836, 1459902, 1392993, 1426457, 1542824, 1533474, 1561467, 1563534, 1566991, 1587241, 1416119, 1596270, 1601580, 1525751, 1582146, 1558167, 1420943, 1466487, 1642575, 1648013, 1646094, 1393097, 1643446, 1545219, 1583484, 1613092, 1627981, 1633374, 1633277, 1633251, 1585138, 1624034, 1616785, 1625916, 1667582, 1666996, 1675013, 1675316, 1531316, 1665413, 1681719, 1699880, 1688696, 623770, 1727243, 1531329, 1683915, 1689533, 1738601, 3756146, 7742371, 7781585, 7781591, 7791374, 7703556, 7795263, 7712465, 7712471, 7716829, 7713613, 7799245, 4675294, 7801165, 6255760 }
+-- TEMP: Temporary fix to get rid of farmers and hackers
+local banned = {
+    ["Sannntos#0000"] = true
+}
+
+local maps = { 521833, 401421, 541917, 541928, 541936, 541943, 527935, 559634, 559644, 888052, 878047, 885641, 770600, 770656, 772172, 891472, 589736, 589800, 589708, 900012, 901062, 754380, 901337, 901411, 892660, 907870, 910078, 1190467, 1252043, 1124380, 1016258, 1252299, 1255902, 1256808, 986790, 1285380, 1271249, 1255944, 1255983, 1085344, 1273114, 1276664, 1279258, 1286824, 1280135, 1280342, 1284861, 1287556, 1057753, 1196679, 1288489, 1292983, 1298164, 1298521, 1293189, 1296949, 1308378, 1311136, 1314419, 1314982, 1318248, 1312411, 1312589, 1312845, 1312933, 1313969, 1338762, 1339474, 1349878, 1297154, 644588, 1351237, 1354040, 1354375, 1362386, 1283234, 1370578, 1306592, 1360889, 1362753, 1408124, 1407949, 1407849, 1343986, 1408028, 1441370, 1443416, 1389255, 1427349, 1450527, 1424739, 869836, 1459902, 1392993, 1426457, 1542824, 1533474, 1561467, 1563534, 1566991, 1587241, 1416119, 1596270, 1601580, 1525751, 1582146, 1558167, 1420943, 1466487, 1642575, 1648013, 1646094, 1393097, 1643446, 1545219, 1583484, 1613092, 1627981, 1633374, 1633277, 1633251, 1585138, 1624034, 1616785, 1625916, 1667582, 1666996, 1675013, 1675316, 1531316, 1665413, 1681719, 1699880, 1688696, 623770, 1727243, 1531329, 1683915, 1689533, 1738601, 3756146, 7742371, 7781585, 7781591, 7791374, 7703556, 7795263, 7712465, 7712471, 7716829, 7713613, 7799245, 4675294, 7801165, 6255760, 7710672, 7702365 }
 
 local ENUM_ITEMS = {
 	SMALL_BOX = 		1,
@@ -1213,17 +1217,21 @@ leaderboard.addPlayer = function(player)
 end
 
 leaderboard.prepare = function(leaders)
-	
+
 	local temp, res = {}, {}
-    
-	for name, leader in next, leaders do temp[#temp + 1] = leader end
-    
+
+	for name, leader in next, leaders do
+		if not banned[name] then
+			temp[#temp + 1] = leader
+		end
+	end
+
 	table.sort(temp, function(p1, p2)
 		return p1.score > p2.score
     end)
-    
+
     for i = 1, 50 do res[i] = temp[i] end
-    
+
 	return leaderboard.dumpLeaderboard(res), res
 
 end
@@ -1283,7 +1291,7 @@ leaderboard.displayLeaderboard = function(mode, page, target, keyPressed)
 		if counter >= 10 then break end
 	end
 
-	Panel.panels[350]:update(rankTxt, target)	
+	Panel.panels[350]:update(rankTxt, target)
 	Panel.panels[351]:update(nameTxt, target)
 	Panel.panels[352]:update(roundsTxt, target)
 	Panel.panels[353]:update(deathsTxt, target)
@@ -1457,7 +1465,7 @@ shop.packs = {
 		coverAdj = { x = 0, y = 0 },
 		description = "Ho ho ho, Merry Christmas!!",
 		author = "Thetiger56#6961",
-		price = 200,
+		price = 400,
 
 		description_locales = {
 			en = "Ho ho ho, Merry Christmas!!"
@@ -1819,7 +1827,9 @@ end
 setNameColor = function(name)
     local player = Player.players[name]
     if player.highestRole == "default" then return end
-    tfm.exec.setNameColor(name, roles.colors[player.highestRole])
+    local color = roles.colors[player.highestRole]
+    if not color then return end
+    tfm.exec.setNameColor(name, color)
 end
 
 createPrettyUI = function(id, x, y, w, h, fixed, closeButton)

@@ -160,7 +160,7 @@ shop.packs = {
 		coverAdj = { x = 0, y = 0 },
 		description = "Ho ho ho, Merry Christmas!!",
 		author = "Thetiger56#6961",
-		price = 200,
+		price = 400,
 
 		description_locales = {
 			en = "Ho ho ho, Merry Christmas!!"

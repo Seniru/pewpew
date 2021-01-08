@@ -50,17 +50,21 @@ leaderboard.addPlayer = function(player)
 end
 
 leaderboard.prepare = function(leaders)
-	
+
 	local temp, res = {}, {}
-    
-	for name, leader in next, leaders do temp[#temp + 1] = leader end
-    
+
+	for name, leader in next, leaders do
+		if not banned[name] then
+			temp[#temp + 1] = leader
+		end
+	end
+
 	table.sort(temp, function(p1, p2)
 		return p1.score > p2.score
     end)
-    
+
     for i = 1, 50 do res[i] = temp[i] end
-    
+
 	return leaderboard.dumpLeaderboard(res), res
 
 end
@@ -120,7 +124,7 @@ leaderboard.displayLeaderboard = function(mode, page, target, keyPressed)
 		if counter >= 10 then break end
 	end
 
-	Panel.panels[350]:update(rankTxt, target)	
+	Panel.panels[350]:update(rankTxt, target)
 	Panel.panels[351]:update(nameTxt, target)
 	Panel.panels[352]:update(roundsTxt, target)
 	Panel.panels[353]:update(deathsTxt, target)
