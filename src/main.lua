@@ -78,7 +78,7 @@ end
 
 setNameColor = function(name)
     local player = Player.players[name]
-    if player.highestRole == "default" then return end
+    if (not player) or player.highestRole == "default" then return end
     local color = roles.colors[player.highestRole]
     if not color then return end
     tfm.exec.setNameColor(name, color)

@@ -391,11 +391,15 @@ local a={}a.VERSION='1.5'a.__index=a;function a.new(b,c,d)local self=setmetatabl
 
 --==[[ init ]]==--
 
-local VERSION = "v2.3.0.3"
+local VERSION = "v2.3.0.4"
 local CHANGELOG =
 [[
 
 <p align='center'><font size='20'><b><V>CHANGELOG</V></b></font> <BV><a href='event:log'>[View all]</a></BV></p><font size='12' face='Lucide Console'>
+
+    <font size='15' face='Lucida Console'><b><BV>v2.3.0.4</BV></b></font> <i>(1/20/2021)</i>
+        • Temporary fix for room crashing when changing name color (role system)
+    
 
     <font size='15' face='Lucida Console'><b><BV>v2.3.0.3</BV></b></font> <i>(1/19/2021)</i>
         • Added new maps
@@ -430,10 +434,6 @@ local CHANGELOG =
 
     <font size='15' face='Lucida Console'><b><BV>v2.2.2.3</BV></b></font> <i>(11/27/2020)</i>
         • Added new maps
-
-
-    <font size='15' face='Lucida Console'><b><BV>v2.2.2.2</BV></b></font> <i>(11/15/2020)</i>
-        • Halloween sale ends!
 
 
 
@@ -1828,7 +1828,7 @@ end
 
 setNameColor = function(name)
     local player = Player.players[name]
-    if player.highestRole == "default" then return end
+    if (not player) or player.highestRole == "default" then return end
     local color = roles.colors[player.highestRole]
     if not color then return end
     tfm.exec.setNameColor(name, color)
