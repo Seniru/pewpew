@@ -391,50 +391,47 @@ local a={}a.VERSION='1.5'a.__index=a;function a.new(b,c,d)local self=setmetatabl
 
 --==[[ init ]]==--
 
-local VERSION = "v2.3.0.4"
+local VERSION = "v2.3.0.5"
 local CHANGELOG =
 [[
 
-<p align='center'><font size='20'><b><V>CHANGELOG</V></b></font> <BV><a href='event:log'>[View all]</a></BV></p><font size='12' face='Lucide Console'>
+<p align='center'><font size='20'><b><V>CHANGELOG</V></b></font> <BV><a href='event:log'>[View all]</a></BV></p><font size='12' face='Lucida Console'>
 
-    <font size='15' face='Lucida Console'><b><BV>v2.3.0.4</BV></b></font> <i>(1/20/2021)</i>
-        • Temporary fix for room crashing when changing name color (role system)
+    
+<font size='15' face='Lucida Console'><b><BV>v2.3.0.5</BV></b></font> <i>(2/20/2021)</i>
+    • Fixed and updated TR translations (Thanks to Star#6725)
+    • Fixed the fonts in the changelog menu
+
+
+<font size='15' face='Lucida Console'><b><BV>v2.3.0.4</BV></b></font> <i>(1/20/2021)</i>
+    • Temporary fix for room crashing when changing name color (role system)
+
+
+<font size='15' face='Lucida Console'><b><BV>v2.3.0.3</BV></b></font> <i>(1/19/2021)</i>
+    • Added new maps
+
+
+<font size='15' face='Lucida Console'><b><BV>v2.3.0.2</BV></b></font> <i>(1/08/2021)</i>
+    • End of christmas sale!
+    • Added new maps
+    • Minor fixes with the new role color system
+    • Quick patch to get rid from farmers and hackers (will be a better system in future)
+
+
+<font size='15' face='Lucida Console'><b><BV>v2.3.0.1</BV></b></font> <i>(11/29/2020)</i>
+    • Added new maps
+
+
+<font size='15' face='Lucida Console'><b><BV>v2.3.0.0</BV></b></font> <i>(12/27/2020)</i>
+    • Added a new role system. This is meant to give more recognition to the players who have contributed to pewpew. This is done through adding a name color to those players according to their roles (highest role). There will be more releases related to this role system soon!
+
+
+<font size='15' face='Lucida Console'><b><BV>v2.2.4.1</BV></b></font> <i>(12/14/2020)</i>
+    • Added christmas 2020 pack (Thanks for Thetiger#6961), get it before the sale ends :P
     
 
-    <font size='15' face='Lucida Console'><b><BV>v2.3.0.3</BV></b></font> <i>(1/19/2021)</i>
-        • Added new maps
-
-
-    <font size='15' face='Lucida Console'><b><BV>v2.3.0.2</BV></b></font> <i>(1/08/2021)</i>
-        • End of christmas sale!
-        • Added new maps
-        • Minor fixes with the new role color system
-        • Quick patch to get rid from farmers and hackers (will be a better system in future)
-
-
-    <font size='15' face='Lucida Console'><b><BV>v2.3.0.1</BV></b></font> <i>(11/29/2020)</i>
-        • Added new maps
-
-
-    <font size='15' face='Lucida Console'><b><BV>v2.3.0.0</BV></b></font> <i>(12/27/2020)</i>
-        • Added a new role system. This is meant to give more recognition to the players who have contributed to pewpew. This is done through adding a name color to those players according to their roles (highest role). There will be more releases related to this role system soon!
-
-
-    <font size='15' face='Lucida Console'><b><BV>v2.2.4.1</BV></b></font> <i>(12/14/2020)</i>
-        • Added christmas 2020 pack (Thanks for Thetiger#6961), get it before the sale ends :P
-
-
-    <font size='15' face='Lucida Console'><b><BV>v2.2.4.0</BV></b></font> <i>(12/10/2020)</i>
-        • Added important links (github, discord and map submission thread) to the help menu
-
-
-    <font size='15' face='Lucida Console'><b><BV>v2.2.3.0</BV></b></font> <i>(12/09/2020)</i>
-        • Added leaderboard position (global) to the profile
-
-
-    <font size='15' face='Lucida Console'><b><BV>v2.2.2.3</BV></b></font> <i>(11/27/2020)</i>
-        • Added new maps
-
+<font size='15' face='Lucida Console'><b><BV>v2.2.4.0</BV></b></font> <i>(12/10/2020)</i>
+    • Added important links (github, discord and map submission thread) to the help menu
 
 
 </font>
@@ -698,7 +695,7 @@ translations["en"] = {
     GIFT_RECV = "<N>You have been rewarded with <ROSE><b>${gift}</b></ROSE> by <ROSE><b>${admin}</b></ROSE>",
     COMMANDS =  "\n\n<N2>[ <b>H</b> ]</N2> <N><ROSE>!help</ROSE> (displays this help menu)</N><br><N2>[ <b>P</b> ]</N2> <N><ROSE>!profile <i>[player]</i></ROSE> (displays the profile of the player)</N><br></N><N2>[ <b>O</b> ]</N2> <N><ROSE>!shop</ROSE> (displays the shop)</N><br><N2>[ <b>L</b> ]</N2> <N>(displays the leaderboard)</N><br><br><N><ROSE>!changelog</ROSE> (displays the changelog)</N><br><br>",
     CMD_TITLE = "<font size='25' face='Comic Sans'><b><J>Commands</J></b></font>",
-    CREDITS =   "\n\nArtist - <b><BV>Lightymouse</BV><G>#0421</G></b>\nTranslators - <b><BV>Overforyou</BV><G>#9290</G>, <BV>Nuttysquirrel</BV><G>#0626</G></b>\n\n\nAnd thank you for playing pewpew!",
+    CREDITS =   "\n\nArtist - <b><BV>Lightymouse</BV><G>#0421</G></b>\nTranslators - <b><BV>Overforyou</BV><G>#9290</G>, <BV>Nuttysquirrel</BV><G>#0626</G>, <BV>Star</BV><G>#6725</G></b>\n\n\nAnd thank you for playing pewpew!",
     CREDS_TITLE = "<font size='25' face='Comic Sans'><b><R>Credits</R></b></font>",
     OBJECTIVE = "<b>Survive and kill others to win</b>",
     HELP_GOTIT = "<font size='15'><J><b><a href='event:close'>Got it!</a></b></J></font>",
@@ -738,31 +735,31 @@ translations["tr"] = {
 	LOST_ALL =      "<ROSE>Bütün canınızı kaybettiniz!",        
 	SD =            "<VP>Ani ölüm! Artık herkesin <N>1<VP> canı kald?",        
 	WELCOME =       "<VP>pewpew odasına hoşgeldiniz, eşyaları fırlatmak için <N>eğilin <VP>ya da <N>spacebar <VP>'a basın!",        
-	SOLE =          "<ROSE>Yaşayan kişi ${player}!"
-	SURVIVORS = "<ROSE>${winners} ve ${winner} bu turda hayatta kaldı!",
-    SELF_RANK = "<p align='center'>Your rank: ${rank}</p>",
-    ROUNDS  =   "<font face='Lucida console'><N2>Oynanılan turlar</N2></font>",
-    DEATHS =    "<font face='Lucida console'><N2>Ölümler</N2></font>",
-    SURVIVED =  "<font face='Lucida console'><N2>Rounds survived</N2></f  ont>",
-    WON =       "<font face='Lucida console'><N2>Kazanılan turlar</N2></font>",
-    LBOARD_POS = "<b><font face='Lucida console' color='#e3b134'>Genel Skor Tablosu: ${pos}</font></b>",
-    EQUIPPED =  "Donanımlı",
-    EQUIP =     "Ekipman",
-    BUY =       "Satın Al",
-    POINTS =    "<font face='Lucida console' size='12'>   <b>Puanlar:</b> <V>${points}</V></font>",
-    PACK_DESC = "\n\n<font face='Lucida console' size='12' color='#cccccc'><i>“ ${desc} ”</i></font>\n<p align='right'><font size='10'>- ${author}</font></p>",
-    GIFT_RECV = "<N>Ödülendirildin seni ödülendiren kişi <ROSE><b>${gift}</b></ROSE> by <ROSE><b>${admin}</b></ROSE>",
-    COMMANDS =  "\n\n<N2>[ <b>H</b> ]</N2> <N><ROSE>!help</ROSE> (yardım menüsünü açar)</N><br><N2>[ <b>P</b> ]</N2> <N><ROSE>!profile <i>[oyuncu]</i></ROSE> (istediğiniz kişinin profiline bakarsınız)</N><br></N><N2>[ <b>O</b> ]</N2> <N><ROSE>!shop</ROSE> (Marketi açar)</N><br><N2>[ <b>L</b> ]</N2> <N>(Skor Tablosunu açar)</N><br><br><N><ROSE>!changelog</ROSE> (displays the changelog)</N><br><br>",
-    CMD_TITLE = "<font size='25' face='Comic Sans'><b><J>Komutlar</J></b></font>",
-    CREDITS =   "\n\nÇizimler - <b><BV>Lightymouse</BV><G>#0421</G></b>\nÇevirmenler - <b><BV>Overforyou</BV><G>#9290</G>, <BV>Nuttysquirrel</BV><G>#0626</G></b>\n\n\nVe pewpew oynadığınız için teşekkür ederiz!",
-    CREDS_TITLE = "<font size='25' face='Comic Sans'><b><R>Krediler</R></b></font>",
-    OBJECTIVE = "<b>Hayatta kal ve kazanmak için başkalarını öldür</b>",
-    HELP_GOTIT = "<font size='15'><J><b><a href='event:close'>Anladım!</a></b></J></font>",
-    HELP_GITHUB = "<N>Bu modüle katkıda bulunmak ister misiniz? Güzel! Link:</N> <VI><b><i>https://github.com/Seniru/pewpew</i></b></VI>",
-    HELP_DISCORD = "<N>Discord:</N> <VI><b><i>https://discord.gg/vaqgrgp</i></b></VI>",
-    HELP_MAP = "<N>Haritalarınızı pewpew'e eklemek ister misiniz? Link:</N> <VI><b><i>https://atelier801.com/topic?f=6&t=892550</i></b></VI>",
-    NEW_ROLE = "<N><ROSE><b>${player}</b></ROSE> artık bir <ROSE><b>${role}</b></ROSE>",
-    KICK_ROLE = "<N><ROSE><b>${player}</b></ROSE> artık bir <ROSE><b>${role}</b></ROSE> değil! ;c",
+	SOLE =          "<ROSE>Yaşayan kişi ${player}!",
+	SURVIVORS =     "<ROSE>${winners} ve ${winner} bu turda hayatta kaldı!",
+    SELF_RANK =     "<p align='center'>Your rank: ${rank}</p>",
+    ROUNDS  =       "<font face='Lucida console'><N2>Oynanılan turlar</N2></font>",
+    DEATHS =        "<font face='Lucida console'><N2>Ölümler</N2></font>",
+    SURVIVED =      "<font face='Lucida console'><N2>Rounds survived</N2></f  ont>",
+    WON =           "<font face='Lucida console'><N2>Kazanılan turlar</N2></font>",
+    LBOARD_POS =     "<b><font face='Lucida console' color='#e3b134'>Genel Skor Tablosu: ${pos}</font></b>",
+    EQUIPPED =      "Donanımlı",
+    EQUIP =         "Ekipman",
+    BUY =           "Satın Al",
+    POINTS =        "<font face='Lucida console' size='12'>   <b>Puanlar:</b> <V>${points}</V></font>",
+    PACK_DESC =     "\n\n<font face='Lucida console' size='12' color='#cccccc'><i>“ ${desc} ”</i></font>\n<p align='right'><font size='10'>- ${author}</font></p>",
+    GIFT_RECV =     "<N>Ödülendirildin seni ödülendiren kişi <ROSE><b>${gift}</b></ROSE> by <ROSE><b>${admin}</b></ROSE>",
+    COMMANDS =      "\n\n<N2>[ <b>H</b> ]</N2> <N><ROSE>!help</ROSE> (yardım menüsünü açar)</N><br><N2>[ <b>P</b> ]</N2> <N><ROSE>!profile <i>[oyuncu]</i></ROSE> (istediğiniz kişinin profiline bakarsınız)</N><br></N><N2>[ <b>O</b> ]</N2> <N><ROSE>!shop</ROSE> (Marketi açar)</N><br><N2>[ <b>L</b> ]</N2> <N>(Skor Tablosunu açar)</N><br><br><N><ROSE>!changelog</ROSE> (displays the changelog)</N><br><br>",
+    CMD_TITLE =     "<font size='25' face='Comic Sans'><b><J>Komutlar</J></b></font>",
+    CREDITS =       "\n\nÇizimler - <b><BV>Lightymouse</BV><G>#0421</G></b>\nÇevirmenler - <b><BV>Overforyou</BV><G>#9290</G>, <BV>Nuttysquirrel</BV><G>#0626</G>, <BV>Star</BV><G>#6725</G></b>\n\n\nVe pewpew oynadığınız için teşekkür ederiz!",
+    CREDS_TITLE =   "<font size='25' face='Comic Sans'><b><R>Krediler</R></b></font>",
+    OBJECTIVE =     "<b>Hayatta kal ve kazanmak için başkalarını öldür</b>",
+    HELP_GOTIT =    "<font size='15'><J><b><a href='event:close'>Anladım!</a></b></J></font>",
+    HELP_GITHUB =   "<N>Bu modüle katkıda bulunmak ister misiniz? Güzel! Link:</N> <VI><b><i>https://github.com/Seniru/pewpew</i></b></VI>",
+    HELP_DISCORD =  "<N>Discord:</N> <VI><b><i>https://discord.gg/vaqgrgp</i></b></VI>",
+    HELP_MAP =      "<N>Haritalarınızı pewpew'e eklemek ister misiniz? Link:</N> <VI><b><i>https://atelier801.com/topic?f=6&t=892550</i></b></VI>",
+    NEW_ROLE =      "<N><ROSE><b>${player}</b></ROSE> artık bir <ROSE><b>${role}</b></ROSE>",
+    KICK_ROLE =     "<N><ROSE><b>${player}</b></ROSE> artık bir <ROSE><b>${role}</b></ROSE> değil! ;c"
 }
 
 translations["ph"] = {
@@ -2035,7 +2032,7 @@ do
 
     changelogWindow = createPrettyUI(4, 70, 50, 670, 330, true, true)
         :addPanel(
-            Panel(450, CHANGELOG, 70, 50, 670, 330, nil, nil, 0, true)
+            Panel(450, CHANGELOG, 100, 50, 630, 330, nil, nil, 0, true)
                 :setActionListener(function(id, name, event)
                     tfm.exec.chatMessage("<BV>• <u><i>https://github.com/Seniru/pewpew/releases</i></u></BV>", name)
                 end)
