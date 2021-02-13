@@ -23,6 +23,7 @@ shop.packs = {
 		price = 0,
 
 		description_locales = {
+			en = "It's all random 0m0"
 			fr = "C'est que du hasard 0m0"
 		},
 
@@ -46,6 +47,7 @@ shop.packs = {
 		price = 0,
 
 		description_locales = {
+			en = "Default item pack"
 			fr = "Pack de texture par défaut."
 		},
 
@@ -69,6 +71,7 @@ shop.packs = {
 		price = 100,
 
 		description_locales = {
+			en = "Back in old days..."
 			fr = "Comme au bon vieux temps..."
 		},
 
@@ -92,6 +95,7 @@ shop.packs = {
 		price = 300,
 
 		description_locales = {
+			en = "Meow!"
 			fr = "Miaou !"
 		},
 
@@ -115,7 +119,8 @@ shop.packs = {
 		price = 300,
 
 		description_locales = {
-			fr = "Seulement pour le plus fort des rois !"
+			en = "Only for the strongest kings!"
+			fr = "Seulement pour les rois les plus fort !"
 		},
 
 		skins = {
@@ -139,6 +144,7 @@ shop.packs = {
 		price = 400,
 
 		description_locales = {
+			en = "Trick or Treat!?"
 			fr = "Un bonbon ou un sort !?"
 		},
 
@@ -163,6 +169,7 @@ shop.packs = {
 		price = 400,
 
 		description_locales = {
+			en = "Ho ho ho, Merry Christmas!!"
 			fr = "Ho ho Ho, Joyeux Noël !!"
 		},
 
