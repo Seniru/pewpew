@@ -391,14 +391,18 @@ local a={}a.VERSION='1.5'a.__index=a;function a.new(b,c,d)local self=setmetatabl
 
 --==[[ init ]]==--
 
-local VERSION = "v2.3.0.5"
+local VERSION = "v2.3.0.6"
 local CHANGELOG =
 [[
 
 <p align='center'><font size='20'><b><V>CHANGELOG</V></b></font> <BV><a href='event:log'>[View all]</a></BV></p><font size='12' face='Lucida Console'>
 
+<font size='15' face='Lucida Console'><b><BV>v2.3.0.6</BV></b></font> <i>(2/19/2021)</i>
+    • Fixed and updated FR translations (Thanks to Jaker#9310)
+    • Added HU translations
+
     
-<font size='15' face='Lucida Console'><b><BV>v2.3.0.5</BV></b></font> <i>(2/20/2021)</i>
+<font size='15' face='Lucida Console'><b><BV>v2.3.0.5</BV></b></font> <i>(1/20/2021)</i>
     • Fixed and updated TR translations (Thanks to Star#6725)
     • Fixed the fonts in the changelog menu
 
@@ -429,10 +433,6 @@ local CHANGELOG =
 <font size='15' face='Lucida Console'><b><BV>v2.2.4.1</BV></b></font> <i>(12/14/2020)</i>
     • Added christmas 2020 pack (Thanks for Thetiger#6961), get it before the sale ends :P
     
-
-<font size='15' face='Lucida Console'><b><BV>v2.2.4.0</BV></b></font> <i>(12/10/2020)</i>
-    • Added important links (github, discord and map submission thread) to the help menu
-
 
 </font>
 ]]
@@ -695,7 +695,7 @@ translations["en"] = {
     GIFT_RECV = "<N>You have been rewarded with <ROSE><b>${gift}</b></ROSE> by <ROSE><b>${admin}</b></ROSE>",
     COMMANDS =  "\n\n<N2>[ <b>H</b> ]</N2> <N><ROSE>!help</ROSE> (displays this help menu)</N><br><N2>[ <b>P</b> ]</N2> <N><ROSE>!profile <i>[player]</i></ROSE> (displays the profile of the player)</N><br></N><N2>[ <b>O</b> ]</N2> <N><ROSE>!shop</ROSE> (displays the shop)</N><br><N2>[ <b>L</b> ]</N2> <N>(displays the leaderboard)</N><br><br><N><ROSE>!changelog</ROSE> (displays the changelog)</N><br><br>",
     CMD_TITLE = "<font size='25' face='Comic Sans'><b><J>Commands</J></b></font>",
-    CREDITS =   "\n\nArtist - <b><BV>Lightymouse</BV><G>#0421</G></b>\nTranslators - <b><BV>Overforyou</BV><G>#9290</G>, <BV>Nuttysquirrel</BV><G>#0626</G>, <BV>Star</BV><G>#6725</G></b>\n\n\nAnd thank you for playing pewpew!",
+    CREDITS =   "\n\nArtist - <b><BV>Lightymouse</BV><G>#0421</G></b>\nTranslators - <b><BV>Overforyou</BV><G>#9290</G>, <BV>Nuttysquirrel</BV><G>#0626</G>, <BV>Star</BV><G>#6725</G>, <BV>Jaker</BV><G>#9310</G></b>\n\n\nAnd thank you for playing pewpew!",
     CREDS_TITLE = "<font size='25' face='Comic Sans'><b><R>Credits</R></b></font>",
     OBJECTIVE = "<b>Survive and kill others to win</b>",
     HELP_GOTIT = "<font size='15'><J><b><a href='event:close'>Got it!</a></b></J></font>",
@@ -775,7 +775,7 @@ translations["tr"] = {
     GIFT_RECV =     "<N>Ödülendirildin seni ödülendiren kişi <ROSE><b>${gift}</b></ROSE> by <ROSE><b>${admin}</b></ROSE>",
     COMMANDS =      "\n\n<N2>[ <b>H</b> ]</N2> <N><ROSE>!help</ROSE> (yardım menüsünü açar)</N><br><N2>[ <b>P</b> ]</N2> <N><ROSE>!profile <i>[oyuncu]</i></ROSE> (istediğiniz kişinin profiline bakarsınız)</N><br></N><N2>[ <b>O</b> ]</N2> <N><ROSE>!shop</ROSE> (Marketi açar)</N><br><N2>[ <b>L</b> ]</N2> <N>(Skor Tablosunu açar)</N><br><br><N><ROSE>!changelog</ROSE> (displays the changelog)</N><br><br>",
     CMD_TITLE =     "<font size='25' face='Comic Sans'><b><J>Komutlar</J></b></font>",
-    CREDITS =       "\n\nÇizimler - <b><BV>Lightymouse</BV><G>#0421</G></b>\nÇevirmenler - <b><BV>Overforyou</BV><G>#9290</G>, <BV>Nuttysquirrel</BV><G>#0626</G>, <BV>Star</BV><G>#6725</G></b>\n\n\nVe pewpew oynadığınız için teşekkür ederiz!",
+    CREDITS =       "\n\nÇizimler - <b><BV>Lightymouse</BV><G>#0421</G></b>\nÇevirmenler - <b><BV>Overforyou</BV><G>#9290</G>, <BV>Nuttysquirrel</BV><G>#0626</G>, <BV>Star</BV><G>#6725</G>, <BV>Jaker</BV><G>#9310</G></b>\n\n\nVe pewpew oynadığınız için teşekkür ederiz!",
     CREDS_TITLE =   "<font size='25' face='Comic Sans'><b><R>Krediler</R></b></font>",
     OBJECTIVE =     "<b>Hayatta kal ve kazanmak için başkalarını öldür</b>",
     HELP_GOTIT =    "<font size='15'><J><b><a href='event:close'>Anladım!</a></b></J></font>",
@@ -828,6 +828,37 @@ translations["ru"] = {
     WON =       "<font face='Lucida console'><N2>Выиграл</N2></font>"
 }
 
+translations["hu"] = {
+    LIVES_LEFT = "<ROSE><N>${lives} <ROSE>életed maradt. <VI>Újraéledés 3...",    
+    LOST_ALL =    "<ROSE>Elvesztetted az összes életed!",    
+    SD =        "<VP>Hirtelen halál! Mindenkinek <N>1 <VP>élete maradt.",    
+    WELCOME =    "<VP>Üdvözöl a pewpew! Használd a <N>lefele <VP>vagy a <N>space <VP>gombot, hogy tárgyakat lőj!",        
+    SOLE =        "<ROSE>${player} az egyetlen túlélő!",
+    SURVIVORS = "<ROSE>${winners} és ${winner} túlélte ezt a kört!",
+    SELF_RANK = "<p align='center'>Rangod: ${rank}</p>",
+    ROUNDS  =   "<font face='Lucida console'><N2>Játszott körök</N2></font>",
+    DEATHS =    "<font face='Lucida console'><N2>Halálok</N2></font>",
+    SURVIVED =  "<font face='Lucida console'><N2>Túlélt körök</N2></font>",
+    WON =       "<font face='Lucida console'><N2>Megnyert körök</N2></font>",
+    LBOARD_POS = "<b><font face='Lucida console' color='#e3b134'>Globális ranglista: ${pos}</font></b>",
+    EQUIPPED =  "Használva",
+    EQUIP =     "Használ",
+    BUY =       "Vásárlás",
+    POINTS =    "<font face='Lucida console' size='12'>   <b>Pont:</b> <V>${points}</V></font>",
+    PACK_DESC = "\n\n<font face='Lucida console' size='12' color='#cccccc'><i>“ ${desc} ”</i></font>\n<p align='right'><font size='10'>- ${author}</font></p>",
+    GIFT_RECV = "<N><ROSE><b>${admin}</b></ROSE> megjutalmazott téged ezzel: <ROSE><b>${gift}</b></ROSE>",
+    COMMANDS =  "\n\n<N2>[ <b>H</b> ]</N2> <N><ROSE>!help</ROSE> (megnyitja a segítség menüt)</N><br><N2>[ <b>P</b> ]</N2> <N><ROSE>!profile <i>[játékosNév]</i></ROSE> (megnyitja a játékosNév profilját)</N><br></N><N2>[ <b>O</b> ]</N2> <N><ROSE>!shop</ROSE> (megnyitja a boltot)</N><br><N2>[ <b>L</b> ]</N2> <N>(megnyitja a ranglistát)</N><br><br><N><ROSE>!changelog</ROSE> (megnyitja a változásokat)</N><br><br>",
+    CMD_TITLE = "<font size='25' face='Comic Sans'><b><J>Parancsok</J></b></font>",
+    CREDITS =   "\n\nMűvész - <b><BV>Lightymouse</BV><G>#0421</G></b>\nFordítók - <b><BV>Overforyou</BV><G>#9290</G>, <BV>Nuttysquirrel</BV><G>#0626</G>, <BV>Star</BV><G>#6725</G>, <BV>Jaker</BV><G>#9310</G></b>\n\n\nÉs köszönöm, hogy játszol a pewpew -el!",
+    CREDS_TITLE = "<font size='25' face='Comic Sans'><b><R>Kreditek</R></b></font>",
+    OBJECTIVE = "<b>Éld túl és ölj meg másokat a győzelemért</b>",
+    HELP_GOTIT = "<font size='15'><J><b><a href='event:close'>Értem!</a></b></J></font>",
+    HELP_GITHUB = "<N>Szeretnél hozzájárulni a modulhoz? Nagyszerű! Csekkold:</N> <VI><b><i>https://github.com/Seniru/pewpew</i></b></VI>",
+    HELP_DISCORD = "<N>Discord:</N> <VI><b><i>https://discord.gg/vaqgrgp</i></b></VI>",
+    HELP_MAP = "<N>Szeretnél benyújtani pályákat? Csekkold:</N> <VI><b><i>https://atelier801.com/topic?f=6&t=892550</i></b></VI>",
+    NEW_ROLE = "<N><ROSE><b>${player}</b></ROSE> most már egy <ROSE><b>${role}</b></ROSE>",
+    KICK_ROLE = "<N><ROSE><b>${player}</b></ROSE> nem <ROSE><b>${role}</b></ROSE> többé! ;c",
+}
 local translate = function(term, lang, page, kwargs)
     local translation
     if translations[lang] then 

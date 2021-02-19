@@ -1,11 +1,15 @@
-local VERSION = "v2.3.0.5"
+local VERSION = "v2.3.0.6"
 local CHANGELOG =
 [[
 
 <p align='center'><font size='20'><b><V>CHANGELOG</V></b></font> <BV><a href='event:log'>[View all]</a></BV></p><font size='12' face='Lucida Console'>
 
+<font size='15' face='Lucida Console'><b><BV>v2.3.0.6</BV></b></font> <i>(2/19/2021)</i>
+    • Fixed and updated FR translations (Thanks to Jaker#9310)
+    • Added HU translations
+
     
-<font size='15' face='Lucida Console'><b><BV>v2.3.0.5</BV></b></font> <i>(2/20/2021)</i>
+<font size='15' face='Lucida Console'><b><BV>v2.3.0.5</BV></b></font> <i>(1/20/2021)</i>
     • Fixed and updated TR translations (Thanks to Star#6725)
     • Fixed the fonts in the changelog menu
 
@@ -36,10 +40,6 @@ local CHANGELOG =
 <font size='15' face='Lucida Console'><b><BV>v2.2.4.1</BV></b></font> <i>(12/14/2020)</i>
     • Added christmas 2020 pack (Thanks for Thetiger#6961), get it before the sale ends :P
     
-
-<font size='15' face='Lucida Console'><b><BV>v2.2.4.0</BV></b></font> <i>(12/10/2020)</i>
-    • Added important links (github, discord and map submission thread) to the help menu
-
 
 </font>
 ]]
