@@ -3,6 +3,8 @@ const { Webhook, MessageBuilder } = require('discord-webhook-node');
 
 const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET || process.argv[1]
 
+console.log("test", WEBHOOK_SECRET, process.env.WEBHOOK_SECRET, process.argv)
+
 const hook = new Webhook(`https://discord.com/api/webhooks/${WEBHOOK_SECRET}`);
 
 let main = async () => {
