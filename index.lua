@@ -859,6 +859,7 @@ translations["hu"] = {
     NEW_ROLE = "<N><ROSE><b>${player}</b></ROSE> most már egy <ROSE><b>${role}</b></ROSE>",
     KICK_ROLE = "<N><ROSE><b>${player}</b></ROSE> nem <ROSE><b>${role}</b></ROSE> többé! ;c",
 }
+
 local translate = function(term, lang, page, kwargs)
     local translation
     if translations[lang] then 
