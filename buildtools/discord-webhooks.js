@@ -1,13 +1,13 @@
 const fetch = require("node-fetch")
 const { Webhook, MessageBuilder } = require('discord-webhook-node');
 
-const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET || process.argv[0]
+const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET || process.argv[1]
 
 console.log(WEBHOOK_SECRET)
 
 console.log("test")
 console.log("test1", process.env.WEBHOOK_SECRET)
-console.log("test2", process.argv[0])
+console.log("test2", process.argv, process.argv[1])
 
 const hook = new Webhook(`https://discord.com/api/webhooks/${WEBHOOK_SECRET}`);
 
