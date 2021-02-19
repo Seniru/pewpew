@@ -19,5 +19,4 @@ jobs:
       - name: Post webhooks
         run: |
           npm i
-          ls
-          node ./buildtools/discord-webhooks.js
+          node ./buildtools/discord-webhooks.js ${WEBHOOK_SECRET}
