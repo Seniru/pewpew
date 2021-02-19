@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "discord-webhook-node": "^1.1.8",
     "luamin": "^1.0.4",
+    "node-fetch": "^2.6.1",
     "vkbeautify": "^0.99.3"
   },
   "devDependencies": {},
