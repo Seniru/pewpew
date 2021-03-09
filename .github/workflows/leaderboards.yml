@@ -1,0 +1,22 @@
+name: Daily leaderboard
+
+on:
+  schedule:
+  - cron: "0 0"
+  
+  workflow_dispatch:
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      # Runs a set of commands using the runners shell
+      - name: Post leaderboard
+        run: |
+          pip install -r extras/requirements.txt
+          export LEADERBOARD_WEBHOOK_ID=${{ secrets.LEADERBOARD_WEBHOOK_ID }}
+          export PASSWORD=${{ secrets.PASSWORD }}
+          python extras/post-leaderboard.py
