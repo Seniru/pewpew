@@ -17,6 +17,6 @@ jobs:
       - name: Post leaderboard
         run: |
           pip install -r extras/requirements.txt
-          export LEADERBOARD_WEBHOOK_ID=${{ secrets.LEADERBOARD_WEBHOOK_ID }}
-          export PASSWORD=${{ secrets.PASSWORD }}
+          export LEADERBOARD_WEBHOOK_ID="${{ secrets.LEADERBOARD_WEBHOOK_ID }}"
+          export PASSWORD="${{ secrets.PASSWORD }}"
           python extras/post-leaderboard.py
