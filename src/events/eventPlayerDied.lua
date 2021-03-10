@@ -1,5 +1,5 @@
 function eventPlayerDied(name)
-    local player = Player.players[name]
+	local player = Player.players[name]
 	if not player then return end
 	if not newRoundStarted then
 		tfm.exec.respawnPlayer(name)

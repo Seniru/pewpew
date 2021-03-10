@@ -1,6 +1,6 @@
 local VERSION = "v2.3.0.6"
 local CHANGELOG =
-[[
+	[[
 
 <p align='center'><font size='20'><b><V>CHANGELOG</V></b></font> <BV><a href='event:log'>[View all]</a></BV></p><font size='12' face='Lucida Console'>
 

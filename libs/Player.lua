@@ -7,19 +7,19 @@ Player.aliveCount = 0
 
 Player.__index = Player
 Player.__tostring = function(self)
-    return table.tostring(self)
+	return table.tostring(self)
 end
 
 setmetatable(Player, {
-    __call = function (cls, name)
-        return cls.new(name)
-    end,
+	__call = function (cls, name)
+		return cls.new(name)
+	end,
 })
 
 function Player.new(name)
 	local self = setmetatable({}, Player)
 
-    self.name = name
+	self.name = name
 	self.alive = false
 	self.lives = 0
 	self.inCooldown = true
@@ -37,23 +37,23 @@ function Player.new(name)
 	self.roles = {}
 
 	self.tempEquipped = nil
-    self.openedWindow = nil
+	self.openedWindow = nil
 
-    for key, code in next, keys do system.bindKeyboard(name, code, true, true) end
+	for key, code in next, keys do system.bindKeyboard(name, code, true, true) end
 
 	Player.players[name] = self
 	Player.playerCount = Player.playerCount + 1
 
-    return self
+	return self
 end
 
 function Player:refresh()
 	self.alive = true
 	self.inCooldown = false
-    self:setLives(3)
-    if not Player.alive[self.name] then
-	    Player.alive[self.name] = self
-        Player.aliveCount = Player.aliveCount + 1
+	self:setLives(3)
+	if not Player.alive[self.name] then
+		Player.alive[self.name] = self
+		Player.aliveCount = Player.aliveCount + 1
 	end
 	setNameColor(self.name)
 	self.tempEquipped = nil
@@ -76,7 +76,7 @@ function Player:shoot(x, y)
 		if self.equipped == "Random" and not self.tempEquipped then
 			self.tempEquipped = #self.packsArray == 0 and "Default" or self.packsArray[math.random(#self.packsArray)]
 		end
-		
+
 		self.inCooldown = true
 
 		local stance = self.stance
@@ -116,36 +116,36 @@ end
 
 function Player:die()
 
-    self.lives = 0
-    self.alive = false
-    tfm.exec.chatMessage(translate("LOST_ALL", self.community), self.name)
+	self.lives = 0
+	self.alive = false
+	tfm.exec.chatMessage(translate("LOST_ALL", self.community), self.name)
 
-    if statsEnabled then
-        self.rounds = self.rounds + 1
-        self:savePlayerData()
-    end
+	if statsEnabled then
+		self.rounds = self.rounds + 1
+		self:savePlayerData()
+	end
 
-    if Player.alive[self.name] then
-        Player.alive[self.name] = nil
-        Player.aliveCount = Player.aliveCount - 1
-    end
+	if Player.alive[self.name] then
+		Player.alive[self.name] = nil
+		Player.aliveCount = Player.aliveCount - 1
+	end
 
-    if Player.aliveCount == 1 then
+	if Player.aliveCount == 1 then
 
 		local winner = next(Player.alive)
-        local winnerPlayer = Player.players[winner]
-        local n, t = extractName(winner)
+		local winnerPlayer = Player.players[winner]
+		local n, t = extractName(winner)
 		tfm.exec.chatMessage(translate("SOLE", tfm.get.room.community, nil, {player = "<b><VI>" .. n .. "</VI><font size='8'><N2>" .. t .. "</N2></font></b>"}))
 		tfm.exec.giveCheese(winner)
-        tfm.exec.playerVictory(winner)
+		tfm.exec.playerVictory(winner)
 
-        if statsEnabled then
-		    winnerPlayer.rounds = winnerPlayer.rounds + 1
-		    winnerPlayer.survived = winnerPlayer.survived + 1
+		if statsEnabled then
+			winnerPlayer.rounds = winnerPlayer.rounds + 1
+			winnerPlayer.survived = winnerPlayer.survived + 1
 			winnerPlayer.won = winnerPlayer.won + 1
 			winnerPlayer.points = winnerPlayer.points + 5
-            winnerPlayer:savePlayerData()
-        end
+			winnerPlayer:savePlayerData()
+		end
 
 		Timer("newRound", newRound, 3 * 1000)
 	elseif Player.aliveCount == 0  then
@@ -157,12 +157,12 @@ end
 function Player:savePlayerData()
 	-- if tfm.get.room.uniquePlayers < MIN_PLAYERS then return end
 	local name = self.name
-    dHandler:set(name, "rounds", self.rounds)
-    dHandler:set(name, "survived", self.survived)
+	dHandler:set(name, "rounds", self.rounds)
+	dHandler:set(name, "survived", self.survived)
 	dHandler:set(name, "won", self.won)
 	dHandler:set(name, "points", self.points)
 	dHandler:set(name, "packs", shop.packsBitList:encode(self.packs))
 	dHandler:set(name, "equipped", self.equipped == "Random" and -1 or shop.packsBitList:find(self.equipped))
 	dHandler:set(name, "roles", roles.list:encode(self.roles))
-    system.savePlayerData(name, "v2" .. dHandler:dumpPlayer(name))
+	system.savePlayerData(name, "v2" .. dHandler:dumpPlayer(name))
 end

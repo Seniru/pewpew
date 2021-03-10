@@ -3,32 +3,32 @@
 string.format = function(s, tab) return (s:gsub('($%b{})', function(w) return tab[w:sub(3, -2)] or w end)) end
 
 string.split = function(s, delimiter)
-    result = {}
-    for match in (s .. delimiter):gmatch("(.-)" .. delimiter) do
-        table.insert(result, match)
-    end
-    return result
+	result = {}
+	for match in (s .. delimiter):gmatch("(.-)" .. delimiter) do
+		table.insert(result, match)
+	end
+	return result
 end
 
 table.tostring = function(tbl, depth)
-    local res = "{"
-    local prev = 0
-    for k, v in next, tbl do
-        if type(v) == "table" then
-            if depth == nil or depth > 0 then
-                res =
-                    res ..
-                    ((type(k) == "number" and prev and prev + 1 == k) and "" or k .. ": ") ..
-                        table.tostring(v, depth and depth - 1 or nil) .. ", "
-            else
-                res = res .. k .. ":  {...}, "
-            end
-        else
-            res = res .. ((type(k) == "number" and prev and prev + 1 == k) and "" or k .. ": ") .. tostring(v) .. ", "
-        end
-        prev = type(k) == "number" and k or nil
-    end
-    return res:sub(1, res:len() - 2) .. "}"
+	local res = "{"
+	local prev = 0
+	for k, v in next, tbl do
+		if type(v) == "table" then
+			if depth == nil or depth > 0 then
+				res =
+					res ..
+					((type(k) == "number" and prev and prev + 1 == k) and "" or k .. ": ") ..
+					table.tostring(v, depth and depth - 1 or nil) .. ", "
+			else
+				res = res .. k .. ":  {...}, "
+			end
+		else
+			res = res .. ((type(k) == "number" and prev and prev + 1 == k) and "" or k .. ": ") .. tostring(v) .. ", "
+		end
+		prev = type(k) == "number" and k or nil
+	end
+	return res:sub(1, res:len() - 2) .. "}"
 end
 
 -- Thanks to Turkitutu
@@ -37,117 +37,117 @@ end
 bit = {}
 
 bit.lshift = function(x, by) -- Left-shift of x by n bits
-    return x * 2 ^ by
+	return x * 2 ^ by
 end
 
 bit.rshift = function(x, by) -- Logical right-shift of x by n bits
-    return math.floor(x / 2 ^ by)
+	return math.floor(x / 2 ^ by)
 end
 
 bit.band = function(a, b) -- bitwise and of x1, x2
-    local p, c = 1, 0
-    while a > 0 and b > 0 do
-        local ra, rb = a % 2, b % 2
-        if ra + rb > 1 then
-          c = c + p
-        end
-        a, b, p = (a - ra) / 2, (b - rb) / 2, p * 2
-    end
-    return c
+	local p, c = 1, 0
+	while a > 0 and b > 0 do
+		local ra, rb = a % 2, b % 2
+		if ra + rb > 1 then
+			c = c + p
+		end
+		a, b, p = (a - ra) / 2, (b - rb) / 2, p * 2
+	end
+	return c
 end
 
 bit.bxor = function(a,b) -- Bitwise xor of x1, x2
-    local r = 0
-    for i = 0, 31 do
-        local x = a / 2 + b / 2
-        if x ~= math.floor(x) then
-            r = r + 2^i
-        end
-        a = math.floor(a / 2)
-        b = math.floor(b / 2)
-    end
-    return r
+	local r = 0
+	for i = 0, 31 do
+		local x = a / 2 + b / 2
+		if x ~= math.floor(x) then
+			r = r + 2^i
+		end
+		a = math.floor(a / 2)
+		b = math.floor(b / 2)
+	end
+	return r
 end
 
 bit.bor = function(a,b) -- Bitwise or of x1, x2
-    local p, c= 1, 0
-    while a+b > 0 do
-        local ra, rb = a % 2, b % 2
-        if ra + rb > 0 then
-            c = c + p
-        end
-        a, b, p = (a - ra) / 2, (b - rb) / 2, p * 2
-    end
-    return c
+	local p, c= 1, 0
+	while a+b > 0 do
+		local ra, rb = a % 2, b % 2
+		if ra + rb > 0 then
+			c = c + p
+		end
+		a, b, p = (a - ra) / 2, (b - rb) / 2, p * 2
+	end
+	return c
 end
 
 bit.bnot = function(n) -- Bitwise not of x
-    local p, c = 1, 0
-    while n > 0 do
-        local r = n % 2
-        if r < 0 then
-            c = c + p
-        end
-        n, p = (n - r) / 2, p * 2
-    end
-    return c
+	local p, c = 1, 0
+	while n > 0 do
+		local r = n % 2
+		if r < 0 then
+			c = c + p
+		end
+		n, p = (n - r) / 2, p * 2
+	end
+	return c
 end
 
 local BitList = {}
 
 BitList.__index = BitList
 setmetatable(BitList, {
-    __call = function(cls, ...)
-        return cls.new(...)
-    end
+	__call = function(cls, ...)
+		return cls.new(...)
+	end
 })
 
 do
 
-    function BitList.new(features)
-        local self = setmetatable({}, BitList)
-        self.featureArray = features
+	function BitList.new(features)
+		local self = setmetatable({}, BitList)
+		self.featureArray = features
 
-        self.featureKeys = {}
+		self.featureKeys = {}
 
-        for k, v in next, features do
-            self.featureKeys[v] = k
-        end
+		for k, v in next, features do
+			self.featureKeys[v] = k
+		end
 
-        self.features = #self.featureArray
+		self.features = #self.featureArray
 
-        return self
-    end
+		return self
+	end
 
-    function BitList:encode(featTbl)
-        local res = 0
-        for k, v in next, featTbl do
-            if v and self.featureKeys[k] then
-              res = bit.bor(res, bit.lshift(1, self.featureKeys[k] - 1))
-            end
-        end
-        return res
-    end
+	function BitList:encode(featTbl)
+		local res = 0
+		for k, v in next, featTbl do
+			if v and self.featureKeys[k] then
+				res = bit.bor(res, bit.lshift(1, self.featureKeys[k] - 1))
+			end
+		end
+		return res
+	end
 
-    function BitList:decode(featInt)
-        local features, index = {}, 1
-        while (featInt > 0) do
-            feat = bit.band(featInt, 1) == 1
-            corrFeat = self.featureArray[index]
-            features[corrFeat] = feat
-            featInt = bit.rshift(featInt, 1)
-            index = index + 1
-        end
-        return features
-    end
+	function BitList:decode(featInt)
+		local features, index = {}, 1
+		while (featInt > 0) do
+			feat = bit.band(featInt, 1) == 1
+			corrFeat = self.featureArray[index]
+			features[corrFeat] = feat
+			featInt = bit.rshift(featInt, 1)
+			index = index + 1
+		end
+		return features
+	end
 
-    function BitList:get(index)
-        return self.featureArray[index]
-    end
+	function BitList:get(index)
+		return self.featureArray[index]
+	end
 
-    function BitList:find(feature)
-        return self.featureKeys[feature]
-    end
+	function BitList:find(feature)
+		return self.featureKeys[feature]
+	end
 
 end
 
@@ -157,228 +157,228 @@ local Image = {}
 do
 
 
-    local string_split = function(s, delimiter)
-        result = {}
-        for match in (s .. delimiter):gmatch("(.-)" .. delimiter) do
-            table.insert(result, match)
-        end
-        return result
-    end
+	local string_split = function(s, delimiter)
+		result = {}
+		for match in (s .. delimiter):gmatch("(.-)" .. delimiter) do
+			table.insert(result, match)
+		end
+		return result
+	end
 
-    local table_tostring
+	local table_tostring
 
-    table_tostring = function(tbl, depth)
-        local res = "{"
-        local prev = 0
-        for k, v in next, tbl do
-            if type(v) == "table" then
-                if depth == nil or depth > 0 then
-                    res =
-                        res ..
-                        ((type(k) == "number" and prev and prev + 1 == k) and "" or k .. ": ") ..
-                            table_tostring(v, depth and depth - 1 or nil) .. ", "
-                else
-                    res = res .. k .. ":  {...}, "
-                end
-            else
-                res = res .. ((type(k) == "number" and prev and prev + 1 == k) and "" or k .. ": ") .. tostring(v) .. ", "
-            end
-            prev = type(k) == "number" and k or nil
-        end
-        return res:sub(1, res:len() - 2) .. "}"
-    end
+	table_tostring = function(tbl, depth)
+		local res = "{"
+		local prev = 0
+		for k, v in next, tbl do
+			if type(v) == "table" then
+				if depth == nil or depth > 0 then
+					res =
+						res ..
+						((type(k) == "number" and prev and prev + 1 == k) and "" or k .. ": ") ..
+						table_tostring(v, depth and depth - 1 or nil) .. ", "
+				else
+					res = res .. k .. ":  {...}, "
+				end
+			else
+				res = res .. ((type(k) == "number" and prev and prev + 1 == k) and "" or k .. ": ") .. tostring(v) .. ", "
+			end
+			prev = type(k) == "number" and k or nil
+		end
+		return res:sub(1, res:len() - 2) .. "}"
+	end
 
-    local table_copy = function(tbl)
-        local res = {}
-        for k, v in next, tbl do res[k] = v end
-        return res
-    end
+	local table_copy = function(tbl)
+		local res = {}
+		for k, v in next, tbl do res[k] = v end
+		return res
+	end
 
 
 
-    -- [[ class Image ]] --
+	-- [[ class Image ]] --
 
-    Image.__index = Image
-    Image.__tostring = function(self) return table_tostring(self) end
+	Image.__index = Image
+	Image.__tostring = function(self) return table_tostring(self) end
 
-    Image.images = {}
+	Image.images = {}
 
-    setmetatable(Image, {
-        __call = function(cls, ...)
-            return cls.new(...)
-        end
-    })
+	setmetatable(Image, {
+		__call = function(cls, ...)
+			return cls.new(...)
+		end
+	})
 
-    function Image.new(imageId, target, x, y, parent)
+	function Image.new(imageId, target, x, y, parent)
 
-        local self = setmetatable({
-            id = #Image.images + 1,
-            imageId = imageId,
-            target = target,
-            x = x,
-            y = y,
-            instances = {},
-        }, Image)
+		local self = setmetatable({
+			id = #Image.images + 1,
+			imageId = imageId,
+			target = target,
+			x = x,
+			y = y,
+			instances = {},
+		}, Image)
 
-        Image.images[self.id] = self
+		Image.images[self.id] = self
 
-        return self
+		return self
 
-    end
+	end
 
-    function Image:show(target)
+	function Image:show(target)
 		if target == nil then error("Target cannot be nil") end
-        if self.instances[target] then return self end
-        self.instances[target] = tfm.exec.addImage(self.imageId, self.target, self.x, self.y, target)
-        return self
-    end
+		if self.instances[target] then return self end
+		self.instances[target] = tfm.exec.addImage(self.imageId, self.target, self.x, self.y, target)
+		return self
+	end
 
-    function Image:hide(target)
-        if target == nil then error("Target cannot be nil") end
-        if not self.instances[target] then return end
-        tfm.exec.removeImage(self.instances[target])
-        self.instances[target] = nil
-        return self
-    end
+	function Image:hide(target)
+		if target == nil then error("Target cannot be nil") end
+		if not self.instances[target] then return end
+		tfm.exec.removeImage(self.instances[target])
+		self.instances[target] = nil
+		return self
+	end
 
-    -- [[ class Panel ]] --
+	-- [[ class Panel ]] --
 
-    Panel.__index = Panel
-    Panel.__tostring = function(self) return table_tostring(self) end
+	Panel.__index = Panel
+	Panel.__tostring = function(self) return table_tostring(self) end
 
-    Panel.panels = {}
+	Panel.panels = {}
 
-    setmetatable(Panel, {
-        __call = function (cls, ...)
-            return cls.new(...)
-        end,
-    })
+	setmetatable(Panel, {
+		__call = function (cls, ...)
+			return cls.new(...)
+		end,
+	})
 
-    function Panel.new(id, text, x, y, w, h, background, border, opacity, fixed, hidden)
+	function Panel.new(id, text, x, y, w, h, background, border, opacity, fixed, hidden)
 
-        local self = setmetatable({
-            id = id,
-            text = text,
-            x = x,
-            y = y,
-            w = w,
-            h = h,
-            background = background,
-            border = border,
-            opacity = opacity,
-            fixed = fixed,
-            hidden = hidden,
-            isCloseButton = false,
-            closeTarget = nil,
-            parent = nil,
-            onhide = nil,
-            onclick = nil,
-            children = {},
-            temporary = {}
-        }, Panel)
+		local self = setmetatable({
+			id = id,
+			text = text,
+			x = x,
+			y = y,
+			w = w,
+			h = h,
+			background = background,
+			border = border,
+			opacity = opacity,
+			fixed = fixed,
+			hidden = hidden,
+			isCloseButton = false,
+			closeTarget = nil,
+			parent = nil,
+			onhide = nil,
+			onclick = nil,
+			children = {},
+			temporary = {}
+		}, Panel)
 
-        Panel.panels[id] = self
+		Panel.panels[id] = self
 
-        return self
+		return self
 
-    end
+	end
 
-    function Panel.handleActions(id, name, event)
-        local panelId = id - 10000
-        local panel = Panel.panels[panelId]
-        if not panel then return end
-        if panel.isCloseButton then
-            if not panel.closeTarget then return end
-            panel.closeTarget:hide(name)
-            if panel.onhide then panel.onhide(panelId, name, event) end
-        else
-            if panel.onclick then panel.onclick(panelId, name, event) end
-        end
-    end
+	function Panel.handleActions(id, name, event)
+		local panelId = id - 10000
+		local panel = Panel.panels[panelId]
+		if not panel then return end
+		if panel.isCloseButton then
+			if not panel.closeTarget then return end
+			panel.closeTarget:hide(name)
+			if panel.onhide then panel.onhide(panelId, name, event) end
+		else
+			if panel.onclick then panel.onclick(panelId, name, event) end
+		end
+	end
 
-    function Panel:show(target)
-        ui.addTextArea(10000 + self.id, self.text, target, self.x, self.y, self.w, self.h, self.background, self.border, self.opacity, self.opacity)
-        self.visible = true
+	function Panel:show(target)
+		ui.addTextArea(10000 + self.id, self.text, target, self.x, self.y, self.w, self.h, self.background, self.border, self.opacity, self.opacity)
+		self.visible = true
 
-        for name in next, (target and { [target] = true } or tfm.get.room.playerList) do
-            for id, child in next, self.children do
-                child:show(name)
-            end
-        end
+		for name in next, (target and { [target] = true } or tfm.get.room.playerList) do
+			for id, child in next, self.children do
+				child:show(name)
+			end
+		end
 
-        return self
+		return self
 
-    end
+	end
 
-    function Panel:update(text, target)
-        ui.updateTextArea(10000 + self.id, text, target)
-        return self
-    end
+	function Panel:update(text, target)
+		ui.updateTextArea(10000 + self.id, text, target)
+		return self
+	end
 
-    function Panel:hide(target)
+	function Panel:hide(target)
 
-        ui.removeTextArea(10000 + self.id, target)
+		ui.removeTextArea(10000 + self.id, target)
 
-        for name in next, (target and { [target] = true } or tfm.get.room.playerList) do
+		for name in next, (target and { [target] = true } or tfm.get.room.playerList) do
 
-            for id, child in next, self.children do
+			for id, child in next, self.children do
 				child:hide(name)
-            end
+			end
 
-            if self.temporary[name] then
-                for id, child in next, self.temporary[name] do
-                    child:hide(name)
-                end
-                self.temporary[name] = {}
-            end
+			if self.temporary[name] then
+				for id, child in next, self.temporary[name] do
+					child:hide(name)
+				end
+				self.temporary[name] = {}
+			end
 
-        end
+		end
 
 
-        if self.onclose then self.onclose(target) end
-        return self
+		if self.onclose then self.onclose(target) end
+		return self
 
-    end
+	end
 
-    function Panel:addPanel(panel)
-        self.children[panel.id] = panel
-        panel.parent = self.id
-        return self
-    end
+	function Panel:addPanel(panel)
+		self.children[panel.id] = panel
+		panel.parent = self.id
+		return self
+	end
 
-    function Panel:addImage(image)
-        self.children["i_" .. image.id] = image
-        return self
-    end
+	function Panel:addImage(image)
+		self.children["i_" .. image.id] = image
+		return self
+	end
 
-    function Panel:addPanelTemp(panel, target)
-        if not self.temporary[target] then self.temporary[target] = {} end
-        panel:show(target)
-        self.temporary[target][panel.id] = panel
-        return self
-    end
+	function Panel:addPanelTemp(panel, target)
+		if not self.temporary[target] then self.temporary[target] = {} end
+		panel:show(target)
+		self.temporary[target][panel.id] = panel
+		return self
+	end
 
-    function Panel:addImageTemp(image, target)
-        if not self.temporary[target] then self.temporary[target] = {} end
-        image:show(target)
-        self.temporary[target]["i_" .. image.id] = image
-        return self
-    end
+	function Panel:addImageTemp(image, target)
+		if not self.temporary[target] then self.temporary[target] = {} end
+		image:show(target)
+		self.temporary[target]["i_" .. image.id] = image
+		return self
+	end
 
-    function Panel:setActionListener(fn)
-        self.onclick = fn
-        return self
-    end
+	function Panel:setActionListener(fn)
+		self.onclick = fn
+		return self
+	end
 
-    function Panel:setCloseButton(id, callback)
-        local button = Panel.panels[id]
-        if not button then return self end
-        self.closeTarget = button
-        self.onclose = callback
-        button.isCloseButton = true
-        button.closeTarget = self
-        return self
-    end
+	function Panel:setCloseButton(id, callback)
+		local button = Panel.panels[id]
+		if not button then return self end
+		self.closeTarget = button
+		self.onclose = callback
+		button.isCloseButton = true
+		button.closeTarget = self
+		return self
+	end
 
 end
 
@@ -393,7 +393,7 @@ local a={}a.VERSION='1.5'a.__index=a;function a.new(b,c,d)local self=setmetatabl
 
 local VERSION = "v2.3.0.6"
 local CHANGELOG =
-[[
+	[[
 
 <p align='center'><font size='20'><b><V>CHANGELOG</V></b></font> <BV><a href='event:log'>[View all]</a></BV></p><font size='12' face='Lucida Console'>
 
@@ -444,218 +444,218 @@ tfm.exec.disableAutoTimeLeft()
 tfm.exec.disablePhysicalConsumables()
 
 local admins = {
-    ["King_seniru#5890"] = true,
-    ["Lightymouse#0421"] = true,
-    ["Overforyou#9290"] = true
+	["King_seniru#5890"] = true,
+	["Lightymouse#0421"] = true,
+	["Overforyou#9290"] = true
 }
 
 -- TEMP: Temporary fix to get rid of farmers and hackers
 local banned = {
-    ["Sannntos#0000"] = true
+	["Sannntos#0000"] = true
 }
 
 local maps = { 521833, 401421, 541917, 541928, 541936, 541943, 527935, 559634, 559644, 888052, 878047, 885641, 770600, 770656, 772172, 891472, 589736, 589800, 589708, 900012, 901062, 754380, 901337, 901411, 892660, 907870, 910078, 1190467, 1252043, 1124380, 1016258, 1252299, 1255902, 1256808, 986790, 1285380, 1271249, 1255944, 1255983, 1085344, 1273114, 1276664, 1279258, 1286824, 1280135, 1280342, 1284861, 1287556, 1057753, 1196679, 1288489, 1292983, 1298164, 1298521, 1293189, 1296949, 1308378, 1311136, 1314419, 1314982, 1318248, 1312411, 1312589, 1312845, 1312933, 1313969, 1338762, 1339474, 1349878, 1297154, 644588, 1351237, 1354040, 1354375, 1362386, 1283234, 1370578, 1306592, 1360889, 1362753, 1408124, 1407949, 1407849, 1343986, 1408028, 1441370, 1443416, 1389255, 1427349, 1450527, 1424739, 869836, 1459902, 1392993, 1426457, 1542824, 1533474, 1561467, 1563534, 1566991, 1587241, 1416119, 1596270, 1601580, 1525751, 1582146, 1558167, 1420943, 1466487, 1642575, 1648013, 1646094, 1393097, 1643446, 1545219, 1583484, 1613092, 1627981, 1633374, 1633277, 1633251, 1585138, 1624034, 1616785, 1625916, 1667582, 1666996, 1675013, 1675316, 1531316, 1665413, 1681719, 1699880, 1688696, 623770, 1727243, 1531329, 1683915, 1689533, 1738601, 3756146, 7742371, 7781585, 7781591, 7791374, 7703556, 7795263, 7712465, 7712471, 7716829, 7713613, 7799245, 4675294, 7801165, 6255760, 7710672, 7702365, 7709752, 6207232, 7701302, 7701344, 3780736, 7810641, 7704070, 7773623 }
 
 local ENUM_ITEMS = {
 	SMALL_BOX = 		1,
-    LARGE_BOX = 		2,
-    SMALL_PLANK = 		3,
-    LARGE_PLANK = 		4,
-    BALL = 				6,
+	LARGE_BOX = 		2,
+	SMALL_PLANK = 		3,
+	LARGE_PLANK = 		4,
+	BALL = 				6,
 	ANVIL = 			10,
 	CANNON =			17,
-    BOMB = 				23,
-    SPIRIT = 			24,
-    BLUE_BALOON = 		28,
-    RUNE = 				32,
-    SNOWBALL = 			34,
-    CUPID_ARROW = 		35,
-    APPLE = 			39,
-    SHEEP = 			40,
-    SMALL_ICE_PLANK = 	45,
-    SMALL_CHOCO_PLANK = 46,
-    ICE_CUBE = 			54,
-    CLOUD = 			57,
-    BUBBLE = 			59,
-    TINY_PLANK = 		60,
-    STABLE_RUNE = 		62,
-    PUFFER_FISH = 		65,
-    TOMBSTONE = 		90
+	BOMB = 				23,
+	SPIRIT = 			24,
+	BLUE_BALOON = 		28,
+	RUNE = 				32,
+	SNOWBALL = 			34,
+	CUPID_ARROW = 		35,
+	APPLE = 			39,
+	SHEEP = 			40,
+	SMALL_ICE_PLANK = 	45,
+	SMALL_CHOCO_PLANK = 46,
+	ICE_CUBE = 			54,
+	CLOUD = 			57,
+	BUBBLE = 			59,
+	TINY_PLANK = 		60,
+	STABLE_RUNE = 		62,
+	PUFFER_FISH = 		65,
+	TOMBSTONE = 		90
 }
 
 local items = {
-    ENUM_ITEMS.SMALL_BOX,
-    ENUM_ITEMS.LARGE_BOX,
-    ENUM_ITEMS.SMALL_PLANK,
-    ENUM_ITEMS.LARGE_PLANK,
-    ENUM_ITEMS.BALL,
-    ENUM_ITEMS.ANVIL,
-    ENUM_ITEMS.BOMB,
-    ENUM_ITEMS.SPIRIT,
-    ENUM_ITEMS.BLUE_BALOON,
-    ENUM_ITEMS.RUNE,
-    ENUM_ITEMS.SNOWBALL,
-    ENUM_ITEMS.CUPID_ARROW,
-    ENUM_ITEMS.APPLE,
-    ENUM_ITEMS.SHEEP,
-    ENUM_ITEMS.SMALL_ICE_PLANK,
-    ENUM_ITEMS.SMALL_CHOCO_PLANK,
-    ENUM_ITEMS.ICE_CUBE,
-    ENUM_ITEMS.CLOUD,
-    ENUM_ITEMS.BUBBLE,
-    ENUM_ITEMS.TINY_PLANK,
-    ENUM_ITEMS.STABLE_RUNE,
-    ENUM_ITEMS.PUFFER_FISH,
-    ENUM_ITEMS.TOMBSTONE
+	ENUM_ITEMS.SMALL_BOX,
+	ENUM_ITEMS.LARGE_BOX,
+	ENUM_ITEMS.SMALL_PLANK,
+	ENUM_ITEMS.LARGE_PLANK,
+	ENUM_ITEMS.BALL,
+	ENUM_ITEMS.ANVIL,
+	ENUM_ITEMS.BOMB,
+	ENUM_ITEMS.SPIRIT,
+	ENUM_ITEMS.BLUE_BALOON,
+	ENUM_ITEMS.RUNE,
+	ENUM_ITEMS.SNOWBALL,
+	ENUM_ITEMS.CUPID_ARROW,
+	ENUM_ITEMS.APPLE,
+	ENUM_ITEMS.SHEEP,
+	ENUM_ITEMS.SMALL_ICE_PLANK,
+	ENUM_ITEMS.SMALL_CHOCO_PLANK,
+	ENUM_ITEMS.ICE_CUBE,
+	ENUM_ITEMS.CLOUD,
+	ENUM_ITEMS.BUBBLE,
+	ENUM_ITEMS.TINY_PLANK,
+	ENUM_ITEMS.STABLE_RUNE,
+	ENUM_ITEMS.PUFFER_FISH,
+	ENUM_ITEMS.TOMBSTONE
 }
 
 local keys = {
-    LEFT        = 0,
-    RIGHT       = 2,
-    DOWN        = 3,
-    SPACE       = 32,
-    LETTER_H    = 72,
-    LETTER_L    = 76,
-    LETTER_O    = 79,
-    LETTER_P    = 80,
+	LEFT        = 0,
+	RIGHT       = 2,
+	DOWN        = 3,
+	SPACE       = 32,
+	LETTER_H    = 72,
+	LETTER_L    = 76,
+	LETTER_O    = 79,
+	LETTER_P    = 80,
 }
 
 local assets = {
-    banner = "173f1aa1720.png",
-    count1 = "173f211056a.png",
-    count2 = "173f210937b.png",
-    count3 = "173f210089f.png",
-    newRound = "173f2113b5e.png",
-    heart = "173f2212052.png",
-    iconRounds = "17434cc5748.png",
-    iconDeaths = "17434d1c965.png",
-    iconSurvived = "17434d0a87e.png",
-    iconWon = "17434cff8bd.png",
-    iconTrophy = "176463dbc3e.png",
-    lock = "1660271f4c6.png",
-    help = {
-        survive = "17587d5abed.png",
-        killAll = "17587d5ca0e.png",
-        shoot = "17587d6acaf.png",
-        creditors = "17587d609f1.png",
-        commands = "17587d64557.png",
-        weapon = "17587d67562.png",
-        github = "1764b681c20.png",
-        discord = "1764b73dad6.png",
-        map = "1764b7a7692.png"
-    },
-    items = {
-        [ENUM_ITEMS.SMALL_BOX] = "17406985997.png",
-        [ENUM_ITEMS.LARGE_BOX] = "174068e3bca.png",
-        [ENUM_ITEMS.SMALL_PLANK] = "174069a972e.png",
-        [ENUM_ITEMS.LARGE_PLANK] = "174069c5a7a.png",
-        [ENUM_ITEMS.BALL] = "174069d7a29.png",
-        [ENUM_ITEMS.ANVIL] = "174069e766a.png",
-        [ENUM_ITEMS.CANNON] = "17406bf2f70.png",
-        [ENUM_ITEMS.BOMB] = "17406bf6ffc.png",
-        [ENUM_ITEMS.SPIRIT] = "17406a23cd0.png",
-        [ENUM_ITEMS.BLUE_BALOON] = "17406a41815.png",
-        [ENUM_ITEMS.RUNE] = "17406a58032.png",
-        [ENUM_ITEMS.SNOWBALL] = "17406a795f4.png",
-        [ENUM_ITEMS.CUPID_ARROW] = "17406a914a3.png",
-        [ENUM_ITEMS.APPLE] = "17406aa2daf.png",
-        [ENUM_ITEMS.SHEEP] = "17406ac8ab7.png",
-        [ENUM_ITEMS.SMALL_ICE_PLANK] = "17406aefb88.png",
-        [ENUM_ITEMS.SMALL_CHOCO_PLANK] = "17406b00239.png",
-        [ENUM_ITEMS.ICE_CUBE] = "17406b15725.png",
-        [ENUM_ITEMS.CLOUD] = "17406b22bd6.png",
-        [ENUM_ITEMS.BUBBLE] = "17406b32d1f.png",
-        [ENUM_ITEMS.TINY_PLANK] = "17406b59bd6.png",
-        [ENUM_ITEMS.STABLE_RUNE] = "17406b772b7.png",
-        [ENUM_ITEMS.PUFFER_FISH] = "17406b8c9f2.png",
-        [ENUM_ITEMS.TOMBSTONE] = "17406b9eda9.png"
-    },
-    widgets = {
-        borders = {
-            topLeft = "155cbe99c72.png",
-            topRight = "155cbea943a.png",
-            bottomLeft = "155cbe97a3f.png",
-            bottomRight = "155cbe9bc9b.png"
-        },
-        closeButton = "171e178660d.png",
-        scrollbarBg = "1719e0e550a.png",
-        scrollbarFg = "1719e173ac6.png"
-    },
-    community = {
-        xx = "1651b327097.png",
-        ar = "1651b32290a.png",
-        bg = "1651b300203.png",
-        br = "1651b3019c0.png",
-        cn = "1651b3031bf.png",
-        cz = "1651b304972.png",
-        de = "1651b306152.png",
-        ee = "1651b307973.png",
-        en = "1723dc10ec2.png",
-        e2 = "1723dc10ec2.png",
-        es = "1651b309222.png",
-        fi = "1651b30aa94.png",
-        fr = "1651b30c284.png",
-        gb = "1651b30da90.png",
-        hr = "1651b30f25d.png",
-        hu = "1651b310a3b.png",
-        id = "1651b3121ec.png",
-        il = "1651b3139ed.png",
-        it = "1651b3151ac.png",
-        jp = "1651b31696a.png",
-        lt = "1651b31811c.png",
-        lv = "1651b319906.png",
-        nl = "1651b31b0dc.png",
-        ph = "1651b31c891.png",
-        pl = "1651b31e0cf.png",
-        pt = "1651b3019c0.png",
-        ro = "1651b31f950.png",
-        ru = "1651b321113.png",
-        tr = "1651b3240e8.png",
-        vk = "1651b3258b3.png"
-    },
-    dummy = "17404561700.png"
+	banner = "173f1aa1720.png",
+	count1 = "173f211056a.png",
+	count2 = "173f210937b.png",
+	count3 = "173f210089f.png",
+	newRound = "173f2113b5e.png",
+	heart = "173f2212052.png",
+	iconRounds = "17434cc5748.png",
+	iconDeaths = "17434d1c965.png",
+	iconSurvived = "17434d0a87e.png",
+	iconWon = "17434cff8bd.png",
+	iconTrophy = "176463dbc3e.png",
+	lock = "1660271f4c6.png",
+	help = {
+		survive = "17587d5abed.png",
+		killAll = "17587d5ca0e.png",
+		shoot = "17587d6acaf.png",
+		creditors = "17587d609f1.png",
+		commands = "17587d64557.png",
+		weapon = "17587d67562.png",
+		github = "1764b681c20.png",
+		discord = "1764b73dad6.png",
+		map = "1764b7a7692.png"
+	},
+	items = {
+		[ENUM_ITEMS.SMALL_BOX] = "17406985997.png",
+		[ENUM_ITEMS.LARGE_BOX] = "174068e3bca.png",
+		[ENUM_ITEMS.SMALL_PLANK] = "174069a972e.png",
+		[ENUM_ITEMS.LARGE_PLANK] = "174069c5a7a.png",
+		[ENUM_ITEMS.BALL] = "174069d7a29.png",
+		[ENUM_ITEMS.ANVIL] = "174069e766a.png",
+		[ENUM_ITEMS.CANNON] = "17406bf2f70.png",
+		[ENUM_ITEMS.BOMB] = "17406bf6ffc.png",
+		[ENUM_ITEMS.SPIRIT] = "17406a23cd0.png",
+		[ENUM_ITEMS.BLUE_BALOON] = "17406a41815.png",
+		[ENUM_ITEMS.RUNE] = "17406a58032.png",
+		[ENUM_ITEMS.SNOWBALL] = "17406a795f4.png",
+		[ENUM_ITEMS.CUPID_ARROW] = "17406a914a3.png",
+		[ENUM_ITEMS.APPLE] = "17406aa2daf.png",
+		[ENUM_ITEMS.SHEEP] = "17406ac8ab7.png",
+		[ENUM_ITEMS.SMALL_ICE_PLANK] = "17406aefb88.png",
+		[ENUM_ITEMS.SMALL_CHOCO_PLANK] = "17406b00239.png",
+		[ENUM_ITEMS.ICE_CUBE] = "17406b15725.png",
+		[ENUM_ITEMS.CLOUD] = "17406b22bd6.png",
+		[ENUM_ITEMS.BUBBLE] = "17406b32d1f.png",
+		[ENUM_ITEMS.TINY_PLANK] = "17406b59bd6.png",
+		[ENUM_ITEMS.STABLE_RUNE] = "17406b772b7.png",
+		[ENUM_ITEMS.PUFFER_FISH] = "17406b8c9f2.png",
+		[ENUM_ITEMS.TOMBSTONE] = "17406b9eda9.png"
+	},
+	widgets = {
+		borders = {
+			topLeft = "155cbe99c72.png",
+			topRight = "155cbea943a.png",
+			bottomLeft = "155cbe97a3f.png",
+			bottomRight = "155cbe9bc9b.png"
+		},
+		closeButton = "171e178660d.png",
+		scrollbarBg = "1719e0e550a.png",
+		scrollbarFg = "1719e173ac6.png"
+	},
+	community = {
+		xx = "1651b327097.png",
+		ar = "1651b32290a.png",
+		bg = "1651b300203.png",
+		br = "1651b3019c0.png",
+		cn = "1651b3031bf.png",
+		cz = "1651b304972.png",
+		de = "1651b306152.png",
+		ee = "1651b307973.png",
+		en = "1723dc10ec2.png",
+		e2 = "1723dc10ec2.png",
+		es = "1651b309222.png",
+		fi = "1651b30aa94.png",
+		fr = "1651b30c284.png",
+		gb = "1651b30da90.png",
+		hr = "1651b30f25d.png",
+		hu = "1651b310a3b.png",
+		id = "1651b3121ec.png",
+		il = "1651b3139ed.png",
+		it = "1651b3151ac.png",
+		jp = "1651b31696a.png",
+		lt = "1651b31811c.png",
+		lv = "1651b319906.png",
+		nl = "1651b31b0dc.png",
+		ph = "1651b31c891.png",
+		pl = "1651b31e0cf.png",
+		pt = "1651b3019c0.png",
+		ro = "1651b31f950.png",
+		ru = "1651b321113.png",
+		tr = "1651b3240e8.png",
+		vk = "1651b3258b3.png"
+	},
+	dummy = "17404561700.png"
 }
 
 local closeSequence = {
-    [1] = {}
+	[1] = {}
 }
 
 local dHandler = DataHandler.new("pew", {
-    rounds = {
-        index = 1,
-        type = "number",
-        default = 0
-    },
-    survived = {
-        index = 2,
-        type = "number",
-        default = 0
-    },
-    won = {
-        index = 3,
-        type = "number",
-        default = 0
-    },
-    points = {
-        index = 4,
-        type = "number",
-        default = 0
-    },
-    packs = {
-        index = 5,
-        type = "number",
-        default = 1
-    },
-    equipped = {
-        index = 6,
-        type = "number",
-        default = 1
-    },
-    roles = {
-        index = 7,
-        type = "number",
-        default = 0
-    }
+	rounds = {
+		index = 1,
+		type = "number",
+		default = 0
+	},
+	survived = {
+		index = 2,
+		type = "number",
+		default = 0
+	},
+	won = {
+		index = 3,
+		type = "number",
+		default = 0
+	},
+	points = {
+		index = 4,
+		type = "number",
+		default = 0
+	},
+	packs = {
+		index = 5,
+		type = "number",
+		default = 1
+	},
+	equipped = {
+		index = 6,
+		type = "number",
+		default = 1
+	},
+	roles = {
+		index = 7,
+		type = "number",
+		default = 0
+	}
 })
 
 local MIN_PLAYERS = 4
@@ -674,116 +674,116 @@ local leaderboard, shop, roles
 
 local translations = {}
 
-translations["en"] = {	
-	LIVES_LEFT = "<ROSE>You have <N>${lives} <ROSE>lives left. <VI>Respawning in 3...",	
-	LOST_ALL =	"<ROSE>You have lost all your lives!",	
-	SD =		"<VP>Sudden death! Everyone has <N>1 <VP>life left",	
-	WELCOME =	"<VP>Welcome to pewpew, <N>duck <VP>or <N>spacebar <VP>to shoot items!",	
-    SOLE =		"<ROSE>${player} is the sole survivor!",
-    SURVIVORS = "<ROSE>${winners} and ${winner} have survived this round!",
-    SELF_RANK = "<p align='center'>Your rank: ${rank}</p>",
-    ROUNDS  =   "<font face='Lucida console'><N2>Rounds played</N2></font>",
-    DEATHS =    "<font face='Lucida console'><N2>Deaths</N2></font>",
-    SURVIVED =  "<font face='Lucida console'><N2>Rounds survived</N2></font>",
-    WON =       "<font face='Lucida console'><N2>Rounds won</N2></font>",
-    LBOARD_POS = "<b><font face='Lucida console' color='#e3b134'>Global leaderboard: ${pos}</font></b>",
-    EQUIPPED =  "Equipped",
-    EQUIP =     "Equip",
-    BUY =       "Buy",
-    POINTS =    "<font face='Lucida console' size='12'>   <b>Points:</b> <V>${points}</V></font>",
-    PACK_DESC = "\n\n<font face='Lucida console' size='12' color='#cccccc'><i>“ ${desc} ”</i></font>\n<p align='right'><font size='10'>- ${author}</font></p>",
-    GIFT_RECV = "<N>You have been rewarded with <ROSE><b>${gift}</b></ROSE> by <ROSE><b>${admin}</b></ROSE>",
-    COMMANDS =  "\n\n<N2>[ <b>H</b> ]</N2> <N><ROSE>!help</ROSE> (displays this help menu)</N><br><N2>[ <b>P</b> ]</N2> <N><ROSE>!profile <i>[player]</i></ROSE> (displays the profile of the player)</N><br></N><N2>[ <b>O</b> ]</N2> <N><ROSE>!shop</ROSE> (displays the shop)</N><br><N2>[ <b>L</b> ]</N2> <N>(displays the leaderboard)</N><br><br><N><ROSE>!changelog</ROSE> (displays the changelog)</N><br><br>",
-    CMD_TITLE = "<font size='25' face='Comic Sans'><b><J>Commands</J></b></font>",
-    CREDITS =   "\n\nArtist - <b><BV>Lightymouse</BV><G>#0421</G></b>\nTranslators - <b><BV>Overforyou</BV><G>#9290</G>, <BV>Nuttysquirrel</BV><G>#0626</G>, <BV>Star</BV><G>#6725</G>, <BV>Jaker</BV><G>#9310</G></b>\n\n\nAnd thank you for playing pewpew!",
-    CREDS_TITLE = "<font size='25' face='Comic Sans'><b><R>Credits</R></b></font>",
-    OBJECTIVE = "<b>Survive and kill others to win</b>",
-    HELP_GOTIT = "<font size='15'><J><b><a href='event:close'>Got it!</a></b></J></font>",
-    HELP_GITHUB = "<N>Want to contribute this module? Cool! Check out</N> <VI><b><i>https://github.com/Seniru/pewpew</i></b></VI>",
-    HELP_DISCORD = "<N>Discord:</N> <VI><b><i>https://discord.gg/vaqgrgp</i></b></VI>",
-    HELP_MAP = "<N>Want to add your maps to pewpew? Check out</N> <VI><b><i>https://atelier801.com/topic?f=6&t=892550</i></b></VI>",
-    NEW_ROLE = "<N><ROSE><b>${player}</b></ROSE> is now a <ROSE><b>${role}</b></ROSE>",
-    KICK_ROLE = "<N><ROSE><b>${player}</b></ROSE> is not a <ROSE><b>${role}</b></ROSE> anymore! ;c",
+translations["en"] = {
+	LIVES_LEFT = "<ROSE>You have <N>${lives} <ROSE>lives left. <VI>Respawning in 3...",
+	LOST_ALL =	"<ROSE>You have lost all your lives!",
+	SD =		"<VP>Sudden death! Everyone has <N>1 <VP>life left",
+	WELCOME =	"<VP>Welcome to pewpew, <N>duck <VP>or <N>spacebar <VP>to shoot items!",
+	SOLE =		"<ROSE>${player} is the sole survivor!",
+	SURVIVORS = "<ROSE>${winners} and ${winner} have survived this round!",
+	SELF_RANK = "<p align='center'>Your rank: ${rank}</p>",
+	ROUNDS  =   "<font face='Lucida console'><N2>Rounds played</N2></font>",
+	DEATHS =    "<font face='Lucida console'><N2>Deaths</N2></font>",
+	SURVIVED =  "<font face='Lucida console'><N2>Rounds survived</N2></font>",
+	WON =       "<font face='Lucida console'><N2>Rounds won</N2></font>",
+	LBOARD_POS = "<b><font face='Lucida console' color='#e3b134'>Global leaderboard: ${pos}</font></b>",
+	EQUIPPED =  "Equipped",
+	EQUIP =     "Equip",
+	BUY =       "Buy",
+	POINTS =    "<font face='Lucida console' size='12'>   <b>Points:</b> <V>${points}</V></font>",
+	PACK_DESC = "\n\n<font face='Lucida console' size='12' color='#cccccc'><i>“ ${desc} ”</i></font>\n<p align='right'><font size='10'>- ${author}</font></p>",
+	GIFT_RECV = "<N>You have been rewarded with <ROSE><b>${gift}</b></ROSE> by <ROSE><b>${admin}</b></ROSE>",
+	COMMANDS =  "\n\n<N2>[ <b>H</b> ]</N2> <N><ROSE>!help</ROSE> (displays this help menu)</N><br><N2>[ <b>P</b> ]</N2> <N><ROSE>!profile <i>[player]</i></ROSE> (displays the profile of the player)</N><br></N><N2>[ <b>O</b> ]</N2> <N><ROSE>!shop</ROSE> (displays the shop)</N><br><N2>[ <b>L</b> ]</N2> <N>(displays the leaderboard)</N><br><br><N><ROSE>!changelog</ROSE> (displays the changelog)</N><br><br>",
+	CMD_TITLE = "<font size='25' face='Comic Sans'><b><J>Commands</J></b></font>",
+	CREDITS =   "\n\nArtist - <b><BV>Lightymouse</BV><G>#0421</G></b>\nTranslators - <b><BV>Overforyou</BV><G>#9290</G>, <BV>Nuttysquirrel</BV><G>#0626</G>, <BV>Star</BV><G>#6725</G>, <BV>Jaker</BV><G>#9310</G></b>\n\n\nAnd thank you for playing pewpew!",
+	CREDS_TITLE = "<font size='25' face='Comic Sans'><b><R>Credits</R></b></font>",
+	OBJECTIVE = "<b>Survive and kill others to win</b>",
+	HELP_GOTIT = "<font size='15'><J><b><a href='event:close'>Got it!</a></b></J></font>",
+	HELP_GITHUB = "<N>Want to contribute this module? Cool! Check out</N> <VI><b><i>https://github.com/Seniru/pewpew</i></b></VI>",
+	HELP_DISCORD = "<N>Discord:</N> <VI><b><i>https://discord.gg/vaqgrgp</i></b></VI>",
+	HELP_MAP = "<N>Want to add your maps to pewpew? Check out</N> <VI><b><i>https://atelier801.com/topic?f=6&t=892550</i></b></VI>",
+	NEW_ROLE = "<N><ROSE><b>${player}</b></ROSE> is now a <ROSE><b>${role}</b></ROSE>",
+	KICK_ROLE = "<N><ROSE><b>${player}</b></ROSE> is not a <ROSE><b>${role}</b></ROSE> anymore! ;c",
 }
 
-translations["br"] = {        
-	LIVES_LEFT =    "<ROSE>Você possuí<N>${lives} <ROSE>vidas restantes. <VI>Renascendo em 3...",        
-	LOST_ALL =      "<ROSE>Você perdeu todas as suas vidas!",        
-	SD =            "<VP>Morte Súbita! Todos agora possuem <N>1 <VP>vida restante",        
-	WELCOME =       "<VP>Bem vindo ao pewpew, <N>use a seta para baixo <VP>ou <N> a barra de espaço <VP>para atirar itens!",        
+translations["br"] = {
+	LIVES_LEFT =    "<ROSE>Você possuí<N>${lives} <ROSE>vidas restantes. <VI>Renascendo em 3...",
+	LOST_ALL =      "<ROSE>Você perdeu todas as suas vidas!",
+	SD =            "<VP>Morte Súbita! Todos agora possuem <N>1 <VP>vida restante",
+	WELCOME =       "<VP>Bem vindo ao pewpew, <N>use a seta para baixo <VP>ou <N> a barra de espaço <VP>para atirar itens!",
 	SOLE =          "<ROSE>${player} é o último sobrevivente!"
 }
 
-translations["es"] = {        
-	LIVES_LEFT =    "<ROSE>Te quedan <N>${lives} <ROSE>vidas restantes. <VI>Renaciendo en 3...",        
-	LOST_ALL =      "<ROSE>¡Has perdido todas tus vidas!",        
-	SD =            "<VP>¡Muerte súbita! A todos le quedan <N>1 <VP>vida restante",        
-	WELCOME =       "<VP>¡Bienvenido a pewpew, <N>agáchate <VP>o presiona <N>la barra de espacio <VP>para disparar ítems!",        
+translations["es"] = {
+	LIVES_LEFT =    "<ROSE>Te quedan <N>${lives} <ROSE>vidas restantes. <VI>Renaciendo en 3...",
+	LOST_ALL =      "<ROSE>¡Has perdido todas tus vidas!",
+	SD =            "<VP>¡Muerte súbita! A todos le quedan <N>1 <VP>vida restante",
+	WELCOME =       "<VP>¡Bienvenido a pewpew, <N>agáchate <VP>o presiona <N>la barra de espacio <VP>para disparar ítems!",
 	SOLE =          "<ROSE>¡${player} es el único superviviente!"
 }
 
-translations["fr"] = {	
-	LIVES_LEFT = "<ROSE>Tu as encore <N>${lives} <ROSE>vies restantes. <VI>Réapparition dans 3...",	
-	LOST_ALL =	"<ROSE>Tu as perdu toutes tes vies !",	
-	SD =		"<VP>Mort soudaine ! Tout le monde a <N>1 <VP>seule vie restante",	
-	WELCOME =	"<VP>Bienvenue dans pewpew, <N>baisse-toi <VP>ou utilise la <N>barre d'espace <VP>pour tirer des objets !",	
-    SOLE =		"<ROSE>${player} est le dernier survivant !",
-    SURVIVORS = "<ROSE>${winners} et ${winner} ont survécu à cette manche !",
-    SELF_RANK = "<p align='center'>Ton rang : ${rank}</p>",
-    ROUNDS  =   "<font face='Lucida console'><N2>Manches jouées</N2></font>",
-    DEATHS =    "<font face='Lucida console'><N2>Morts</N2></font>",
-    SURVIVED =  "<font face='Lucida console'><N2>Manches survécues</N2></font>",
-    WON =       "<font face='Lucida console'><N2>Manches gagnées</N2></font>",
-    LBOARD_POS = "<b><font face='Lucida console' color='#e3b134'>Classement global : ${pos}</font></b>",
-    EQUIPPED =  "Equipé",
-    EQUIP =     "Utiliser",
-    BUY =       "Acheter",
-    POINTS =    "<font face='Lucida console' size='12'>   <b>Points :</b> <V>${points}</V></font>",
-    PACK_DESC = "\n\n<font face='Lucida console' size='12' color='#cccccc'><i>“ ${desc} ”</i></font>\n<p align='right'><font size='10'>- ${author}</font></p>",
-    GIFT_RECV = "<N>Tu as été récompensé avec un(e) <ROSE><b>${gift}</b></ROSE> de la part de <ROSE><b>${admin}</b></ROSE>",
-    COMMANDS =  "\n\n<N2>[ <b>H</b> ]</N2> <N><ROSE>!help</ROSE> (Affiche le menu d'aide)</N><br><N2>[ <b>P</b> ]</N2> <N><ROSE>!profile <i>[joueur]</i></ROSE> (Affiche le profile d'un joueur)</N><br></N><N2>[ <b>O</b> ]</N2> <N><ROSE>!shop</ROSE> (Ouvre le magasin)</N><br><N2>[ <b>L</b> ]</N2> <N>(Affiche le classement)</N><br><br><N><ROSE>!changelog</ROSE> (Affiche l'historique des changements)</N><br><br>",
-    CMD_TITLE = "<font size='25' face='Comic Sans'><b><J>Commandes</J></b></font>",
-    CREDITS =   "\n\nArtiste - <b><BV>Lightymouse</BV><G>#0421</G></b>\nTraducteurs - <b><BV>Overforyou</BV><G>#9290</G>, <BV>Nuttysquirrel</BV><G>#0626</G>, <BV>Star</BV><G>#6725</G>, <BV>Jaker</BV><G>#9310</G></b>\n\n\nEt merci de jouer à Pewpew!",
-    CREDS_TITLE = "<font size='25' face='Comic Sans'><b><R>Credits</R></b></font>",
-    OBJECTIVE = "<b>Survie et tue les autres pour gagner.</b>",
-    HELP_GOTIT = "<font size='15'><J><b><a href='event:close'>Compris !</a></b></J></font>",
-    HELP_GITHUB = "<N>Envie de contribuer à ce module ? Cool ! Va sur </N> <VI><b><i>https://github.com/Seniru/pewpew</i></b></VI>",
-    HELP_DISCORD = "<N>Discord : </N> <VI><b><i>https://discord.gg/vaqgrgp</i></b></VI>",
-    HELP_MAP = "<N>Tu voudrais voir tes maps dans pewpew ? Va sur </N> <VI><b><i>https://atelier801.com/topic?f=6&t=892550</i></b></VI>",
-    NEW_ROLE = "<N><ROSE><b>${player}</b></ROSE> est maintenant un(e) <ROSE><b>${role}</b></ROSE>",
-    KICK_ROLE = "<N><ROSE><b>${player}</b></ROSE> n'est plus un(e) <ROSE><b>${role}</b></ROSE> ! ;c",
+translations["fr"] = {
+	LIVES_LEFT = "<ROSE>Tu as encore <N>${lives} <ROSE>vies restantes. <VI>Réapparition dans 3...",
+	LOST_ALL =	"<ROSE>Tu as perdu toutes tes vies !",
+	SD =		"<VP>Mort soudaine ! Tout le monde a <N>1 <VP>seule vie restante",
+	WELCOME =	"<VP>Bienvenue dans pewpew, <N>baisse-toi <VP>ou utilise la <N>barre d'espace <VP>pour tirer des objets !",
+	SOLE =		"<ROSE>${player} est le dernier survivant !",
+	SURVIVORS = "<ROSE>${winners} et ${winner} ont survécu à cette manche !",
+	SELF_RANK = "<p align='center'>Ton rang : ${rank}</p>",
+	ROUNDS  =   "<font face='Lucida console'><N2>Manches jouées</N2></font>",
+	DEATHS =    "<font face='Lucida console'><N2>Morts</N2></font>",
+	SURVIVED =  "<font face='Lucida console'><N2>Manches survécues</N2></font>",
+	WON =       "<font face='Lucida console'><N2>Manches gagnées</N2></font>",
+	LBOARD_POS = "<b><font face='Lucida console' color='#e3b134'>Classement global : ${pos}</font></b>",
+	EQUIPPED =  "Equipé",
+	EQUIP =     "Utiliser",
+	BUY =       "Acheter",
+	POINTS =    "<font face='Lucida console' size='12'>   <b>Points :</b> <V>${points}</V></font>",
+	PACK_DESC = "\n\n<font face='Lucida console' size='12' color='#cccccc'><i>“ ${desc} ”</i></font>\n<p align='right'><font size='10'>- ${author}</font></p>",
+	GIFT_RECV = "<N>Tu as été récompensé avec un(e) <ROSE><b>${gift}</b></ROSE> de la part de <ROSE><b>${admin}</b></ROSE>",
+	COMMANDS =  "\n\n<N2>[ <b>H</b> ]</N2> <N><ROSE>!help</ROSE> (Affiche le menu d'aide)</N><br><N2>[ <b>P</b> ]</N2> <N><ROSE>!profile <i>[joueur]</i></ROSE> (Affiche le profile d'un joueur)</N><br></N><N2>[ <b>O</b> ]</N2> <N><ROSE>!shop</ROSE> (Ouvre le magasin)</N><br><N2>[ <b>L</b> ]</N2> <N>(Affiche le classement)</N><br><br><N><ROSE>!changelog</ROSE> (Affiche l'historique des changements)</N><br><br>",
+	CMD_TITLE = "<font size='25' face='Comic Sans'><b><J>Commandes</J></b></font>",
+	CREDITS =   "\n\nArtiste - <b><BV>Lightymouse</BV><G>#0421</G></b>\nTraducteurs - <b><BV>Overforyou</BV><G>#9290</G>, <BV>Nuttysquirrel</BV><G>#0626</G>, <BV>Star</BV><G>#6725</G>, <BV>Jaker</BV><G>#9310</G></b>\n\n\nEt merci de jouer à Pewpew!",
+	CREDS_TITLE = "<font size='25' face='Comic Sans'><b><R>Credits</R></b></font>",
+	OBJECTIVE = "<b>Survie et tue les autres pour gagner.</b>",
+	HELP_GOTIT = "<font size='15'><J><b><a href='event:close'>Compris !</a></b></J></font>",
+	HELP_GITHUB = "<N>Envie de contribuer à ce module ? Cool ! Va sur </N> <VI><b><i>https://github.com/Seniru/pewpew</i></b></VI>",
+	HELP_DISCORD = "<N>Discord : </N> <VI><b><i>https://discord.gg/vaqgrgp</i></b></VI>",
+	HELP_MAP = "<N>Tu voudrais voir tes maps dans pewpew ? Va sur </N> <VI><b><i>https://atelier801.com/topic?f=6&t=892550</i></b></VI>",
+	NEW_ROLE = "<N><ROSE><b>${player}</b></ROSE> est maintenant un(e) <ROSE><b>${role}</b></ROSE>",
+	KICK_ROLE = "<N><ROSE><b>${player}</b></ROSE> n'est plus un(e) <ROSE><b>${role}</b></ROSE> ! ;c",
 }
 
-translations["tr"] = {        
-	LIVES_LEFT =    "<N>${lives} <ROSE> canınız kaldı. <VI>3 saniye içinde yeniden doğacaksınız...",        
-	LOST_ALL =      "<ROSE>Bütün canınızı kaybettiniz!",        
-	SD =            "<VP>Ani ölüm! Artık herkesin <N>1<VP> canı kald?",        
-	WELCOME =       "<VP>pewpew odasına hoşgeldiniz, eşyaları fırlatmak için <N>eğilin <VP>ya da <N>spacebar <VP>'a basın!",        
+translations["tr"] = {
+	LIVES_LEFT =    "<N>${lives} <ROSE> canınız kaldı. <VI>3 saniye içinde yeniden doğacaksınız...",
+	LOST_ALL =      "<ROSE>Bütün canınızı kaybettiniz!",
+	SD =            "<VP>Ani ölüm! Artık herkesin <N>1<VP> canı kald?",
+	WELCOME =       "<VP>pewpew odasına hoşgeldiniz, eşyaları fırlatmak için <N>eğilin <VP>ya da <N>spacebar <VP>'a basın!",
 	SOLE =          "<ROSE>Yaşayan kişi ${player}!",
 	SURVIVORS =     "<ROSE>${winners} ve ${winner} bu turda hayatta kaldı!",
-    SELF_RANK =     "<p align='center'>Your rank: ${rank}</p>",
-    ROUNDS  =       "<font face='Lucida console'><N2>Oynanılan turlar</N2></font>",
-    DEATHS =        "<font face='Lucida console'><N2>Ölümler</N2></font>",
-    SURVIVED =      "<font face='Lucida console'><N2>Rounds survived</N2></f  ont>",
-    WON =           "<font face='Lucida console'><N2>Kazanılan turlar</N2></font>",
-    LBOARD_POS =     "<b><font face='Lucida console' color='#e3b134'>Genel Skor Tablosu: ${pos}</font></b>",
-    EQUIPPED =      "Donanımlı",
-    EQUIP =         "Ekipman",
-    BUY =           "Satın Al",
-    POINTS =        "<font face='Lucida console' size='12'>   <b>Puanlar:</b> <V>${points}</V></font>",
-    PACK_DESC =     "\n\n<font face='Lucida console' size='12' color='#cccccc'><i>“ ${desc} ”</i></font>\n<p align='right'><font size='10'>- ${author}</font></p>",
-    GIFT_RECV =     "<N>Ödülendirildin seni ödülendiren kişi <ROSE><b>${gift}</b></ROSE> by <ROSE><b>${admin}</b></ROSE>",
-    COMMANDS =      "\n\n<N2>[ <b>H</b> ]</N2> <N><ROSE>!help</ROSE> (yardım menüsünü açar)</N><br><N2>[ <b>P</b> ]</N2> <N><ROSE>!profile <i>[oyuncu]</i></ROSE> (istediğiniz kişinin profiline bakarsınız)</N><br></N><N2>[ <b>O</b> ]</N2> <N><ROSE>!shop</ROSE> (Marketi açar)</N><br><N2>[ <b>L</b> ]</N2> <N>(Skor Tablosunu açar)</N><br><br><N><ROSE>!changelog</ROSE> (displays the changelog)</N><br><br>",
-    CMD_TITLE =     "<font size='25' face='Comic Sans'><b><J>Komutlar</J></b></font>",
-    CREDITS =       "\n\nÇizimler - <b><BV>Lightymouse</BV><G>#0421</G></b>\nÇevirmenler - <b><BV>Overforyou</BV><G>#9290</G>, <BV>Nuttysquirrel</BV><G>#0626</G>, <BV>Star</BV><G>#6725</G>, <BV>Jaker</BV><G>#9310</G></b>\n\n\nVe pewpew oynadığınız için teşekkür ederiz!",
-    CREDS_TITLE =   "<font size='25' face='Comic Sans'><b><R>Krediler</R></b></font>",
-    OBJECTIVE =     "<b>Hayatta kal ve kazanmak için başkalarını öldür</b>",
-    HELP_GOTIT =    "<font size='15'><J><b><a href='event:close'>Anladım!</a></b></J></font>",
-    HELP_GITHUB =   "<N>Bu modüle katkıda bulunmak ister misiniz? Güzel! Link:</N> <VI><b><i>https://github.com/Seniru/pewpew</i></b></VI>",
-    HELP_DISCORD =  "<N>Discord:</N> <VI><b><i>https://discord.gg/vaqgrgp</i></b></VI>",
-    HELP_MAP =      "<N>Haritalarınızı pewpew'e eklemek ister misiniz? Link:</N> <VI><b><i>https://atelier801.com/topic?f=6&t=892550</i></b></VI>",
-    NEW_ROLE =      "<N><ROSE><b>${player}</b></ROSE> artık bir <ROSE><b>${role}</b></ROSE>",
-    KICK_ROLE =     "<N><ROSE><b>${player}</b></ROSE> artık bir <ROSE><b>${role}</b></ROSE> değil! ;c"
+	SELF_RANK =     "<p align='center'>Your rank: ${rank}</p>",
+	ROUNDS  =       "<font face='Lucida console'><N2>Oynanılan turlar</N2></font>",
+	DEATHS =        "<font face='Lucida console'><N2>Ölümler</N2></font>",
+	SURVIVED =      "<font face='Lucida console'><N2>Rounds survived</N2></f  ont>",
+	WON =           "<font face='Lucida console'><N2>Kazanılan turlar</N2></font>",
+	LBOARD_POS =     "<b><font face='Lucida console' color='#e3b134'>Genel Skor Tablosu: ${pos}</font></b>",
+	EQUIPPED =      "Donanımlı",
+	EQUIP =         "Ekipman",
+	BUY =           "Satın Al",
+	POINTS =        "<font face='Lucida console' size='12'>   <b>Puanlar:</b> <V>${points}</V></font>",
+	PACK_DESC =     "\n\n<font face='Lucida console' size='12' color='#cccccc'><i>“ ${desc} ”</i></font>\n<p align='right'><font size='10'>- ${author}</font></p>",
+	GIFT_RECV =     "<N>Ödülendirildin seni ödülendiren kişi <ROSE><b>${gift}</b></ROSE> by <ROSE><b>${admin}</b></ROSE>",
+	COMMANDS =      "\n\n<N2>[ <b>H</b> ]</N2> <N><ROSE>!help</ROSE> (yardım menüsünü açar)</N><br><N2>[ <b>P</b> ]</N2> <N><ROSE>!profile <i>[oyuncu]</i></ROSE> (istediğiniz kişinin profiline bakarsınız)</N><br></N><N2>[ <b>O</b> ]</N2> <N><ROSE>!shop</ROSE> (Marketi açar)</N><br><N2>[ <b>L</b> ]</N2> <N>(Skor Tablosunu açar)</N><br><br><N><ROSE>!changelog</ROSE> (displays the changelog)</N><br><br>",
+	CMD_TITLE =     "<font size='25' face='Comic Sans'><b><J>Komutlar</J></b></font>",
+	CREDITS =       "\n\nÇizimler - <b><BV>Lightymouse</BV><G>#0421</G></b>\nÇevirmenler - <b><BV>Overforyou</BV><G>#9290</G>, <BV>Nuttysquirrel</BV><G>#0626</G>, <BV>Star</BV><G>#6725</G>, <BV>Jaker</BV><G>#9310</G></b>\n\n\nVe pewpew oynadığınız için teşekkür ederiz!",
+	CREDS_TITLE =   "<font size='25' face='Comic Sans'><b><R>Krediler</R></b></font>",
+	OBJECTIVE =     "<b>Hayatta kal ve kazanmak için başkalarını öldür</b>",
+	HELP_GOTIT =    "<font size='15'><J><b><a href='event:close'>Anladım!</a></b></J></font>",
+	HELP_GITHUB =   "<N>Bu modüle katkıda bulunmak ister misiniz? Güzel! Link:</N> <VI><b><i>https://github.com/Seniru/pewpew</i></b></VI>",
+	HELP_DISCORD =  "<N>Discord:</N> <VI><b><i>https://discord.gg/vaqgrgp</i></b></VI>",
+	HELP_MAP =      "<N>Haritalarınızı pewpew'e eklemek ister misiniz? Link:</N> <VI><b><i>https://atelier801.com/topic?f=6&t=892550</i></b></VI>",
+	NEW_ROLE =      "<N><ROSE><b>${player}</b></ROSE> artık bir <ROSE><b>${role}</b></ROSE>",
+	KICK_ROLE =     "<N><ROSE><b>${player}</b></ROSE> artık bir <ROSE><b>${role}</b></ROSE> değil! ;c"
 }
 
 translations["ph"] = {
@@ -791,85 +791,85 @@ translations["ph"] = {
 	LOST_ALL =	"<ROSE>Nawala lahat nang buhay mo!",
 	SD =		"<VP>Biglaang kamatayan! Lahat ay mayroong <N>1 <VP>buhay na natitira",
 	WELCOME =	"<VP>Maligayang pagdating sa pewpew, <N>bumaba <VP>o <N>spacebar <VP>para bumaril nang gamit!",
-    SOLE =		"<ROSE>${player} ang nag isang nakaligtas!",
-    SURVIVORS = "<ROSE>${winners} at ${winner} ay nakaligtas ngayong round!",
-    SELF_RANK = "<p align='center'>Ranggo mo: ${rank}</p>",
-    ROUNDS  =   "<font face='Lucida console'><N2>Rounds na nalaro</N2></font>",
-    DEATHS =    "<font face='Lucida console'><N2>Pagkamatay</N2></font>",
-    SURVIVED =  "<font face='Lucida console'><N2>Rounds na nakaligtas</N2></font>",
-    WON =       "<font face='Lucida console'><N2>Rounds na nanalo</N2></font>"
+	SOLE =		"<ROSE>${player} ang nag isang nakaligtas!",
+	SURVIVORS = "<ROSE>${winners} at ${winner} ay nakaligtas ngayong round!",
+	SELF_RANK = "<p align='center'>Ranggo mo: ${rank}</p>",
+	ROUNDS  =   "<font face='Lucida console'><N2>Rounds na nalaro</N2></font>",
+	DEATHS =    "<font face='Lucida console'><N2>Pagkamatay</N2></font>",
+	SURVIVED =  "<font face='Lucida console'><N2>Rounds na nakaligtas</N2></font>",
+	WON =       "<font face='Lucida console'><N2>Rounds na nanalo</N2></font>"
 }
 
-translations["pl"] = {	
+translations["pl"] = {
 	LIVES_LEFT = "<ROSE>Pozostało ci <N>${lives} <ROSE>żyć! . <VI>Odrodzenie za 3...",
-	LOST_ALL =	"<ROSE>Straciłeś wszystkie życia!",	
-	SD =		"<VP>Nagła śmierć! Każdy został z <N>1 <VP>życiem",	
-	WELCOME =	"<VP>Witamy w Pewpew, kucnij, kliknij strzałkę w dół lub <N>spacje <VP>aby strzelać przedmiotami!",	
-    SOLE =		"<ROSE>${player} jest jedynym ocalałym!",
-    SURVIVORS = "<ROSE>${winners} i ${winner} przeżyli tę runde!",
-    SELF_RANK = "<p align='center'>Twoja range: ${rank}</p>",
-    ROUNDS  =   "<font face='Lucida console'><N2>Rozegrane rundy</N2></font>",
-    DEATHS =    "<font face='Lucida console'><N2>Śmierci</N2></font>",
-    SURVIVED =  "<font face='Lucida console'><N2>Przeżyte rundy</N2></font>",
-    WON =       "<font face='Lucida console'><N2>Wygrane rundy</N2></font>"
+	LOST_ALL =	"<ROSE>Straciłeś wszystkie życia!",
+	SD =		"<VP>Nagła śmierć! Każdy został z <N>1 <VP>życiem",
+	WELCOME =	"<VP>Witamy w Pewpew, kucnij, kliknij strzałkę w dół lub <N>spacje <VP>aby strzelać przedmiotami!",
+	SOLE =		"<ROSE>${player} jest jedynym ocalałym!",
+	SURVIVORS = "<ROSE>${winners} i ${winner} przeżyli tę runde!",
+	SELF_RANK = "<p align='center'>Twoja range: ${rank}</p>",
+	ROUNDS  =   "<font face='Lucida console'><N2>Rozegrane rundy</N2></font>",
+	DEATHS =    "<font face='Lucida console'><N2>Śmierci</N2></font>",
+	SURVIVED =  "<font face='Lucida console'><N2>Przeżyte rundy</N2></font>",
+	WON =       "<font face='Lucida console'><N2>Wygrane rundy</N2></font>"
 }
 
-translations["ru"] = {	
+translations["ru"] = {
 	LIVES_LEFT = "<ROSE>Оставшиеся жизни: <N>${lives}. <VI>Вернёшься в игру через 3...",
 	LOST_ALL =	"<ROSE>Вы потеряли все cвои жизни!",
 	SD =		"<VP>Внезапная смерть! У всех осталась <N>1 <VP>жизнь.",
 	WELCOME =	"<VP>Добро пожаловать в pewpew, нажмите на пробел или на s чтобы стрелять предметами.",
-    SOLE =		"<ROSE>${player} был единственным выжившим!",
-    SURVIVORS = "<ROSE>${winners} и ${winner} выжили эту игру!",
-    SELF_RANK = "<p align='center'>Ваше место на лидерборде: ${rank}</p>",
-    ROUNDS  =   "<font face='Lucida console'><N2>Номер игр</N2></font>",
-    DEATHS =    "<font face='Lucida console'><N2>Умер</N2></font>",
-    SURVIVED =  "<font face='Lucida console'><N2>Выжил</N2></font>",
-    WON =       "<font face='Lucida console'><N2>Выиграл</N2></font>"
+	SOLE =		"<ROSE>${player} был единственным выжившим!",
+	SURVIVORS = "<ROSE>${winners} и ${winner} выжили эту игру!",
+	SELF_RANK = "<p align='center'>Ваше место на лидерборде: ${rank}</p>",
+	ROUNDS  =   "<font face='Lucida console'><N2>Номер игр</N2></font>",
+	DEATHS =    "<font face='Lucida console'><N2>Умер</N2></font>",
+	SURVIVED =  "<font face='Lucida console'><N2>Выжил</N2></font>",
+	WON =       "<font face='Lucida console'><N2>Выиграл</N2></font>"
 }
 
 translations["hu"] = {
-    LIVES_LEFT = "<ROSE><N>${lives} <ROSE>életed maradt. <VI>Újraéledés 3...",    
-    LOST_ALL =    "<ROSE>Elvesztetted az összes életed!",    
-    SD =        "<VP>Hirtelen halál! Mindenkinek <N>1 <VP>élete maradt.",    
-    WELCOME =    "<VP>Üdvözöl a pewpew! Használd a <N>lefele <VP>vagy a <N>space <VP>gombot, hogy tárgyakat lőj!",        
-    SOLE =        "<ROSE>${player} az egyetlen túlélő!",
-    SURVIVORS = "<ROSE>${winners} és ${winner} túlélte ezt a kört!",
-    SELF_RANK = "<p align='center'>Rangod: ${rank}</p>",
-    ROUNDS  =   "<font face='Lucida console'><N2>Játszott körök</N2></font>",
-    DEATHS =    "<font face='Lucida console'><N2>Halálok</N2></font>",
-    SURVIVED =  "<font face='Lucida console'><N2>Túlélt körök</N2></font>",
-    WON =       "<font face='Lucida console'><N2>Megnyert körök</N2></font>",
-    LBOARD_POS = "<b><font face='Lucida console' color='#e3b134'>Globális ranglista: ${pos}</font></b>",
-    EQUIPPED =  "Használva",
-    EQUIP =     "Használ",
-    BUY =       "Vásárlás",
-    POINTS =    "<font face='Lucida console' size='12'>   <b>Pont:</b> <V>${points}</V></font>",
-    PACK_DESC = "\n\n<font face='Lucida console' size='12' color='#cccccc'><i>“ ${desc} ”</i></font>\n<p align='right'><font size='10'>- ${author}</font></p>",
-    GIFT_RECV = "<N><ROSE><b>${admin}</b></ROSE> megjutalmazott téged ezzel: <ROSE><b>${gift}</b></ROSE>",
-    COMMANDS =  "\n\n<N2>[ <b>H</b> ]</N2> <N><ROSE>!help</ROSE> (megnyitja a segítség menüt)</N><br><N2>[ <b>P</b> ]</N2> <N><ROSE>!profile <i>[játékosNév]</i></ROSE> (megnyitja a játékosNév profilját)</N><br></N><N2>[ <b>O</b> ]</N2> <N><ROSE>!shop</ROSE> (megnyitja a boltot)</N><br><N2>[ <b>L</b> ]</N2> <N>(megnyitja a ranglistát)</N><br><br><N><ROSE>!changelog</ROSE> (megnyitja a változásokat)</N><br><br>",
-    CMD_TITLE = "<font size='25' face='Comic Sans'><b><J>Parancsok</J></b></font>",
-    CREDITS =   "\n\nMűvész - <b><BV>Lightymouse</BV><G>#0421</G></b>\nFordítók - <b><BV>Overforyou</BV><G>#9290</G>, <BV>Nuttysquirrel</BV><G>#0626</G>, <BV>Star</BV><G>#6725</G>, <BV>Jaker</BV><G>#9310</G></b>\n\n\nÉs köszönöm, hogy játszol a pewpew -el!",
-    CREDS_TITLE = "<font size='25' face='Comic Sans'><b><R>Kreditek</R></b></font>",
-    OBJECTIVE = "<b>Éld túl és ölj meg másokat a győzelemért</b>",
-    HELP_GOTIT = "<font size='15'><J><b><a href='event:close'>Értem!</a></b></J></font>",
-    HELP_GITHUB = "<N>Szeretnél hozzájárulni a modulhoz? Nagyszerű! Csekkold:</N> <VI><b><i>https://github.com/Seniru/pewpew</i></b></VI>",
-    HELP_DISCORD = "<N>Discord:</N> <VI><b><i>https://discord.gg/vaqgrgp</i></b></VI>",
-    HELP_MAP = "<N>Szeretnél benyújtani pályákat? Csekkold:</N> <VI><b><i>https://atelier801.com/topic?f=6&t=892550</i></b></VI>",
-    NEW_ROLE = "<N><ROSE><b>${player}</b></ROSE> most már egy <ROSE><b>${role}</b></ROSE>",
-    KICK_ROLE = "<N><ROSE><b>${player}</b></ROSE> nem <ROSE><b>${role}</b></ROSE> többé! ;c",
+	LIVES_LEFT = "<ROSE><N>${lives} <ROSE>életed maradt. <VI>Újraéledés 3...",
+	LOST_ALL =    "<ROSE>Elvesztetted az összes életed!",
+	SD =        "<VP>Hirtelen halál! Mindenkinek <N>1 <VP>élete maradt.",
+	WELCOME =    "<VP>Üdvözöl a pewpew! Használd a <N>lefele <VP>vagy a <N>space <VP>gombot, hogy tárgyakat lőj!",
+	SOLE =        "<ROSE>${player} az egyetlen túlélő!",
+	SURVIVORS = "<ROSE>${winners} és ${winner} túlélte ezt a kört!",
+	SELF_RANK = "<p align='center'>Rangod: ${rank}</p>",
+	ROUNDS  =   "<font face='Lucida console'><N2>Játszott körök</N2></font>",
+	DEATHS =    "<font face='Lucida console'><N2>Halálok</N2></font>",
+	SURVIVED =  "<font face='Lucida console'><N2>Túlélt körök</N2></font>",
+	WON =       "<font face='Lucida console'><N2>Megnyert körök</N2></font>",
+	LBOARD_POS = "<b><font face='Lucida console' color='#e3b134'>Globális ranglista: ${pos}</font></b>",
+	EQUIPPED =  "Használva",
+	EQUIP =     "Használ",
+	BUY =       "Vásárlás",
+	POINTS =    "<font face='Lucida console' size='12'>   <b>Pont:</b> <V>${points}</V></font>",
+	PACK_DESC = "\n\n<font face='Lucida console' size='12' color='#cccccc'><i>“ ${desc} ”</i></font>\n<p align='right'><font size='10'>- ${author}</font></p>",
+	GIFT_RECV = "<N><ROSE><b>${admin}</b></ROSE> megjutalmazott téged ezzel: <ROSE><b>${gift}</b></ROSE>",
+	COMMANDS =  "\n\n<N2>[ <b>H</b> ]</N2> <N><ROSE>!help</ROSE> (megnyitja a segítség menüt)</N><br><N2>[ <b>P</b> ]</N2> <N><ROSE>!profile <i>[játékosNév]</i></ROSE> (megnyitja a játékosNév profilját)</N><br></N><N2>[ <b>O</b> ]</N2> <N><ROSE>!shop</ROSE> (megnyitja a boltot)</N><br><N2>[ <b>L</b> ]</N2> <N>(megnyitja a ranglistát)</N><br><br><N><ROSE>!changelog</ROSE> (megnyitja a változásokat)</N><br><br>",
+	CMD_TITLE = "<font size='25' face='Comic Sans'><b><J>Parancsok</J></b></font>",
+	CREDITS =   "\n\nMűvész - <b><BV>Lightymouse</BV><G>#0421</G></b>\nFordítók - <b><BV>Overforyou</BV><G>#9290</G>, <BV>Nuttysquirrel</BV><G>#0626</G>, <BV>Star</BV><G>#6725</G>, <BV>Jaker</BV><G>#9310</G></b>\n\n\nÉs köszönöm, hogy játszol a pewpew -el!",
+	CREDS_TITLE = "<font size='25' face='Comic Sans'><b><R>Kreditek</R></b></font>",
+	OBJECTIVE = "<b>Éld túl és ölj meg másokat a győzelemért</b>",
+	HELP_GOTIT = "<font size='15'><J><b><a href='event:close'>Értem!</a></b></J></font>",
+	HELP_GITHUB = "<N>Szeretnél hozzájárulni a modulhoz? Nagyszerű! Csekkold:</N> <VI><b><i>https://github.com/Seniru/pewpew</i></b></VI>",
+	HELP_DISCORD = "<N>Discord:</N> <VI><b><i>https://discord.gg/vaqgrgp</i></b></VI>",
+	HELP_MAP = "<N>Szeretnél benyújtani pályákat? Csekkold:</N> <VI><b><i>https://atelier801.com/topic?f=6&t=892550</i></b></VI>",
+	NEW_ROLE = "<N><ROSE><b>${player}</b></ROSE> most már egy <ROSE><b>${role}</b></ROSE>",
+	KICK_ROLE = "<N><ROSE><b>${player}</b></ROSE> nem <ROSE><b>${role}</b></ROSE> többé! ;c",
 }
 
 local translate = function(term, lang, page, kwargs)
-    local translation
-    if translations[lang] then 
-        translation = translations[lang][term] or translations.en[term] 
-    else
-        translation = translations.en[term]
-    end
-    translation = page and translation[page] or translation
-    if not translation then return end
-    return string.format(translation, kwargs)
+	local translation
+	if translations[lang] then
+		translation = translations[lang][term] or translations.en[term]
+	else
+		translation = translations.en[term]
+	end
+	translation = page and translation[page] or translation
+	if not translation then return end
+	return string.format(translation, kwargs)
 end
 
 
@@ -884,19 +884,19 @@ Player.aliveCount = 0
 
 Player.__index = Player
 Player.__tostring = function(self)
-    return table.tostring(self)
+	return table.tostring(self)
 end
 
 setmetatable(Player, {
-    __call = function (cls, name)
-        return cls.new(name)
-    end,
+	__call = function (cls, name)
+		return cls.new(name)
+	end,
 })
 
 function Player.new(name)
 	local self = setmetatable({}, Player)
 
-    self.name = name
+	self.name = name
 	self.alive = false
 	self.lives = 0
 	self.inCooldown = true
@@ -914,23 +914,23 @@ function Player.new(name)
 	self.roles = {}
 
 	self.tempEquipped = nil
-    self.openedWindow = nil
+	self.openedWindow = nil
 
-    for key, code in next, keys do system.bindKeyboard(name, code, true, true) end
+	for key, code in next, keys do system.bindKeyboard(name, code, true, true) end
 
 	Player.players[name] = self
 	Player.playerCount = Player.playerCount + 1
 
-    return self
+	return self
 end
 
 function Player:refresh()
 	self.alive = true
 	self.inCooldown = false
-    self:setLives(3)
-    if not Player.alive[self.name] then
-	    Player.alive[self.name] = self
-        Player.aliveCount = Player.aliveCount + 1
+	self:setLives(3)
+	if not Player.alive[self.name] then
+		Player.alive[self.name] = self
+		Player.aliveCount = Player.aliveCount + 1
 	end
 	setNameColor(self.name)
 	self.tempEquipped = nil
@@ -953,7 +953,7 @@ function Player:shoot(x, y)
 		if self.equipped == "Random" and not self.tempEquipped then
 			self.tempEquipped = #self.packsArray == 0 and "Default" or self.packsArray[math.random(#self.packsArray)]
 		end
-		
+
 		self.inCooldown = true
 
 		local stance = self.stance
@@ -993,36 +993,36 @@ end
 
 function Player:die()
 
-    self.lives = 0
-    self.alive = false
-    tfm.exec.chatMessage(translate("LOST_ALL", self.community), self.name)
+	self.lives = 0
+	self.alive = false
+	tfm.exec.chatMessage(translate("LOST_ALL", self.community), self.name)
 
-    if statsEnabled then
-        self.rounds = self.rounds + 1
-        self:savePlayerData()
-    end
+	if statsEnabled then
+		self.rounds = self.rounds + 1
+		self:savePlayerData()
+	end
 
-    if Player.alive[self.name] then
-        Player.alive[self.name] = nil
-        Player.aliveCount = Player.aliveCount - 1
-    end
+	if Player.alive[self.name] then
+		Player.alive[self.name] = nil
+		Player.aliveCount = Player.aliveCount - 1
+	end
 
-    if Player.aliveCount == 1 then
+	if Player.aliveCount == 1 then
 
 		local winner = next(Player.alive)
-        local winnerPlayer = Player.players[winner]
-        local n, t = extractName(winner)
+		local winnerPlayer = Player.players[winner]
+		local n, t = extractName(winner)
 		tfm.exec.chatMessage(translate("SOLE", tfm.get.room.community, nil, {player = "<b><VI>" .. n .. "</VI><font size='8'><N2>" .. t .. "</N2></font></b>"}))
 		tfm.exec.giveCheese(winner)
-        tfm.exec.playerVictory(winner)
+		tfm.exec.playerVictory(winner)
 
-        if statsEnabled then
-		    winnerPlayer.rounds = winnerPlayer.rounds + 1
-		    winnerPlayer.survived = winnerPlayer.survived + 1
+		if statsEnabled then
+			winnerPlayer.rounds = winnerPlayer.rounds + 1
+			winnerPlayer.survived = winnerPlayer.survived + 1
 			winnerPlayer.won = winnerPlayer.won + 1
 			winnerPlayer.points = winnerPlayer.points + 5
-            winnerPlayer:savePlayerData()
-        end
+			winnerPlayer:savePlayerData()
+		end
 
 		Timer("newRound", newRound, 3 * 1000)
 	elseif Player.aliveCount == 0  then
@@ -1034,36 +1034,36 @@ end
 function Player:savePlayerData()
 	-- if tfm.get.room.uniquePlayers < MIN_PLAYERS then return end
 	local name = self.name
-    dHandler:set(name, "rounds", self.rounds)
-    dHandler:set(name, "survived", self.survived)
+	dHandler:set(name, "rounds", self.rounds)
+	dHandler:set(name, "survived", self.survived)
 	dHandler:set(name, "won", self.won)
 	dHandler:set(name, "points", self.points)
 	dHandler:set(name, "packs", shop.packsBitList:encode(self.packs))
 	dHandler:set(name, "equipped", self.equipped == "Random" and -1 or shop.packsBitList:find(self.equipped))
 	dHandler:set(name, "roles", roles.list:encode(self.roles))
-    system.savePlayerData(name, "v2" .. dHandler:dumpPlayer(name))
+	system.savePlayerData(name, "v2" .. dHandler:dumpPlayer(name))
 end
 
 
 --==[[ events ]]==--
 
 function eventNewPlayer(name)
-    local player = Player.new(name)
-    tfm.exec.chatMessage(translate("WELCOME", player.community), name)
-    tfm.exec.chatMessage("<N>Discord server:</N> <VI><b><i>https://discord.gg/vaqgrgp</i></b></VI>", name)
-    Timer("banner_" .. name, function(image)
-        tfm.exec.removeImage(image)
-    end, 5000, false, tfm.exec.addImage(assets.banner, ":1", 120, -85, name))
-    system.loadPlayerData(name)
-    setNameColor(name)
+	local player = Player.new(name)
+	tfm.exec.chatMessage(translate("WELCOME", player.community), name)
+	tfm.exec.chatMessage("<N>Discord server:</N> <VI><b><i>https://discord.gg/vaqgrgp</i></b></VI>", name)
+	Timer("banner_" .. name, function(image)
+		tfm.exec.removeImage(image)
+	end, 5000, false, tfm.exec.addImage(assets.banner, ":1", 120, -85, name))
+	system.loadPlayerData(name)
+	setNameColor(name)
 end
 
 function eventLoop(tc, tr)
-	
+
 	Timer.process()
 
 	if tr < 0 and initialized then
-		if not suddenDeath then	
+		if not suddenDeath then
 			suddenDeath = true
 			tfm.exec.chatMessage(translate("SD", tfm.get.room.community))
 			for name, player in next, Player.alive do
@@ -1073,26 +1073,26 @@ function eventLoop(tc, tr)
 		else
 			local aliveCount = Player.aliveCount
 			if aliveCount > 1 then
-                local winners = ""
-                local winner = ""
+				local winners = ""
+				local winner = ""
 				for name, player in next, Player.alive do
-                    if statsEnabled then
-                        player.rounds = player.rounds + 1
+					if statsEnabled then
+						player.rounds = player.rounds + 1
 						player.survived = player.survived + 1
 						player.points = player.points + 2
-                        player:savePlayerData()
-                    end
+						player:savePlayerData()
+					end
 					if aliveCount == 1 then
-                        winners = winners:sub(1, -3)
-                        local n, t = extractName(name)
-                        winner = "<b><VI>" .. n .. "</VI><font size='8'><N2>" .. t .. "</N2></font></b>"
+						winners = winners:sub(1, -3)
+						local n, t = extractName(name)
+						winner = "<b><VI>" .. n .. "</VI><font size='8'><N2>" .. t .. "</N2></font></b>"
 						break
-                    end
-                    local n, t = extractName(name)
+					end
+					local n, t = extractName(name)
 					winners = winners .. "<b><VI>" .. n .. "</VI><font size='8'><N2>" .. t .. "</N2></font></b>" .. ", "
-					aliveCount = aliveCount - 1			
-                end
-                tfm.exec.chatMessage(translate("SURVIVORS", tfm.get.room.community, nil, { winners = winners, winner = winner }))
+					aliveCount = aliveCount - 1
+				end
+				tfm.exec.chatMessage(translate("SURVIVORS", tfm.get.room.community, nil, { winners = winners, winner = winner }))
 			end
 			newRoundStarted = false
 			Timer("newRound", newRound, 3 * 1000)
@@ -1101,6 +1101,7 @@ function eventLoop(tc, tr)
 	end
 
 end
+
 function eventKeyboard(name, key, down, x, y)
 	if key == keys.SPACE or key == keys.DOWN then
 		Player.players[name]:shoot(x, y)
@@ -1108,15 +1109,15 @@ function eventKeyboard(name, key, down, x, y)
 		Player.players[name].stance = -1
 	elseif key == keys.RIGHT then
 		Player.players[name].stance = 1
-    elseif key == keys.LETTER_H then
-        displayHelp(name, true)
-    elseif key == keys.LETTER_P then
-        displayProfile(Player.players[name], name, true)
-    elseif key == keys.LETTER_L then
-        leaderboard.displayLeaderboard("global", 1, name, true)
-    elseif key == keys.LETTER_O then
-        shop.displayShop(name, 1, true)
-    end
+	elseif key == keys.LETTER_H then
+		displayHelp(name, true)
+	elseif key == keys.LETTER_P then
+		displayProfile(Player.players[name], name, true)
+	elseif key == keys.LETTER_L then
+		leaderboard.displayLeaderboard("global", 1, name, true)
+	elseif key == keys.LETTER_O then
+		shop.displayShop(name, 1, true)
+	end
 end
 
 function eventNewGame()
@@ -1138,8 +1139,9 @@ function eventNewGame()
 		end, Player.playerCount == 1 and 0 or 4000)
 	end
 end
+
 function eventPlayerDied(name)
-    local player = Player.players[name]
+	local player = Player.players[name]
 	if not player then return end
 	if not newRoundStarted then
 		tfm.exec.respawnPlayer(name)
@@ -1164,46 +1166,47 @@ function eventPlayerDied(name)
 end
 
 function eventPlayerLeft(name)
-    local player = Player.players[name]
-    if not player then return end
-    player:die()
-    Player.players[name] = nil
-    Player.playerCount = Player.playerCount - 1
-    -- statsEnabled = (not isTribeHouse) and tfm.get.room.uniquePlayers >= 4
+	local player = Player.players[name]
+	if not player then return end
+	player:die()
+	Player.players[name] = nil
+	Player.playerCount = Player.playerCount - 1
+	-- statsEnabled = (not isTribeHouse) and tfm.get.room.uniquePlayers >= 4
 end
+
 function eventPlayerDataLoaded(name, data)
 	-- reset player data if they are stored according to the old version
 	if data:find("^v2") then
-        dHandler:newPlayer(name, data:sub(3))
-    else
-        system.savePlayerData(name, "")
-        dHandler:newPlayer(name, "")
-    end
+		dHandler:newPlayer(name, data:sub(3))
+	else
+		system.savePlayerData(name, "")
+		dHandler:newPlayer(name, "")
+	end
 
-    local player = Player.players[name]
+	local player = Player.players[name]
 
 	player.rounds = dHandler:get(name, "rounds")
 	player.survived = dHandler:get(name, "survived")
-    player.won = dHandler:get(name, "won")
-    player.points = dHandler:get(name, "points")
+	player.won = dHandler:get(name, "won")
+	player.points = dHandler:get(name, "points")
 
-    player.packs = shop.packsBitList:decode(dHandler:get(name, "packs"))
-    local counter = 1
-    for pack, hasPack in next, player.packs do 
-        if pack ~= "Default" and hasPack then
-            player.packsArray[counter] = pack
-            counter = counter + 1
-        end
-    end
+	player.packs = shop.packsBitList:decode(dHandler:get(name, "packs"))
+	local counter = 1
+	for pack, hasPack in next, player.packs do
+		if pack ~= "Default" and hasPack then
+			player.packsArray[counter] = pack
+			counter = counter + 1
+		end
+	end
 
-    player.packs["Random"] = true
+	player.packs["Random"] = true
 
-    local equipped = dHandler:get(name, "equipped")
-    player.equipped = equipped == -1 and "Random" or shop.packsBitList:get(equipped)
+	local equipped = dHandler:get(name, "equipped")
+	player.equipped = equipped == -1 and "Random" or shop.packsBitList:get(equipped)
 
-    player.roles = roles.list:decode(dHandler:get(name, "roles"))
-    player.highestRole = roles.getHighestRole(player)
-    setNameColor(name)
+	player.roles = roles.list:decode(dHandler:get(name, "roles"))
+	player.highestRole = roles.getHighestRole(player)
+	setNameColor(name)
 
 end
 
@@ -1222,8 +1225,8 @@ end
 
 function eventFileSaved(id)
 	if id == leaderboard.FILE_ID or id == tostring(leaderboard.FILE_ID) then
-        print("[STATS] Leaderboard saved!")
-        print(os.time())
+		print("[STATS] Leaderboard saved!")
+		print(os.time())
 		leaderboard.needUpdate = false
 	end
 end
@@ -1255,20 +1258,20 @@ leaderboard.leaderboardData = leaderboard.leaderboardData or leaderboard.DUMMY_D
 
 leaderboard.parseLeaderboard = function(data)
 	local res = {}
-  	for i, entry in next, string.split(data, "|") do
+	for i, entry in next, string.split(data, "|") do
 		local fields = string.split(entry, ",")
 		local name = fields[1]
 		res[name] = { name = name, rounds = tonumber(fields[2]), survived = tonumber(fields[3]), won = tonumber(fields[4]), community = fields[5] }
 		res[name].score = leaderboard.scorePlayer(res[name])
-  	end
-  	return res
+	end
+	return res
 end
 
 leaderboard.dumpLeaderboard = function(lboard)
 	local res = ""
 	for i, entry in next, lboard do
-  		res = res .. entry.name .. "," .. entry.rounds .. "," .. entry.survived .. "," .. entry.won .. "," .. entry.community .. "|"
-	end 
+		res = res .. entry.name .. "," .. entry.rounds .. "," .. entry.survived .. "," .. entry.won .. "," .. entry.community .. "|"
+	end
 	return res:sub(1, -2)
 end
 
@@ -1281,17 +1284,17 @@ leaderboard.save = function(leaders)
 	local serialised, indexes = leaderboard.prepare(leaders)
 	if serialised == leaderboard.leaderboardData then return end
 	leaderboard.indexed = indexes
-    if tfm.get.room.uniquePlayers < 4 then return end
+	if tfm.get.room.uniquePlayers < 4 then return end
 	local started = system.saveFile(serialised, leaderboard.FILE_ID)
 	if started then print("[STATS] Saving leaderboard...") end
 end
 
 leaderboard.scorePlayer = function(player)
-    return player.rounds * 0.5 * ((player.won + player.survived) / (player.rounds == 0 and 1 or player.rounds))
+	return player.rounds * 0.5 * ((player.won + player.survived) / (player.rounds == 0 and 1 or player.rounds))
 end
 
 leaderboard.addPlayer = function(player)
-    local score = leaderboard.scorePlayer(player)
+	local score = leaderboard.scorePlayer(player)
 	leaderboard.leaders[player.name] = { name = player.name, rounds = player.rounds, survived = player.survived, won = player.won, community = player.community, score = score }
 end
 
@@ -1307,9 +1310,9 @@ leaderboard.prepare = function(leaders)
 
 	table.sort(temp, function(p1, p2)
 		return p1.score > p2.score
-    end)
+	end)
 
-    for i = 1, 50 do res[i] = temp[i] end
+	for i = 1, 50 do res[i] = temp[i] end
 
 	return leaderboard.dumpLeaderboard(res), res
 
@@ -1317,7 +1320,7 @@ end
 
 leaderboard.displayLeaderboard = function(mode, page, target, keyPressed)
 	local targetPlayer = Player.players[target]
-	
+
 	if targetPlayer.openedWindow then
 		targetPlayer.openedWindow:hide(target)
 		if targetPlayer.openedWindow == leaderboardWindow and keyPressed then
@@ -1328,7 +1331,7 @@ leaderboard.displayLeaderboard = function(mode, page, target, keyPressed)
 
 	leaderboardWindow:show(target)
 	local leaders = {}
-	local rankTxt, nameTxt, roundsTxt, deathsTxt, survivedTxt, wonTxt 
+	local rankTxt, nameTxt, roundsTxt, deathsTxt, survivedTxt, wonTxt
 		= "<br><br>", "<br><br>", "<br><br>", "<br><br>", "<br><br>", "<br><br>"
 
 	if mode == "global" then
@@ -1337,25 +1340,25 @@ leaderboard.displayLeaderboard = function(mode, page, target, keyPressed)
 		Panel.panels[357]:update("<a href='event:switch'>Global \t ▼</a>", target)
 	else
 		local selfRank
-		
+
 		for name, player in next, Player.players do
 			leaders[#leaders + 1] = player
 		end
-		
+
 		table.sort(leaders, function(p1, p2)
 			return leaderboard.scorePlayer(p1) > leaderboard.scorePlayer(p2)
 		end)
-		
+
 		for i, leader in ipairs(leaders) do if leader.name == target then selfRank = i break end end
 		-- TODO: Add translations v
 		Panel.panels[356]:update(translate("SELF_RANK", targetPlayer.community, nil, { rank = selfRank }), target)
-        Panel.panels[357]:update("<a href='event:switch'>Room \t ▼</a>", target)
-        
+		Panel.panels[357]:update("<a href='event:switch'>Room \t ▼</a>", target)
+
 	end
-	
-	
-    local counter = 0
-    local rankPage = (page - 1) * 10
+
+
+	local counter = 0
+	local rankPage = (page - 1) * 10
 	for i, leader in next, leaders do
 		local name, tag = extractName(leader.name)
 		if not (name and tag) then name, tag = leader.name, "" end
@@ -1376,7 +1379,7 @@ leaderboard.displayLeaderboard = function(mode, page, target, keyPressed)
 	Panel.panels[353]:update(deathsTxt, target)
 	Panel.panels[354]:update(survivedTxt, target)
 	Panel.panels[355]:update(wonTxt, target)
-    targetPlayer.openedWindow = leaderboardWindow
+	targetPlayer.openedWindow = leaderboardWindow
 
 end
 
@@ -1399,176 +1402,176 @@ shop.defaultItemImages = {
 -- Item packs that are used to display in the shop interface
 shop.packs = {
 
-	["Random"] = {
-		coverImage = "1756e10f5e0.png",
-		coverAdj = { x = 3, y = 0 },
-		description = "It's all random 0m0",
-		author = "rand()",
-		price = 0,
+		["Random"] = {
+			coverImage = "1756e10f5e0.png",
+			coverAdj = { x = 3, y = 0 },
+			description = "It's all random 0m0",
+			author = "rand()",
+			price = 0,
 
-		description_locales = {
-			en = "It's all random 0m0",
-			fr = "C'est que du hasard 0m0",
+			description_locales = {
+				en = "It's all random 0m0",
+				fr = "C'est que du hasard 0m0",
+			},
+
+			skins = {
+				[ENUM_ITEMS.CANNON] = { image = "1756df9f351.png" },
+				[ENUM_ITEMS.ANVIL] = { image = "1756dfa81b1.png" },
+				[ENUM_ITEMS.BALL] = { image = "1756df9f351.png" },
+				[ENUM_ITEMS.BLUE_BALOON] = { image = "1756dfa3e9a.png" },
+				[ENUM_ITEMS.LARGE_BOX] = { image = "1756dfad0ff.png" },
+				[ENUM_ITEMS.SMALL_BOX] = { image = "1756dfafe31.png" },
+				[ENUM_ITEMS.LARGE_PLANK] = { image = "1756dfb428f.png" },
+				[ENUM_ITEMS.SMALL_PLANK] = { image = "1756e01b60d.png" }
+			}
 		},
 
-		skins = {
-			[ENUM_ITEMS.CANNON] = { image = "1756df9f351.png" },
-			[ENUM_ITEMS.ANVIL] = { image = "1756dfa81b1.png" },
-			[ENUM_ITEMS.BALL] = { image = "1756df9f351.png" },
-			[ENUM_ITEMS.BLUE_BALOON] = { image = "1756dfa3e9a.png" },
-			[ENUM_ITEMS.LARGE_BOX] = { image = "1756dfad0ff.png" },
-			[ENUM_ITEMS.SMALL_BOX] = { image = "1756dfafe31.png" },
-			[ENUM_ITEMS.LARGE_PLANK] = { image = "1756dfb428f.png" },
-			[ENUM_ITEMS.SMALL_PLANK] = { image = "1756e01b60d.png" }
-		}
-	},
+		["Default"] = {
+			coverImage = "175405f30a3.png",
+			coverAdj = { x = 15, y = 5 },
+			description = "Default item pack",
+			author = "Transformice",
+			price = 0,
 
-	["Default"] = {
-		coverImage = "175405f30a3.png",
-		coverAdj = { x = 15, y = 5 },
-		description = "Default item pack",
-		author = "Transformice",
-		price = 0,
+			description_locales = {
+				en = "Default item pack",
+				fr = "Pack de texture par défaut.",
+			},
 
-		description_locales = {
-			en = "Default item pack",
-			fr = "Pack de texture par défaut.",
+			skins = {
+				[ENUM_ITEMS.CANNON] = { image = "1752b1c10bc.png" },
+				[ENUM_ITEMS.ANVIL] = { image = "1752b1b9497.png" },
+				[ENUM_ITEMS.BALL] = { image = "1752b1bdeee.png" },
+				[ENUM_ITEMS.BLUE_BALOON] = { image = "1752b1aa57c.png" },
+				[ENUM_ITEMS.LARGE_BOX] = { image = "1752b1adb5e.png" },
+				[ENUM_ITEMS.SMALL_BOX] = { image = "1752b1b1cc6.png" },
+				[ENUM_ITEMS.LARGE_PLANK] = { image = "1752b1b5ac3.png" },
+				[ENUM_ITEMS.SMALL_PLANK] = { image = "1752b0918ed.png" }
+			}
 		},
 
-		skins = {
-			[ENUM_ITEMS.CANNON] = { image = "1752b1c10bc.png" },
-			[ENUM_ITEMS.ANVIL] = { image = "1752b1b9497.png" },
-			[ENUM_ITEMS.BALL] = { image = "1752b1bdeee.png" },
-			[ENUM_ITEMS.BLUE_BALOON] = { image = "1752b1aa57c.png" },
-			[ENUM_ITEMS.LARGE_BOX] = { image = "1752b1adb5e.png" },
-			[ENUM_ITEMS.SMALL_BOX] = { image = "1752b1b1cc6.png" },
-			[ENUM_ITEMS.LARGE_PLANK] = { image = "1752b1b5ac3.png" },
-			[ENUM_ITEMS.SMALL_PLANK] = { image = "1752b0918ed.png" }
-		}
-	},
+		["Poisson"] = {
+			coverImage = "17540405f67.png",
+			coverAdj = { x = 8, y = 8 },
+			description = "Back in old days...",
+			author = "Transformice",
+			price = 100,
 
-	["Poisson"] = {
-		coverImage = "17540405f67.png",
-		coverAdj = { x = 8, y = 8 },
-		description = "Back in old days...",
-		author = "Transformice",
-		price = 100,
+			description_locales = {
+				en = "Back in old days...",
+				fr = "Comme au bon vieux temps...",
+			},
 
-		description_locales = {
-			en = "Back in old days...",
-			fr = "Comme au bon vieux temps...",
+			skins = {
+				[ENUM_ITEMS.CANNON] =  { image = "174bb44115d.png", adj = { x = -16, y = -16 } },
+				[ENUM_ITEMS.ANVIL] = { },
+				[ENUM_ITEMS.BALL] =  { image = "174bb405fd4.png", adj = { x = -16, y = -16 } },
+				[ENUM_ITEMS.BLUE_BALOON] = { },
+				[ENUM_ITEMS.LARGE_BOX] =  { image = "174c530f384.png", adj = { x = -30, y = -30 } },
+				[ENUM_ITEMS.SMALL_BOX] =  { image = "174c532630c.png", adj = { x = -16, y = -16 } },
+				[ENUM_ITEMS.LARGE_PLANK] =  { image = "174c5311ea4.png", adj = { x = -104, y = -6 } },
+				[ENUM_ITEMS.SMALL_PLANK] =  { image = "174c5324b9b.png", adj = { x = -50, y = -6 } }
+			}
 		},
 
-		skins = {
-			[ENUM_ITEMS.CANNON] =  { image = "174bb44115d.png", adj = { x = -16, y = -16 } },
-			[ENUM_ITEMS.ANVIL] = { },
-			[ENUM_ITEMS.BALL] =  { image = "174bb405fd4.png", adj = { x = -16, y = -16 } },
-			[ENUM_ITEMS.BLUE_BALOON] = { },
-			[ENUM_ITEMS.LARGE_BOX] =  { image = "174c530f384.png", adj = { x = -30, y = -30 } },
-			[ENUM_ITEMS.SMALL_BOX] =  { image = "174c532630c.png", adj = { x = -16, y = -16 } },
-			[ENUM_ITEMS.LARGE_PLANK] =  { image = "174c5311ea4.png", adj = { x = -104, y = -6 } },
-			[ENUM_ITEMS.SMALL_PLANK] =  { image = "174c5324b9b.png", adj = { x = -50, y = -6 } }
-		}
-	},
+		["Catto"] = {
+			coverImage = "1754528ac5c.png",
+			coverAdj = { x = 8, y = 0 },
+			description = "Meow!",
+			author = "King_seniru#5890",
+			price = 300,
 
-	["Catto"] = {
-		coverImage = "1754528ac5c.png",
-		coverAdj = { x = 8, y = 0 },
-		description = "Meow!",
-		author = "King_seniru#5890",
-		price = 300,
+			description_locales = {
+				en = "Meow!",
+				fr = "Miaou !",
+			},
 
-		description_locales = {
-			en = "Meow!",
-			fr = "Miaou !",
+			skins = {
+				[ENUM_ITEMS.CANNON] =  { image = "17530cc2bfb.png", adj = { x = -16, y = -16 } },
+				[ENUM_ITEMS.ANVIL] = { image = "17530cb9535.png", adj = { x = -24, y = -24 } },
+				[ENUM_ITEMS.BALL] =  { image = "17530cb1c03.png", adj = { x = -16, y = -16 } },
+				[ENUM_ITEMS.BLUE_BALOON] = { image = "17530cc8b06.png", adj = { x = -18, y = -18 } },
+				[ENUM_ITEMS.LARGE_BOX] =  { image = "17530ccf337.png", adj = { x = -30, y = -30 } },
+				[ENUM_ITEMS.SMALL_BOX] =  { image = "17530cd4a81.png", adj = { x = -16, y = -16 } },
+				[ENUM_ITEMS.LARGE_PLANK] =  { image = "17530cf135f.png", adj = { x = -100, y = -14 } },
+				[ENUM_ITEMS.SMALL_PLANK] =  { image = "17530cf9d23.png", adj = { x = -50, y = -14 } }
+			}
 		},
 
-		skins = {
-			[ENUM_ITEMS.CANNON] =  { image = "17530cc2bfb.png", adj = { x = -16, y = -16 } },
-			[ENUM_ITEMS.ANVIL] = { image = "17530cb9535.png", adj = { x = -24, y = -24 } },
-			[ENUM_ITEMS.BALL] =  { image = "17530cb1c03.png", adj = { x = -16, y = -16 } },
-			[ENUM_ITEMS.BLUE_BALOON] = { image = "17530cc8b06.png", adj = { x = -18, y = -18 } },
-			[ENUM_ITEMS.LARGE_BOX] =  { image = "17530ccf337.png", adj = { x = -30, y = -30 } },
-			[ENUM_ITEMS.SMALL_BOX] =  { image = "17530cd4a81.png", adj = { x = -16, y = -16 } },
-			[ENUM_ITEMS.LARGE_PLANK] =  { image = "17530cf135f.png", adj = { x = -100, y = -14 } },
-			[ENUM_ITEMS.SMALL_PLANK] =  { image = "17530cf9d23.png", adj = { x = -50, y = -14 } }
-		}
-	},
+		["Royal"] = {
+			coverImage = "1754f97c21c.png",
+			coverAdj = { x = 8, y = 0 },
+			description = "Only for the strongest kings!",
+			author = "Lightymouse#0421",
+			price = 300,
 
-	["Royal"] = {
-		coverImage = "1754f97c21c.png",
-		coverAdj = { x = 8, y = 0 },
-		description = "Only for the strongest kings!",
-		author = "Lightymouse#0421",
-		price = 300,
+			description_locales = {
+				en = "Only for the strongest kings!",
+				fr = "Seulement pour les rois les plus fort !",
+			},
 
-		description_locales = {
-			en = "Only for the strongest kings!",
-			fr = "Seulement pour les rois les plus fort !",
+			skins = {
+				[ENUM_ITEMS.CANNON] =  { image = "1754f9851c8.png", adj = { x = -17, y = -17 } },
+				[ENUM_ITEMS.ANVIL] = { image = "1754f98d0b8.png", adj = { x = -24, y = -34 } },
+				[ENUM_ITEMS.BALL] =  { image = "1754f9a7601.png", adj = { x = -16, y = -16 } },
+				[ENUM_ITEMS.BLUE_BALOON] = { image = "1754fca819f.png", adj = { x = -22, y = -22 } },
+				[ENUM_ITEMS.LARGE_BOX] =  { image = "1754f9b87a6.png", adj = { x = -35, y = -35 } },
+				[ENUM_ITEMS.SMALL_BOX] =  { image = "1754f9d18f6.png", adj = { x = -19, y = -19 } },
+				[ENUM_ITEMS.LARGE_PLANK] =  { image = "1754f9d7544.png", adj = { x = -100, y = -10 } },
+				[ENUM_ITEMS.SMALL_PLANK] =  { image = "1754f9dc2a0.png", adj = { x = -50, y = -10 } }
+			}
+
 		},
 
-		skins = {
-			[ENUM_ITEMS.CANNON] =  { image = "1754f9851c8.png", adj = { x = -17, y = -17 } },
-			[ENUM_ITEMS.ANVIL] = { image = "1754f98d0b8.png", adj = { x = -24, y = -34 } },
-			[ENUM_ITEMS.BALL] =  { image = "1754f9a7601.png", adj = { x = -16, y = -16 } },
-			[ENUM_ITEMS.BLUE_BALOON] = { image = "1754fca819f.png", adj = { x = -22, y = -22 } },
-			[ENUM_ITEMS.LARGE_BOX] =  { image = "1754f9b87a6.png", adj = { x = -35, y = -35 } },
-			[ENUM_ITEMS.SMALL_BOX] =  { image = "1754f9d18f6.png", adj = { x = -19, y = -19 } },
-			[ENUM_ITEMS.LARGE_PLANK] =  { image = "1754f9d7544.png", adj = { x = -100, y = -10 } },
-			[ENUM_ITEMS.SMALL_PLANK] =  { image = "1754f9dc2a0.png", adj = { x = -50, y = -10 } }
-		}
+		["Halloween 2020"] = {
+			coverImage = "175832f4631.png",
+			coverAdj = { x = 8, y = 0 },
+			description = "Trick or Treat!?",
+			author = "Thetiger56#6961",
+			price = 400,
 
-	},
+			description_locales = {
+				en = "Trick or Treat!?",
+				fr = "Un bonbon ou un sort !?",
+			},
 
-	["Halloween 2020"] = {
-		coverImage = "175832f4631.png",
-		coverAdj = { x = 8, y = 0 },
-		description = "Trick or Treat!?",
-		author = "Thetiger56#6961",
-		price = 400,
+			skins = {
+				[ENUM_ITEMS.CANNON] =  { image = "175829957ec.png", adj = { x = -17, y = -17 } },
+				[ENUM_ITEMS.ANVIL] = { image = "17582960dfd.png", adj = { x = -22, y = -24 } },
+				[ENUM_ITEMS.BALL] =  { image = "17582965a03.png", adj = { x = -17, y = -19 } },
+				[ENUM_ITEMS.BLUE_BALOON] = { image = "1758295cf4b.png", adj = { x = -22, y = -22 } },
+				[ENUM_ITEMS.LARGE_BOX] =  { image = "175829687b2.png", adj = { x = -32, y = -32 } },
+				[ENUM_ITEMS.SMALL_BOX] =  { image = "1758296be0c.png", adj = { x = -19, y = -19 } },
+				[ENUM_ITEMS.LARGE_PLANK] =  { image = "175829715e2.png", adj = { x = -100, y = -6 } },
+				[ENUM_ITEMS.SMALL_PLANK] =  { image = "17582976871.png", adj = { x = -50, y = -13 } }
+			}
 
-		description_locales = {
-			en = "Trick or Treat!?",
-			fr = "Un bonbon ou un sort !?",
 		},
 
-		skins = {
-			[ENUM_ITEMS.CANNON] =  { image = "175829957ec.png", adj = { x = -17, y = -17 } },
-			[ENUM_ITEMS.ANVIL] = { image = "17582960dfd.png", adj = { x = -22, y = -24 } },
-			[ENUM_ITEMS.BALL] =  { image = "17582965a03.png", adj = { x = -17, y = -19 } },
-			[ENUM_ITEMS.BLUE_BALOON] = { image = "1758295cf4b.png", adj = { x = -22, y = -22 } },
-			[ENUM_ITEMS.LARGE_BOX] =  { image = "175829687b2.png", adj = { x = -32, y = -32 } },
-			[ENUM_ITEMS.SMALL_BOX] =  { image = "1758296be0c.png", adj = { x = -19, y = -19 } },
-			[ENUM_ITEMS.LARGE_PLANK] =  { image = "175829715e2.png", adj = { x = -100, y = -6 } },
-			[ENUM_ITEMS.SMALL_PLANK] =  { image = "17582976871.png", adj = { x = -50, y = -13 } }
-		}
+		["Christmas 2020"] = {
+			coverImage = "1765abc248e.png",
+			coverAdj = { x = 0, y = 0 },
+			description = "Ho ho ho, Merry Christmas!!",
+			author = "Thetiger56#6961",
+			price = 400,
 
-	},
+			description_locales = {
+				en = "Ho ho ho, Merry Christmas!!",
+				fr = "Ho ho Ho, Joyeux Noël !!",
+			},
 
-	["Christmas 2020"] = {
-		coverImage = "1765abc248e.png",
-		coverAdj = { x = 0, y = 0 },
-		description = "Ho ho ho, Merry Christmas!!",
-		author = "Thetiger56#6961",
-		price = 400,
+			skins = {
+				[ENUM_ITEMS.CANNON] =  { image = "1765abff096.png", adj = { x = -17, y = -17 } },
+				[ENUM_ITEMS.ANVIL] = { image = "1765ac2ed92.png", adj = { x = -24, y = -28 } },
+				[ENUM_ITEMS.BALL] =  { image = "1765ac10519.png", adj = { x = -17, y = -18 } },
+				[ENUM_ITEMS.BLUE_BALOON] = { image = "17660481ac5.png", adj = { x = -25, y = -24 } },
+				[ENUM_ITEMS.LARGE_BOX] =  { image = "1765aca14d3.png", adj = { x = -32, y = -32 } },
+				[ENUM_ITEMS.SMALL_BOX] =  { image = "1765ad54bea.png", adj = { x = -17, y = -17 } },
+				[ENUM_ITEMS.LARGE_PLANK] =  { image = "1765ad8d77d.png", adj = { x = -100, y = -17 } },
+				[ENUM_ITEMS.SMALL_PLANK] =  { image = "1765ad9f608.png", adj = { x = -50, y = -18 } }
+			}
 
-		description_locales = {
-			en = "Ho ho ho, Merry Christmas!!",
-			fr = "Ho ho Ho, Joyeux Noël !!",
 		},
-
-		skins = {
-			[ENUM_ITEMS.CANNON] =  { image = "1765abff096.png", adj = { x = -17, y = -17 } },
-			[ENUM_ITEMS.ANVIL] = { image = "1765ac2ed92.png", adj = { x = -24, y = -28 } },
-			[ENUM_ITEMS.BALL] =  { image = "1765ac10519.png", adj = { x = -17, y = -18 } },
-			[ENUM_ITEMS.BLUE_BALOON] = { image = "17660481ac5.png", adj = { x = -25, y = -24 } },
-			[ENUM_ITEMS.LARGE_BOX] =  { image = "1765aca14d3.png", adj = { x = -32, y = -32 } },
-			[ENUM_ITEMS.SMALL_BOX] =  { image = "1765ad54bea.png", adj = { x = -17, y = -17 } },
-			[ENUM_ITEMS.LARGE_PLANK] =  { image = "1765ad8d77d.png", adj = { x = -100, y = -17 } },
-			[ENUM_ITEMS.SMALL_PLANK] =  { image = "1765ad9f608.png", adj = { x = -50, y = -18 } }
-		}
-
-	},
 
 
 }
@@ -1579,7 +1582,7 @@ for pack in next, shop.packs do shop.totalPacks = shop.totalPacks + 1 end
 shop.totalPages = math.ceil((shop.totalPacks) / 6)
 
 shop.packsBitList = BitList {
-    "Default", "Poisson", "Catto", "Royal", "Halloween 2020", "Christmas 2020"
+	"Default", "Poisson", "Catto", "Royal", "Halloween 2020", "Christmas 2020"
 }
 
 shop.displayShop = function(target, page, keyPressed)
@@ -1592,7 +1595,7 @@ shop.displayShop = function(target, page, keyPressed)
 
 	if targetPlayer.openedWindow then
 		targetPlayer.openedWindow:hide(target)
-		if targetPlayer.openedWindow == shopWindow and keyPressed then	
+		if targetPlayer.openedWindow == shopWindow and keyPressed then
 			targetPlayer.openedWindow = nil
 			return
 		end
@@ -1619,7 +1622,7 @@ shop.displayShop = function(target, page, keyPressed)
 
 	targetPlayer.openedWindow = shopWindow
 
-    local col, row, count = 0, 0, 0
+	local col, row, count = 0, 0, 0
 
 	for i = (page - 1) * 6 + 1, page * 6 do
 		local name = i == 1 and "Random" or shop.packsBitList:get(i - 1)
@@ -1636,7 +1639,7 @@ shop.displayShop = function(target, page, keyPressed)
 			)
 		if not targetPlayer.packs[name] then packPanel:addImageTemp(Image(assets.lock, "&1", 380 + col * 120, 80 + row * 120, target), target) end
 
-        shopWindow:addPanelTemp(packPanel, target)
+		shopWindow:addPanelTemp(packPanel, target)
 
 		col = col + 1
 		count = count + 2
@@ -1644,7 +1647,7 @@ shop.displayShop = function(target, page, keyPressed)
 			row = row + 1
 			col = 0
 		end
-    end
+	end
 end
 
 shop.displayPackInfo = function(target, packName)
@@ -1666,11 +1669,11 @@ shop.displayPackInfo = function(target, packName)
 			hasEquipped and "none" or (hasBought and "equip" or (hasRequiredPoints and "buy" or "none")),
 			packName,
 			hasEquipped	and translate("EQUIPPED", commu)
-				or (hasBought and translate("EQUIP", commu)
-					or (hasRequiredPoints and (translate("BUY", commu) .. ": " .. pack.price)
-						or ("<N2>" .. translate("BUY", commu) .. ": " .. pack.price .. "</N2>")
-					)
-				)
+			or (hasBought and translate("EQUIP", commu)
+			or (hasRequiredPoints and (translate("BUY", commu) .. ": " .. pack.price)
+			or ("<N2>" .. translate("BUY", commu) .. ": " .. pack.price .. "</N2>")
+			)
+			)
 		)
 	, target)
 
@@ -1698,134 +1701,134 @@ end
 roles = {}
 
 roles.list = BitList {
-    "admin",
-    "staff",
-    "developer",
-    "artist",
-    "translator",
-    "mapper"
+	"admin",
+	"staff",
+	"developer",
+	"artist",
+	"translator",
+	"mapper"
 }
 
 roles.colors = {
-    ["admin"] = 0xFF5555,
-    ["staff"] = 0xF3D165,
-    ["developer"] = 0x7BC7F7,
-    ["artist"] = 0xFF69B4,
-    ["translator"] = 0xB69EFD,
-    ["mapper"] = 0x87DF87
+	["admin"] = 0xFF5555,
+	["staff"] = 0xF3D165,
+	["developer"] = 0x7BC7F7,
+	["artist"] = 0xFF69B4,
+	["translator"] = 0xB69EFD,
+	["mapper"] = 0x87DF87
 }
 
 roles.addRole = function(player, role)
-    player.roles[role] = true
-    player.highestRole = roles.getHighestRole(player)
-    setNameColor(player.name)
-    tfm.exec.chatMessage(translate("NEW_ROLE", tfm.get.room.community, nil, { player = player.name, role = role }))
-    player:savePlayerData()
+	player.roles[role] = true
+	player.highestRole = roles.getHighestRole(player)
+	setNameColor(player.name)
+	tfm.exec.chatMessage(translate("NEW_ROLE", tfm.get.room.community, nil, { player = player.name, role = role }))
+	player:savePlayerData()
 end
 
 roles.removeRole = function(player, role)
-    player.roles[role] = nil
-    player.highestRole = roles.getHighestRole(player)
-    tfm.exec.setNameColor(player.name, 0) -- set it to default color in case of all the colors are removed
-    setNameColor(player.name)
-    tfm.exec.chatMessage(translate("KICK_ROLE", tfm.get.room.community, nil, { player = player.name, role = role }))
-    player:savePlayerData()
+	player.roles[role] = nil
+	player.highestRole = roles.getHighestRole(player)
+	tfm.exec.setNameColor(player.name, 0) -- set it to default color in case of all the colors are removed
+	setNameColor(player.name)
+	tfm.exec.chatMessage(translate("KICK_ROLE", tfm.get.room.community, nil, { player = player.name, role = role }))
+	player:savePlayerData()
 end
 
 roles.getHighestRole = function(player)
-    for i, rank in next, roles.list.featureArray do
-        if player.roles[rank] then return rank end
-    end
-    return "default"
+	for i, rank in next, roles.list.featureArray do
+		if player.roles[rank] then return rank end
+	end
+	return "default"
 end
 
 cmds = {
 
-    ["profile"] = function(args, msg, author)
-        local player = Player.players[args[1] or author] or Player.players[author]
-        displayProfile(player, author)
-    end,
+		["profile"] = function(args, msg, author)
+			local player = Player.players[args[1] or author] or Player.players[author]
+			displayProfile(player, author)
+		end,
 
-    ["help"] = function(args, msg, author)
-        displayHelp(author)
-    end,
+		["help"] = function(args, msg, author)
+			displayHelp(author)
+		end,
 
-    ["shop"] = function(args, msg, author)
-        shop.displayShop(author, 1)
-    end,
+		["shop"] = function(args, msg, author)
+			shop.displayShop(author, 1)
+		end,
 
-    ["changelog"] = function(args, msg, author)
-        displayChangelog(author)
-    end,
+		["changelog"] = function(args, msg, author)
+			displayChangelog(author)
+		end,
 
-    ["give"] = function(args, msg, author)
-        
-        if not admins[author] then return end
-        
-        local FORMAT_ERR_MSG = "<N>[</N><R>•</R><N>] <R><b>Error in command<br>\tUsage:</b><font face='Lucida console'> !give <i>[points|pack] [target] [value]</i></font></R>"
-        local TARGET_UNREACHABLE_ERR = "<N>[</N><R>•</R><N>] <R><b>Error: Target unreachable!</b></R>"
+		["give"] = function(args, msg, author)
 
-        if (not args[1]) or (not args[2]) or (not args[3]) then return tfm.exec.chatMessage(FORMAT_ERR_MSG, author) end
+			if not admins[author] then return end
 
-        local target = Player.players[args[2]]
-        local n, t = extractName(author)
+			local FORMAT_ERR_MSG = "<N>[</N><R>•</R><N>] <R><b>Error in command<br>\tUsage:</b><font face='Lucida console'> !give <i>[points|pack] [target] [value]</i></font></R>"
+			local TARGET_UNREACHABLE_ERR = "<N>[</N><R>•</R><N>] <R><b>Error: Target unreachable!</b></R>"
 
-        if args[1] == "points" then
-            if not target then return tfm.exec.chatMessage(TARGET_UNREACHABLE_ERR, author) end
-            local points = tonumber(args[3])
-            if not points then return tfm.exec.chatMessage(FORMAT_ERR_MSG, author) end -- NaN
-            target.points = target.points + points
-            target:savePlayerData()
-            print(("[GIFT] %s has been rewarded with %s by %s"):format(args[2], points .. " Pts.", author))
-            tfm.exec.chatMessage(("<N>[</N><ROSE>•</ROSE><N>] Rewarded <ROSE>%s</ROSE> with <ROSE>%s</ROSE> points"):format(args[2], points), author)
-            tfm.exec.chatMessage(translate("GIFT_RECV", target.community, nil, {
-                admin = "<VI>" .. n .. "</VI><font size='8'><N2>" .. t .. "</N2></font>",
-                gift = points .. " Pts."
-            }), args[2])
-        elseif args[1] == "pack" then
-            if not target then return tfm.exec.chatMessage(TARGET_UNREACHABLE_ERR, author) end
-            local pack = msg:match("give pack .+#%d+ (.+)")
-            if not shop.packs[pack] then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error:</b> Could not find the pack</R>", author) end
-            if target.packs[pack] then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error: </b>Target already own that pack</R>", author) end
-            target.packs[pack] = true
-            target:savePlayerData()
-            print(("[GIFT] %s has been rewarded with %s by %s"):format(args[2], pack, author))
-            tfm.exec.chatMessage(("<N>[</N><ROSE>•</ROSE><N>] Rewarded <ROSE>%s</ROSE> with <ROSE>%s</ROSE>"):format(args[2], pack), author)
-            tfm.exec.chatMessage(translate("GIFT_RECV", target.community, nil, {
-                admin = "<VI>" .. n .. "</VI><font size='8'><N2>" .. t .. "</N2></font>",
-                gift = pack
-            }), args[2])
-        else
-            tfm.exec.chatMessage(FORMAT_ERR_MSG, author)
-        end
+			if (not args[1]) or (not args[2]) or (not args[3]) then return tfm.exec.chatMessage(FORMAT_ERR_MSG, author) end
 
-    end,
+			local target = Player.players[args[2]]
+			local n, t = extractName(author)
 
-    ["pw"] = function(args, msg, author)
-        if not admins[author] then return end
-        local pw = msg:match("^pw (.+)")
-        tfm.exec.setRoomPassword(pw)
-        if (not pw) or pw == "" then tfm.exec.chatMessage("<N>[</N><ROSE>•</ROSE><N>] Removed the password!", author)
-        else tfm.exec.chatMessage(("<N>[</N><ROSE>•</ROSE><N>] Password: %s"):format(pw), author) end
-    end,
+			if args[1] == "points" then
+				if not target then return tfm.exec.chatMessage(TARGET_UNREACHABLE_ERR, author) end
+				local points = tonumber(args[3])
+				if not points then return tfm.exec.chatMessage(FORMAT_ERR_MSG, author) end -- NaN
+				target.points = target.points + points
+				target:savePlayerData()
+				print(("[GIFT] %s has been rewarded with %s by %s"):format(args[2], points .. " Pts.", author))
+				tfm.exec.chatMessage(("<N>[</N><ROSE>•</ROSE><N>] Rewarded <ROSE>%s</ROSE> with <ROSE>%s</ROSE> points"):format(args[2], points), author)
+				tfm.exec.chatMessage(translate("GIFT_RECV", target.community, nil, {
+					admin = "<VI>" .. n .. "</VI><font size='8'><N2>" .. t .. "</N2></font>",
+					gift = points .. " Pts."
+				}), args[2])
+			elseif args[1] == "pack" then
+				if not target then return tfm.exec.chatMessage(TARGET_UNREACHABLE_ERR, author) end
+				local pack = msg:match("give pack .+#%d+ (.+)")
+				if not shop.packs[pack] then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error:</b> Could not find the pack</R>", author) end
+				if target.packs[pack] then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error: </b>Target already own that pack</R>", author) end
+				target.packs[pack] = true
+				target:savePlayerData()
+				print(("[GIFT] %s has been rewarded with %s by %s"):format(args[2], pack, author))
+				tfm.exec.chatMessage(("<N>[</N><ROSE>•</ROSE><N>] Rewarded <ROSE>%s</ROSE> with <ROSE>%s</ROSE>"):format(args[2], pack), author)
+				tfm.exec.chatMessage(translate("GIFT_RECV", target.community, nil, {
+					admin = "<VI>" .. n .. "</VI><font size='8'><N2>" .. t .. "</N2></font>",
+					gift = pack
+				}), args[2])
+			else
+				tfm.exec.chatMessage(FORMAT_ERR_MSG, author)
+			end
 
-    ["setrole"] = function(args, msg, author)
-        if not admins[author] then return end
-        if not (args[1] or args[2]) then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error in command<br>\tUsage:</b><font face='Lucida console'> !setrole <i> [target] [role]</i></font>\n\tAvailable roles - <font face='Lucida Console'>admin, staff, developer, artist, translator, mapper</font></R>", author) end
-        local target = Player.players[args[1]]
-        if not target then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error: Target unreachable!</b></R>", author) end
-        if not roles.list:find(args[2]) then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error:</b> Could not find the role</R>", author) end
-        roles.addRole(target, args[2])
-    end,
+		end,
 
-    ["remrole"] = function(args, msg, author)
-        if not admins[author] then return end
-        if not (args[1] or args[2]) then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error in command<br>\tUsage:</b><font face='Lucida console'> !remrole <i> [target] [role]</i></font>\n\tAvailable roles - <font face='Lucida Console'>admin, staff, developer, artist, translator, mapper</font></R>", author) end
-        local target = Player.players[args[1]]
-        if not target then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error: Target unreachable!</b></R>", author) end
-        if not roles.list:find(args[2]) then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error:</b> Could not find the role</R>", author) end
-        roles.removeRole(target, args[2])
-    end
+		["pw"] = function(args, msg, author)
+			if not admins[author] then return end
+			local pw = msg:match("^pw (.+)")
+			tfm.exec.setRoomPassword(pw)
+			if (not pw) or pw == "" then tfm.exec.chatMessage("<N>[</N><ROSE>•</ROSE><N>] Removed the password!", author)
+			else tfm.exec.chatMessage(("<N>[</N><ROSE>•</ROSE><N>] Password: %s"):format(pw), author) end
+		end,
+
+		["setrole"] = function(args, msg, author)
+			if not admins[author] then return end
+			if not (args[1] or args[2]) then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error in command<br>\tUsage:</b><font face='Lucida console'> !setrole <i> [target] [role]</i></font>\n\tAvailable roles - <font face='Lucida Console'>admin, staff, developer, artist, translator, mapper</font></R>", author) end
+			local target = Player.players[args[1]]
+			if not target then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error: Target unreachable!</b></R>", author) end
+			if not roles.list:find(args[2]) then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error:</b> Could not find the role</R>", author) end
+			roles.addRole(target, args[2])
+		end,
+
+		["remrole"] = function(args, msg, author)
+			if not admins[author] then return end
+			if not (args[1] or args[2]) then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error in command<br>\tUsage:</b><font face='Lucida console'> !remrole <i> [target] [role]</i></font>\n\tAvailable roles - <font face='Lucida Console'>admin, staff, developer, artist, translator, mapper</font></R>", author) end
+			local target = Player.players[args[1]]
+			if not target then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error: Target unreachable!</b></R>", author) end
+			if not roles.list:find(args[2]) then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error:</b> Could not find the role</R>", author) end
+			roles.removeRole(target, args[2])
+		end
 
 }
 
@@ -1835,51 +1838,51 @@ cmds["p"] = cmds["profile"]
 local rotation, currentMapIndex = {}, 0
 
 local shuffleMaps = function(maps)
-    local res = {}
-    for _, map in next, maps do
-        res[#res + 1] = map
-        res[#res + 1] = map
-    end
-    table.sort(res, function(e1, e2)
-        return math.random() <= 0.5
-    end)
-    return res
+	local res = {}
+	for _, map in next, maps do
+		res[#res + 1] = map
+		res[#res + 1] = map
+	end
+	table.sort(res, function(e1, e2)
+		return math.random() <= 0.5
+	end)
+	return res
 end
 
 newRound = function()
 
-    newRoundStarted = false
-    suddenDeath = false
-    currentMapIndex = next(rotation, currentMapIndex)
-    statsEnabled = (not isTribeHouse) and tfm.get.room.uniquePlayers >= MIN_PLAYERS
+	newRoundStarted = false
+	suddenDeath = false
+	currentMapIndex = next(rotation, currentMapIndex)
+	statsEnabled = (not isTribeHouse) and tfm.get.room.uniquePlayers >= MIN_PLAYERS
 
 
-    tfm.exec.newGame(rotation[currentMapIndex])
-    tfm.exec.setGameTime(93, true)
+	tfm.exec.newGame(rotation[currentMapIndex])
+	tfm.exec.setGameTime(93, true)
 
-    Player.alive = {}
-    Player.aliveCount = 0
+	Player.alive = {}
+	Player.aliveCount = 0
 
-    for name, player in next, Player.players do player:refresh() end
+	for name, player in next, Player.players do player:refresh() end
 
-    if currentMapIndex >= #rotation then
-        rotation = shuffleMaps(maps)
-        currentMapIndex = 1
-    end
+	if currentMapIndex >= #rotation then
+		rotation = shuffleMaps(maps)
+		currentMapIndex = 1
+	end
 
-    if not initialized then
-        initialized = true
-        closeSequence[1].images = { tfm.exec.addImage(assets.items[currentItem],":1", 740, 330) }
-        Timer("changeItem", function()
-            if math.random(1, 3) == 3 then
-                currentItem = ENUM_ITEMS.CANNON
-            else
-                currentItem = items[math.random(1, #items)]
-            end
-            tfm.exec.removeImage(closeSequence[1].images[1])
-            closeSequence[1].images = { tfm.exec.addImage(assets.items[currentItem], ":1", 740, 330) }
-        end, 10000, true)
-    end
+	if not initialized then
+		initialized = true
+		closeSequence[1].images = { tfm.exec.addImage(assets.items[currentItem],":1", 740, 330) }
+		Timer("changeItem", function()
+			if math.random(1, 3) == 3 then
+				currentItem = ENUM_ITEMS.CANNON
+			else
+				currentItem = items[math.random(1, #items)]
+			end
+			tfm.exec.removeImage(closeSequence[1].images[1])
+			closeSequence[1].images = { tfm.exec.addImage(assets.items[currentItem], ":1", 740, 330) }
+		end, 10000, true)
+	end
 
 end
 
@@ -1904,293 +1907,293 @@ getRot = function(item, stance)
 end
 
 extractName = function(username)
-    username = username or ""
-    local name, tag = username:match("^(.+)(#%d+)$")
-    if name and tag then return name, tag
-    else return username, "" end
+	username = username or ""
+	local name, tag = username:match("^(.+)(#%d+)$")
+	if name and tag then return name, tag
+	else return username, "" end
 end
 
 setNameColor = function(name)
-    local player = Player.players[name]
-    if (not player) or player.highestRole == "default" then return end
-    local color = roles.colors[player.highestRole]
-    if not color then return end
-    tfm.exec.setNameColor(name, color)
+	local player = Player.players[name]
+	if (not player) or player.highestRole == "default" then return end
+	local color = roles.colors[player.highestRole]
+	if not color then return end
+	tfm.exec.setNameColor(name, color)
 end
 
 createPrettyUI = function(id, x, y, w, h, fixed, closeButton)
 
-    local window =  Panel(id * 100 + 10, "", x - 4, y - 4, w + 8, h + 8, 0x7f492d, 0x7f492d, 1, fixed)
-        :addPanel(
-            Panel(id * 100 + 20, "", x, y, w, h, 0x152d30, 0x0f1213, 1, fixed)
-        )
-        :addImage(Image(assets.widgets.borders.topLeft, "&1",     x - 10,     y - 10))
-        :addImage(Image(assets.widgets.borders.topRight, "&1",    x + w - 18, y - 10))
-        :addImage(Image(assets.widgets.borders.bottomLeft, "&1",  x - 10,     y + h - 18))
-        :addImage(Image(assets.widgets.borders.bottomRight, "&1", x + w - 18, y + h - 18))
+	local window =  Panel(id * 100 + 10, "", x - 4, y - 4, w + 8, h + 8, 0x7f492d, 0x7f492d, 1, fixed)
+		:addPanel(
+			Panel(id * 100 + 20, "", x, y, w, h, 0x152d30, 0x0f1213, 1, fixed)
+		)
+		:addImage(Image(assets.widgets.borders.topLeft, "&1",     x - 10,     y - 10))
+		:addImage(Image(assets.widgets.borders.topRight, "&1",    x + w - 18, y - 10))
+		:addImage(Image(assets.widgets.borders.bottomLeft, "&1",  x - 10,     y + h - 18))
+		:addImage(Image(assets.widgets.borders.bottomRight, "&1", x + w - 18, y + h - 18))
 
 
-    if closeButton then
-        window
-            :addPanel(
-                Panel(id * 100 + 30, "<a href='event:close'>\n\n\n\n\n\n</a>", x + w + 18, y - 10, 15, 20, nil, nil, 0, fixed)
-                    :addImage(Image(assets.widgets.closeButton, ":0", x + w + 15, y - 10)
-                )
-            )
-            :setCloseButton(id * 100 + 30)
-    end
+	if closeButton then
+		window
+			:addPanel(
+				Panel(id * 100 + 30, "<a href='event:close'>\n\n\n\n\n\n</a>", x + w + 18, y - 10, 15, 20, nil, nil, 0, fixed)
+					:addImage(Image(assets.widgets.closeButton, ":0", x + w + 15, y - 10)
+					)
+			)
+			:setCloseButton(id * 100 + 30)
+	end
 
-    return window
+	return window
 
 end
 
 displayProfile = function(player, target, keyPressed)
-    local targetPlayer = Player.players[target]
+	local targetPlayer = Player.players[target]
 
-    if targetPlayer.openedWindow then
-        targetPlayer.openedWindow:hide(target)
-        if targetPlayer.openedWindow == profileWindow and keyPressed then
-            targetPlayer.openedWindow = nil
-            return
-        end
-    end
+	if targetPlayer.openedWindow then
+		targetPlayer.openedWindow:hide(target)
+		if targetPlayer.openedWindow == profileWindow and keyPressed then
+			targetPlayer.openedWindow = nil
+			return
+		end
+	end
 
-    local lboardPos
-    for i, p in next, leaderboard.indexed do
-        if p.name == player.name then
-            lboardPos = i
-            break
-        end
-    end
+	local lboardPos
+	for i, p in next, leaderboard.indexed do
+		if p.name == player.name then
+			lboardPos = i
+			break
+		end
+	end
 
-    local name, tag = extractName(player.name)
-    if (not name) or (not tag) then return end -- guest players
-    profileWindow:show(target)
-    Panel.panels[220]:update("<b><font size='20'><V>" .. name .. "</V></font><font size='10'><G>" .. tag, target)
-    Panel.panels[151]:update(translate("ROUNDS", player.community) .. "<br><b><BV><font size='14'>" .. player.rounds .. "</font></BV>", target)
-    Panel.panels[152]:update(translate("DEATHS", player.community) .. "<br><b><BV><font size='14'>" .. player.rounds - player.survived .. "</font></BV>", target)
-    Panel.panels[153]:update(translate("SURVIVED", player.community) .. "<br><b><BV><font size='14'>" .. player.survived .. "</font></BV>     <font size='10'>(" .. math.floor(player.survived / player.rounds * 100) .."%)</font>", target)
-    Panel.panels[154]:update(translate("WON", player.community) .. "<br><b><BV><font size='14'>" .. player.won .. "</font></BV>     <font size='10'>(" .. math.floor(player.won / player.rounds * 100) .."%)</font>", target)
-    Panel.panels[155]:update(translate("LBOARD_POS", player.community, nil, { pos = lboardPos or "N/A" }), target)
-    targetPlayer.openedWindow = profileWindow
+	local name, tag = extractName(player.name)
+	if (not name) or (not tag) then return end -- guest players
+	profileWindow:show(target)
+	Panel.panels[220]:update("<b><font size='20'><V>" .. name .. "</V></font><font size='10'><G>" .. tag, target)
+	Panel.panels[151]:update(translate("ROUNDS", player.community) .. "<br><b><BV><font size='14'>" .. player.rounds .. "</font></BV>", target)
+	Panel.panels[152]:update(translate("DEATHS", player.community) .. "<br><b><BV><font size='14'>" .. player.rounds - player.survived .. "</font></BV>", target)
+	Panel.panels[153]:update(translate("SURVIVED", player.community) .. "<br><b><BV><font size='14'>" .. player.survived .. "</font></BV>     <font size='10'>(" .. math.floor(player.survived / player.rounds * 100) .."%)</font>", target)
+	Panel.panels[154]:update(translate("WON", player.community) .. "<br><b><BV><font size='14'>" .. player.won .. "</font></BV>     <font size='10'>(" .. math.floor(player.won / player.rounds * 100) .."%)</font>", target)
+	Panel.panels[155]:update(translate("LBOARD_POS", player.community, nil, { pos = lboardPos or "N/A" }), target)
+	targetPlayer.openedWindow = profileWindow
 end
 
 displayHelp = function(target, keyPressed)
-    local targetPlayer = Player.players[target]
-    
-    if targetPlayer.openedWindow then
-        targetPlayer.openedWindow:hide(target)
-        if targetPlayer.openedWindow == helpWindow and keyPressed then
-            targetPlayer.openedWindow = nil
-            return
-        end
-    end
+	local targetPlayer = Player.players[target]
 
-    local commu = targetPlayer.community
-    helpWindow:show(target)
-    Panel.panels[820]:update(translate("COMMANDS", commu), target)
-    Panel.panels[705]:update(translate("CMD_TITLE",  commu), target)
+	if targetPlayer.openedWindow then
+		targetPlayer.openedWindow:hide(target)
+		if targetPlayer.openedWindow == helpWindow and keyPressed then
+			targetPlayer.openedWindow = nil
+			return
+		end
+	end
 
-    Panel.panels[920]:update(translate("CREDITS", commu), target)
-    Panel.panels[706]:update(translate("CREDS_TITLE", commu), target)
+	local commu = targetPlayer.community
+	helpWindow:show(target)
+	Panel.panels[820]:update(translate("COMMANDS", commu), target)
+	Panel.panels[705]:update(translate("CMD_TITLE",  commu), target)
 
-    Panel.panels[701]:update(translate("OBJECTIVE", commu), target)
-    Panel.panels[704]:update(translate("HELP_GOTIT", commu), target)
+	Panel.panels[920]:update(translate("CREDITS", commu), target)
+	Panel.panels[706]:update(translate("CREDS_TITLE", commu), target)
 
-    targetPlayer.openedWindow = helpWindow
+	Panel.panels[701]:update(translate("OBJECTIVE", commu), target)
+	Panel.panels[704]:update(translate("HELP_GOTIT", commu), target)
+
+	targetPlayer.openedWindow = helpWindow
 end
 
 displayChangelog = function(target)
-    local targetPlayer = Player.players[target]
-    
-    if targetPlayer.openedWindow then
-        targetPlayer.openedWindow:hide(target)
-        if targetPlayer.openedWindow == changelogWindow then
-            targetPlayer.openedWindow = nil
-            return
-        end
-    end
+	local targetPlayer = Player.players[target]
 
-    changelogWindow:show(target)
-    targetPlayer.openedWindow = changelogWindow
+	if targetPlayer.openedWindow then
+		targetPlayer.openedWindow:hide(target)
+		if targetPlayer.openedWindow == changelogWindow then
+			targetPlayer.openedWindow = nil
+			return
+		end
+	end
+
+	changelogWindow:show(target)
+	targetPlayer.openedWindow = changelogWindow
 end
 
 
 do
 
-    rotation = shuffleMaps(maps)
-    currentMapIndex = 1
-    statsEnabled = (not isTribeHouse) and tfm.get.room.uniquePlayers >= MIN_PLAYERS
+	rotation = shuffleMaps(maps)
+	currentMapIndex = 1
+	statsEnabled = (not isTribeHouse) and tfm.get.room.uniquePlayers >= MIN_PLAYERS
 
-    leaderboard.load()
-    Timer("newRound", newRound, 6 * 1000)
-    Timer("leaderboard", leaderboard.load, 2 * 60 * 1000, true)
+	leaderboard.load()
+	Timer("newRound", newRound, 6 * 1000)
+	Timer("leaderboard", leaderboard.load, 2 * 60 * 1000, true)
 
-    tfm.exec.newGame(rotation[currentMapIndex])
-    tfm.exec.setGameTime(8)
+	tfm.exec.newGame(rotation[currentMapIndex])
+	tfm.exec.setGameTime(8)
 
-    for cmd in next, cmds do system.disableChatCommandDisplay(cmd) end
+	for cmd in next, cmds do system.disableChatCommandDisplay(cmd) end
 
-    for name in next, tfm.get.room.playerList do
-        eventNewPlayer(name)
-    end
+	for name in next, tfm.get.room.playerList do
+		eventNewPlayer(name)
+	end
 
-    profileWindow = createPrettyUI(1, 200, 100, 400, 200, true, true)
-        :addPanel(createPrettyUI(2, 240, 80, 250, 35, true))
-        :addPanel(
-            Panel(150, "", 220, 140, 360, 100, 0x1A3846 , 0x1A3846, 1, true)
-                :addImage(Image(assets.iconRounds, "&1", 230, 125))
-                :addPanel(Panel(151, "", 290, 140, 120, 50, nil, nil, 0, true))
-                :addImage(Image(assets.iconDeaths, "&1", 400, 125))
-                :addPanel(Panel(152, "", 460, 140, 120, 50, nil, nil, 0, true))
-                :addImage(Image(assets.iconSurvived, "&1", 230, 185))
-                :addPanel(Panel(153, "", 290, 200, 120, 50, nil, nil, 0, true))
-                :addImage(Image(assets.iconWon, "&1", 400, 185))
-                :addPanel(Panel(154, "", 460, 200, 120, 50, nil, nil, 0, true))
-                :addImage(Image(assets.iconTrophy, "&1", 390, 255))
-                :addPanel(Panel(155, "", 420, 260, 210, 30, nil, nil, 0, true))
-        )
+	profileWindow = createPrettyUI(1, 200, 100, 400, 200, true, true)
+		:addPanel(createPrettyUI(2, 240, 80, 250, 35, true))
+		:addPanel(
+			Panel(150, "", 220, 140, 360, 100, 0x1A3846 , 0x1A3846, 1, true)
+				:addImage(Image(assets.iconRounds, "&1", 230, 125))
+				:addPanel(Panel(151, "", 290, 140, 120, 50, nil, nil, 0, true))
+				:addImage(Image(assets.iconDeaths, "&1", 400, 125))
+				:addPanel(Panel(152, "", 460, 140, 120, 50, nil, nil, 0, true))
+				:addImage(Image(assets.iconSurvived, "&1", 230, 185))
+				:addPanel(Panel(153, "", 290, 200, 120, 50, nil, nil, 0, true))
+				:addImage(Image(assets.iconWon, "&1", 400, 185))
+				:addPanel(Panel(154, "", 460, 200, 120, 50, nil, nil, 0, true))
+				:addImage(Image(assets.iconTrophy, "&1", 390, 255))
+				:addPanel(Panel(155, "", 420, 260, 210, 30, nil, nil, 0, true))
+		)
 
-    leaderboardWindow = createPrettyUI(3, 70, 50, 670, 330, true, true)
-        :addPanel(Panel(350, "", 90, 100, 50, 240, 0x1A3846, 0x1A3846, 1, true))
-        :addPanel(Panel(351, "", 160, 100, 200, 240, 0x1A3846, 0x1A3846, 1, true))
-        :addPanel(
-            Panel(352, "", 380, 100, 70, 240, 0x1A3846, 0x1A3846, 1, true)
-                :addImage(Image(assets.iconRounds, "&1", 380, 70))
-        )
-        :addPanel(
-            Panel(353, "", 470, 100, 70, 240, 0x1A3846, 0x1A3846, 1, true)
-                :addImage(Image(assets.iconDeaths, "&1", 470, 70))
-        )
-        :addPanel(
-            Panel(354, "", 560, 100, 70, 240, 0x1A3846, 0x1A3846, 1, true)
-                :addImage(Image(assets.iconSurvived, "&1", 560, 70))
-        )
-        :addPanel(
-            Panel(355, "", 650, 100, 70, 240, 0x1A3846, 0x1A3846, 1, true)
-                :addImage(Image(assets.iconWon, "&1", 650, 70))
-        )
-        :addPanel(
-            Panel(356, "", 70, 350, 670, 50, nil, nil, 0, true)
-                :setActionListener(function(id, name, event)
-                    local page = tonumber(event)
-                    if page then
-                        leaderboardWindow:hide(name)
-                        leaderboard.displayLeaderboard("global", page, name)
-                    end
-                end)
-            )
-        :addPanel(
-            Panel(357, "<a href='event:switch'>Room \t ▼</a>", 90, 55, 80, 20, 0x152d30, 0x7f492d, 1, true)
-                :setActionListener(function(id, name, event)
-                    Panel.panels[id]:addPanelTemp(
-                        Panel(358, "<a href='event:room'>Room</a><br><a href='event:global'>Global</a>", 90, 85, 80, 30, 0x152d30, 0x7f492d, 1, true)
-                            :setActionListener(function(id, name, event)
-                                leaderboardWindow:hide(name)
-                                leaderboard.displayLeaderboard(event, 1, name)
-                            end),
-                    name)
-                end)
-        )
+	leaderboardWindow = createPrettyUI(3, 70, 50, 670, 330, true, true)
+		:addPanel(Panel(350, "", 90, 100, 50, 240, 0x1A3846, 0x1A3846, 1, true))
+		:addPanel(Panel(351, "", 160, 100, 200, 240, 0x1A3846, 0x1A3846, 1, true))
+		:addPanel(
+			Panel(352, "", 380, 100, 70, 240, 0x1A3846, 0x1A3846, 1, true)
+				:addImage(Image(assets.iconRounds, "&1", 380, 70))
+		)
+		:addPanel(
+			Panel(353, "", 470, 100, 70, 240, 0x1A3846, 0x1A3846, 1, true)
+				:addImage(Image(assets.iconDeaths, "&1", 470, 70))
+		)
+		:addPanel(
+			Panel(354, "", 560, 100, 70, 240, 0x1A3846, 0x1A3846, 1, true)
+				:addImage(Image(assets.iconSurvived, "&1", 560, 70))
+		)
+		:addPanel(
+			Panel(355, "", 650, 100, 70, 240, 0x1A3846, 0x1A3846, 1, true)
+				:addImage(Image(assets.iconWon, "&1", 650, 70))
+		)
+		:addPanel(
+			Panel(356, "", 70, 350, 670, 50, nil, nil, 0, true)
+				:setActionListener(function(id, name, event)
+					local page = tonumber(event)
+					if page then
+						leaderboardWindow:hide(name)
+						leaderboard.displayLeaderboard("global", page, name)
+					end
+				end)
+		)
+		:addPanel(
+			Panel(357, "<a href='event:switch'>Room \t ▼</a>", 90, 55, 80, 20, 0x152d30, 0x7f492d, 1, true)
+				:setActionListener(function(id, name, event)
+					Panel.panels[id]:addPanelTemp(
+						Panel(358, "<a href='event:room'>Room</a><br><a href='event:global'>Global</a>", 90, 85, 80, 30, 0x152d30, 0x7f492d, 1, true)
+							:setActionListener(function(id, name, event)
+								leaderboardWindow:hide(name)
+								leaderboard.displayLeaderboard(event, 1, name)
+							end),
+						name)
+				end)
+		)
 
-    changelogWindow = createPrettyUI(4, 70, 50, 670, 330, true, true)
-        :addPanel(
-            Panel(450, CHANGELOG, 100, 50, 630, 330, nil, nil, 0, true)
-                :setActionListener(function(id, name, event)
-                    tfm.exec.chatMessage("<BV>• <u><i>https://github.com/Seniru/pewpew/releases</i></u></BV>", name)
-                end)
-        )
-        :addImage(Image(assets.widgets.scrollbarBg, "&1", 720, 80))
-        :addImage(Image(assets.widgets.scrollbarFg, "&1", 720, 90))
+	changelogWindow = createPrettyUI(4, 70, 50, 670, 330, true, true)
+		:addPanel(
+			Panel(450, CHANGELOG, 100, 50, 630, 330, nil, nil, 0, true)
+				:setActionListener(function(id, name, event)
+					tfm.exec.chatMessage("<BV>• <u><i>https://github.com/Seniru/pewpew/releases</i></u></BV>", name)
+				end)
+		)
+		:addImage(Image(assets.widgets.scrollbarBg, "&1", 720, 80))
+		:addImage(Image(assets.widgets.scrollbarFg, "&1", 720, 90))
 
-    shopWindow = createPrettyUI(5, 360, 50, 380, 330, true, true) -- main shop window
-        :addPanel(  -- preview window
-            createPrettyUI(6, 70, 50, 260, 330, true, false)
-                :addPanel(
-                    Panel(650, "", 80, 350, 240, 20, nil, 0x324650, 1, true)
-                        :setActionListener(function(id, name, event)
-                            local key, value = table.unpack(string.split(event, ":"))
-                            local player = Player.players[name]
-                            local pack = shop.packs[value]
-                            if not pack then return end
-                            if key == "buy" then
-                                -- Exit if the player already have the pack or if they dont have the required points
-                                if player.packs[value] or player.points < pack.price then return end
-                                player.packs[value] = true
-                                player.equipped = value
-                                player.points = player.points - pack.price
-                                player.packsArray[#player.packsArray + 1] = value
-                                shop.displayShop(name)
-                                player:savePlayerData()
-                            elseif key == "equip" then
-                                -- Exit if the player don't have the pack
-                                if not player.packs[value] then return end
-                                player.equipped =  value
-                                player:savePlayerData()
-                                shop.displayPackInfo(name, value)
-                            end
-                        end)
-                )
-                :addPanel(Panel(651, "", 160, 60, 150, 90, nil, nil, 0, true))
-                :addPanel(Panel(652, "", 80, 160, 100, 100, nil, nil, 0, true))
-        ):addPanel(
-            Panel(551, "〈", 620, 350, 40, 20, nil, 0x324650, 1, true)
-                :setActionListener(function(id, name, event)
-                    shop.displayShop(name, tonumber(event))
-                end)
-        ):addPanel(
-            Panel(552, "〉", 680, 350, 40, 20, nil, 0x324650, 1, true)
-                :setActionListener(function(id, name, event)
-                    shop.displayShop(name, tonumber(event))
-                end)
-        )
+	shopWindow = createPrettyUI(5, 360, 50, 380, 330, true, true) -- main shop window
+		:addPanel(  -- preview window
+			createPrettyUI(6, 70, 50, 260, 330, true, false)
+				:addPanel(
+					Panel(650, "", 80, 350, 240, 20, nil, 0x324650, 1, true)
+						:setActionListener(function(id, name, event)
+							local key, value = table.unpack(string.split(event, ":"))
+							local player = Player.players[name]
+							local pack = shop.packs[value]
+							if not pack then return end
+							if key == "buy" then
+								-- Exit if the player already have the pack or if they dont have the required points
+								if player.packs[value] or player.points < pack.price then return end
+								player.packs[value] = true
+								player.equipped = value
+								player.points = player.points - pack.price
+								player.packsArray[#player.packsArray + 1] = value
+								shop.displayShop(name)
+								player:savePlayerData()
+							elseif key == "equip" then
+								-- Exit if the player don't have the pack
+								if not player.packs[value] then return end
+								player.equipped =  value
+								player:savePlayerData()
+								shop.displayPackInfo(name, value)
+							end
+						end)
+				)
+			:addPanel(Panel(651, "", 160, 60, 150, 90, nil, nil, 0, true))
+			:addPanel(Panel(652, "", 80, 160, 100, 100, nil, nil, 0, true))
+		):addPanel(
+		Panel(551, "〈", 620, 350, 40, 20, nil, 0x324650, 1, true)
+			:setActionListener(function(id, name, event)
+				shop.displayShop(name, tonumber(event))
+			end)
+		):addPanel(
+		Panel(552, "〉", 680, 350, 40, 20, nil, 0x324650, 1, true)
+			:setActionListener(function(id, name, event)
+				shop.displayShop(name, tonumber(event))
+			end)
+		)
 
-    helpWindow = Panel(700, ("<br><br>\t <J><b><a href='event:changelog'>%s</a></b></J>        <a href='event:github'>  </a>   <a href='event:discord'>  </a>    <a href='event:map'>  </a>"):format(VERSION), 0, 0, 800, 50, 0x324650, 0x324650, 0, true)
-        :setActionListener(function(id, name, event) 
-            if event == "changelog" then displayChangelog(name) end end)
-        :addImage(Image(assets.help.github, ":1", 120, 30))
-        :addImage(Image(assets.help.discord, ":1", 144, 30))
-        :addImage(Image(assets.help.map, ":1", 170, 30))
-        :addPanel(
-            Panel(701, "", 180, 150, 200, 20, 0x324650, 0x324650, 0.6, true)
-                :addImage(Image(assets.help.survive, ":1", 10, 10))
-                :addImage(Image(assets.help.killAll, ":1", 200, 10))
-        )
-        :addPanel(
-            createPrettyUI(8, 10, 220, 230, 165, true)
-                :addPanel(Panel(705, "", 90, 200, 300, 30, nil, nil, 0, true))
-                :addImage(Image(assets.help.commands, "&1", -55, 150))
-        )
-        :addPanel(
-            createPrettyUI(9, 270, 220, 230, 165, true)
-                :addPanel(Panel(706, "", 345, 200, 300, 30, nil, nil, 0, true))
-                :addImage(Image(assets.help.creditors, "&1", 260, 170))
-        )
-        :addImage(Image(assets.help.shoot, "&1", 521, 28))
-        :addImage(Image(assets.help.weapon, ":1", 480, 220))
-        :addPanel(
-            Panel(704, "", 585, 370, 100, 30, nil, nil, 0, true)
-                :addImage(Image("170970cdb9f.png", ":1", 550, 350))
-        )
-        :setCloseButton(704)
-        :addPanel(
-            Panel(710, "<a href='event:github'>\n\n\n\n</a>", 120, 25, 18, 20, nil, nil, 0, true)
-                :setActionListener(function(id, name, event)
-                    tfm.exec.chatMessage(translate("HELP_GITHUB", Player.players[name].community), name)
-                end)
-        )
-        :addPanel(
-            Panel(711, "<a href='event:discord'>\n\n\n\n</a>", 144, 25, 18, 20, nil, nil, 0, true)
-                :setActionListener(function(id, name, event)
-                    tfm.exec.chatMessage(translate("HELP_DISCORD", Player.players[name].community), name)
-                end)
-        )
-        :addPanel(
-            Panel(712, "<a href='event:map'>\n\n\n\n</a>", 170, 25, 18, 20, nil, nil, 0, true)
-                :setActionListener(function(id, name, event)
-                    tfm.exec.chatMessage(translate("HELP_MAP", Player.players[name].community), name)
-                end)
-        )
+	helpWindow = Panel(700, ("<br><br>\t <J><b><a href='event:changelog'>%s</a></b></J>        <a href='event:github'>  </a>   <a href='event:discord'>  </a>    <a href='event:map'>  </a>"):format(VERSION), 0, 0, 800, 50, 0x324650, 0x324650, 0, true)
+		:setActionListener(function(id, name, event)
+			if event == "changelog" then displayChangelog(name) end end)
+		:addImage(Image(assets.help.github, ":1", 120, 30))
+		:addImage(Image(assets.help.discord, ":1", 144, 30))
+		:addImage(Image(assets.help.map, ":1", 170, 30))
+		:addPanel(
+			Panel(701, "", 180, 150, 200, 20, 0x324650, 0x324650, 0.6, true)
+				:addImage(Image(assets.help.survive, ":1", 10, 10))
+				:addImage(Image(assets.help.killAll, ":1", 200, 10))
+		)
+		:addPanel(
+			createPrettyUI(8, 10, 220, 230, 165, true)
+				:addPanel(Panel(705, "", 90, 200, 300, 30, nil, nil, 0, true))
+				:addImage(Image(assets.help.commands, "&1", -55, 150))
+		)
+		:addPanel(
+			createPrettyUI(9, 270, 220, 230, 165, true)
+				:addPanel(Panel(706, "", 345, 200, 300, 30, nil, nil, 0, true))
+				:addImage(Image(assets.help.creditors, "&1", 260, 170))
+		)
+		:addImage(Image(assets.help.shoot, "&1", 521, 28))
+		:addImage(Image(assets.help.weapon, ":1", 480, 220))
+		:addPanel(
+			Panel(704, "", 585, 370, 100, 30, nil, nil, 0, true)
+				:addImage(Image("170970cdb9f.png", ":1", 550, 350))
+		)
+		:setCloseButton(704)
+		:addPanel(
+			Panel(710, "<a href='event:github'>\n\n\n\n</a>", 120, 25, 18, 20, nil, nil, 0, true)
+				:setActionListener(function(id, name, event)
+					tfm.exec.chatMessage(translate("HELP_GITHUB", Player.players[name].community), name)
+				end)
+		)
+		:addPanel(
+			Panel(711, "<a href='event:discord'>\n\n\n\n</a>", 144, 25, 18, 20, nil, nil, 0, true)
+				:setActionListener(function(id, name, event)
+					tfm.exec.chatMessage(translate("HELP_DISCORD", Player.players[name].community), name)
+				end)
+		)
+		:addPanel(
+			Panel(712, "<a href='event:map'>\n\n\n\n</a>", 170, 25, 18, 20, nil, nil, 0, true)
+				:setActionListener(function(id, name, event)
+					tfm.exec.chatMessage(translate("HELP_MAP", Player.players[name].community), name)
+				end)
+		)
 
 end
 

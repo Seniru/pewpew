@@ -5,13 +5,13 @@ function eventKeyboard(name, key, down, x, y)
 		Player.players[name].stance = -1
 	elseif key == keys.RIGHT then
 		Player.players[name].stance = 1
-    elseif key == keys.LETTER_H then
-        displayHelp(name, true)
-    elseif key == keys.LETTER_P then
-        displayProfile(Player.players[name], name, true)
-    elseif key == keys.LETTER_L then
-        leaderboard.displayLeaderboard("global", 1, name, true)
-    elseif key == keys.LETTER_O then
-        shop.displayShop(name, 1, true)
-    end
+	elseif key == keys.LETTER_H then
+		displayHelp(name, true)
+	elseif key == keys.LETTER_P then
+		displayProfile(Player.players[name], name, true)
+	elseif key == keys.LETTER_L then
+		leaderboard.displayLeaderboard("global", 1, name, true)
+	elseif key == keys.LETTER_O then
+		shop.displayShop(name, 1, true)
+	end
 end
