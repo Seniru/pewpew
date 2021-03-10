@@ -1,4 +1,5 @@
 const combine = require("./combine");
+const { exec } = require("child_process")
 const luamin = require("luamin");
 const vkbeauty = require("vkbeautify");
 
@@ -47,5 +48,8 @@ combine({
   },
   main: { files: ["src/leaderboard.lua", "src/shop.lua", "src/roles.lua", "src/cmds.lua", "src/main.lua"] },
 }).then((res) => {
-  console.log("\x1b[1m\x1b[32m%s\x1b[0m", "Build completed!");
+  exec(`luaformatter index.lua --tabs 1 -a`, (error, stdout, stderr) => {
+    if (stderr) return console.log(stderr)
+    console.log("\x1b[1m\x1b[32m%s\x1b[0m", "Build completed!");
+  })
 });

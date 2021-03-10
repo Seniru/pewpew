@@ -1,4 +1,5 @@
 const fs = require("fs")
+const { execSync } = require("child_process")
 
 const OUTPUT_FILE_LOC = "./index.lua"
 
@@ -14,7 +15,9 @@ module.exports = (segments) => {
                 writer.write(`--==[[ ${type} ]]==--\n\n`)
                 if (segments[type].header) writer.write(segments[type].header)
                 for (let filePath of segments[type].files) {
-                    console.log(`\x1b[93mWriting ${filePath}`)
+                    console.log(`\x1b[93mWriting ${filePath}\x1b[0m`)
+                    let processStderr = execSync(`luaformatter ${filePath} --tabs 1 -a`).toString()
+                    if (processStderr) throw new SyntaxError("\x1b[31m[Lua]" + processStderr)
                     let chunk = fs.readFileSync(`./${filePath}`).toString()
                     writer.write((segments[type].prefix || "") + (segments[type].compressFunction ? segments[type].compressFunction(chunk) : chunk) + (segments[type].suffix || "\n"))
                 }
