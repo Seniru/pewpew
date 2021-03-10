@@ -1,0 +1,18 @@
+name: Release webhooks
+
+on: 
+  workflow_dispatch:
+  release:
+    types: published
+    
+jobs:
+  post-webhook:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Post webhooks
+        run: |
+          npm i
+          node ./extras/release-webhooks.js ${{ secrets.WEBHOOK_SECRET }}

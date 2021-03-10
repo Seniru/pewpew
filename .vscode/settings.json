@@ -1,5 +1,7 @@
 {
     "workbench.editor.highlightModifiedTabs": false,
+    "editor.useTabStops": true,
+    "editor.tabSize": 4,
     "Lua.diagnostics.disable": [
         "lowercase-global",
         "undefined-global"
@@ -11,5 +13,8 @@
         "ui",
         "system",
         "translate"
-    ]
+    ],
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": true,
+    "python.linting.enabled": true
 }

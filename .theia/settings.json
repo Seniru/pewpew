@@ -1,3 +1,5 @@
 {
-    "workbench.editor.highlightModifiedTabs": true
+	"workbench.editor.highlightModifiedTabs": true,
+	"editor.useTabStops": true,
+	"editor.tabSize": 4
 }
