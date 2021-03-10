@@ -6,11 +6,17 @@ jobs:
   build:
     runs-on: ubuntu-latest 
     steps:
+
     - uses: actions/checkout@v1
+
     - name: Use Node.js 12.x
       uses: actions/setup-node@v1
       with:
         node-version: '12.x'
+
+    - name: Install dependencies
+      run: ./buildtools/install.sh
+      
     - name: npm install and build
       run: |
         npm install
