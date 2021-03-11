@@ -1842,8 +1842,6 @@ cmds = {
 
 		["maps"] = function(args, msg, author)
 			local player = Player.players[author]
-			print(player:hasRole("staff"))
-			print(player:hasRole("mapper"))
 			if not (admins[author] or (player:hasRole("staff") and player:hasRole("mapper"))) then return end
 			local res = "<b><BV>Current rotation:</BV></b> "
 			for index, map in next, rotation do
@@ -1860,7 +1858,7 @@ cmds = {
 				end
 			end
 			if #res > 0 then tfm.exec.chatMessage(res:sub(1, -2), author) end
-			tfm.exec.chatMessage("<b><BV>Queued maps:</BV></b> @" ..  table.concat(queuedMaps, ", @"), author)
+			tfm.exec.chatMessage("<b><BV>Queued maps:</BV></b> " .. (#queuedMaps > 0 and table.concat(queuedMaps, ", @") or "-"), author)
 		end,
 
 		["npp"] = function(args, msg, author)
