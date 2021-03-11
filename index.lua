@@ -666,6 +666,7 @@ local initialized, newRoundStarted, suddenDeath = false, false, false
 local currentItem = ENUM_ITEMS.CANNON
 local isTribeHouse = tfm.get.room.isTribeHouse
 local statsEnabled = not isTribeHouse
+local rotation, queuedMaps, currentMapIndex = {}, {}, 0
 
 local leaderboard, shop, roles
 
@@ -704,6 +705,9 @@ translations["en"] = {
 	HELP_MAP = "<N>Want to add your maps to pewpew? Check out</N> <VI><b><i>https://atelier801.com/topic?f=6&t=892550</i></b></VI>",
 	NEW_ROLE = "<N><ROSE><b>${player}</b></ROSE> is now a <ROSE><b>${role}</b></ROSE>",
 	KICK_ROLE = "<N><ROSE><b>${player}</b></ROSE> is not a <ROSE><b>${role}</b></ROSE> anymore! ;c",
+	ERR_PERMS = "<N>[</N><R>•</R><N>] <R><b>Error: You are not permitted to use this command!</b></R>",
+	ERR_CMD =   "<N>[</N><R>•</R><N>] <R><b>Error in command<br>\tUsage:</b><font face='Lucida console'>${syntax}</i></font></R>",
+	MAP_QUEUED ="<N><ROSE><b>@${map}</b></ROSE> has been queued by <ROSE><b>${player}</b></ROSE>"
 }
 
 translations["br"] = {
@@ -1029,6 +1033,10 @@ function Player:die()
 		Timer("newRound", newRound, 3 * 1000)
 	end
 
+end
+
+function Player:hasRole(role)
+	return not not self.roles[role]
 end
 
 function Player:savePlayerData()
@@ -1761,6 +1769,8 @@ cmds = {
 			displayChangelog(author)
 		end,
 
+		-- [[ administration commands ]]
+
 		["give"] = function(args, msg, author)
 
 			if not admins[author] then return end
@@ -1828,14 +1838,54 @@ cmds = {
 			if not target then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error: Target unreachable!</b></R>", author) end
 			if not roles.list:find(args[2]) then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error:</b> Could not find the role</R>", author) end
 			roles.removeRole(target, args[2])
+		end,
+
+		["maps"] = function(args, msg, author)
+			local player = Player.players[author]
+			print(player:hasRole("staff"))
+			print(player:hasRole("mapper"))
+			if not (admins[author] or (player:hasRole("staff") and player:hasRole("mapper"))) then return end
+			local res = "<b><BV>Current rotation:</BV></b> "
+			for index, map in next, rotation do
+				if index == currentMapIndex then
+					print("index is currentmaps")
+					res = res .. "<b><VP> &lt; @" .. map .. " &gt; </VP></b>, "
+				else
+					print("not")
+					res = res .. "@" .. map .. ", "
+				end
+				if #res > 980 then
+					tfm.exec.chatMessage(res, author)
+					res = ""
+				end
+			end
+			if #res > 0 then tfm.exec.chatMessage(res:sub(1, -2), author) end
+			tfm.exec.chatMessage("<b><BV>Queued maps:</BV></b> @" ..  table.concat(queuedMaps, ", @"), author)
+		end,
+
+		["npp"] = function(args, msg, author)
+			local target = Player.players[author]
+
+			if not isTribeHouse then
+				if not (admins[author] or (player:hasRole("staff") and player:hasRole("mapper"))) then
+					return tfm.exec.chatMessage(translate("ERR_PERMS", target.community))
+				end
+			else
+				if tfm.get.room.name:sub(2) ~= tfm.get.room.playerList[author].tribeName then
+					return tfm.exec.chatMessage(translate("ERR_PERMS", target.community))
+				end
+			end
+
+			local map = args[1]:match("@?(%d+)")
+			if not map then return translate("ERR_CMD", target.community, nil, { syntax = "!npp [@code]"}) end
+			queuedMaps[#queuedMaps+1] = map
+			tfm.exec.chatMessage(translate("MAP_QUEUED", tfm.get.room.community, nil, { map = map, player = author }))
 		end
 
 }
 
 -- [[ aliases ]]
 cmds["p"] = cmds["profile"]
-
-local rotation, currentMapIndex = {}, 0
 
 local shuffleMaps = function(maps)
 	local res = {}
@@ -1853,22 +1903,26 @@ newRound = function()
 
 	newRoundStarted = false
 	suddenDeath = false
-	currentMapIndex = next(rotation, currentMapIndex)
 	statsEnabled = (not isTribeHouse) and tfm.get.room.uniquePlayers >= MIN_PLAYERS
 
+	if #queuedMaps > 0 then
+		tfm.exec.newGame(queuedMaps[1])
+		table.remove(queuedMaps, 1)
+	else
+		currentMapIndex = next(rotation, currentMapIndex)
+		tfm.exec.newGame(rotation[currentMapIndex])
+		if currentMapIndex >= #rotation then
+			rotation = shuffleMaps(maps)
+			currentMapIndex = 1
+		end
+	end
 
-	tfm.exec.newGame(rotation[currentMapIndex])
 	tfm.exec.setGameTime(93, true)
 
 	Player.alive = {}
 	Player.aliveCount = 0
 
 	for name, player in next, Player.players do player:refresh() end
-
-	if currentMapIndex >= #rotation then
-		rotation = shuffleMaps(maps)
-		currentMapIndex = 1
-	end
 
 	if not initialized then
 		initialized = true

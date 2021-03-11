@@ -154,6 +154,10 @@ function Player:die()
 
 end
 
+function Player:hasRole(role)
+	return not not self.roles[role]
+end
+
 function Player:savePlayerData()
 	-- if tfm.get.room.uniquePlayers < MIN_PLAYERS then return end
 	local name = self.name

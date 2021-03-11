@@ -1,5 +1,3 @@
-local rotation, currentMapIndex = {}, 0
-
 local shuffleMaps = function(maps)
 	local res = {}
 	for _, map in next, maps do
@@ -16,22 +14,26 @@ newRound = function()
 
 	newRoundStarted = false
 	suddenDeath = false
-	currentMapIndex = next(rotation, currentMapIndex)
 	statsEnabled = (not isTribeHouse) and tfm.get.room.uniquePlayers >= MIN_PLAYERS
 
+	if #queuedMaps > 0 then
+		tfm.exec.newGame(queuedMaps[1])
+		table.remove(queuedMaps, 1)
+	else
+		currentMapIndex = next(rotation, currentMapIndex)
+		tfm.exec.newGame(rotation[currentMapIndex])
+		if currentMapIndex >= #rotation then
+			rotation = shuffleMaps(maps)
+			currentMapIndex = 1
+		end
+	end
 
-	tfm.exec.newGame(rotation[currentMapIndex])
 	tfm.exec.setGameTime(93, true)
 
 	Player.alive = {}
 	Player.aliveCount = 0
 
 	for name, player in next, Player.players do player:refresh() end
-
-	if currentMapIndex >= #rotation then
-		rotation = shuffleMaps(maps)
-		currentMapIndex = 1
-	end
 
 	if not initialized then
 		initialized = true

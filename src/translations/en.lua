@@ -28,4 +28,7 @@ translations["en"] = {
 	HELP_MAP = "<N>Want to add your maps to pewpew? Check out</N> <VI><b><i>https://atelier801.com/topic?f=6&t=892550</i></b></VI>",
 	NEW_ROLE = "<N><ROSE><b>${player}</b></ROSE> is now a <ROSE><b>${role}</b></ROSE>",
 	KICK_ROLE = "<N><ROSE><b>${player}</b></ROSE> is not a <ROSE><b>${role}</b></ROSE> anymore! ;c",
+	ERR_PERMS = "<N>[</N><R>•</R><N>] <R><b>Error: You are not permitted to use this command!</b></R>",
+	ERR_CMD =   "<N>[</N><R>•</R><N>] <R><b>Error in command<br>\tUsage:</b><font face='Lucida console'>${syntax}</i></font></R>",
+	MAP_QUEUED ="<N><ROSE><b>@${map}</b></ROSE> has been queued by <ROSE><b>${player}</b></ROSE>"
 }

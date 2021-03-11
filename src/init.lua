@@ -227,5 +227,6 @@ local initialized, newRoundStarted, suddenDeath = false, false, false
 local currentItem = ENUM_ITEMS.CANNON
 local isTribeHouse = tfm.get.room.isTribeHouse
 local statsEnabled = not isTribeHouse
+local rotation, queuedMaps, currentMapIndex = {}, {}, 0
 
 local leaderboard, shop, roles

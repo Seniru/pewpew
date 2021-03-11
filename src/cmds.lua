@@ -17,6 +17,8 @@ cmds = {
 			displayChangelog(author)
 		end,
 
+		-- [[ administration commands ]]
+
 		["give"] = function(args, msg, author)
 
 			if not admins[author] then return end
@@ -84,6 +86,46 @@ cmds = {
 			if not target then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error: Target unreachable!</b></R>", author) end
 			if not roles.list:find(args[2]) then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error:</b> Could not find the role</R>", author) end
 			roles.removeRole(target, args[2])
+		end,
+
+		["maps"] = function(args, msg, author)
+			local player = Player.players[author]
+			if not (admins[author] or (player:hasRole("staff") and player:hasRole("mapper"))) then return end
+			local res = "<b><BV>Current rotation:</BV></b> "
+			for index, map in next, rotation do
+				if index == currentMapIndex then
+					print("index is currentmaps")
+					res = res .. "<b><VP> &lt; @" .. map .. " &gt; </VP></b>, "
+				else
+					print("not")
+					res = res .. "@" .. map .. ", "
+				end
+				if #res > 980 then
+					tfm.exec.chatMessage(res, author)
+					res = ""
+				end
+			end
+			if #res > 0 then tfm.exec.chatMessage(res:sub(1, -2), author) end
+			tfm.exec.chatMessage("<b><BV>Queued maps:</BV></b> " .. (#queuedMaps > 0 and table.concat(queuedMaps, ", @") or "-"), author)
+		end,
+
+		["npp"] = function(args, msg, author)
+			local target = Player.players[author]
+
+			if not isTribeHouse then
+				if not (admins[author] or (player:hasRole("staff") and player:hasRole("mapper"))) then
+					return tfm.exec.chatMessage(translate("ERR_PERMS", target.community))
+				end
+			else
+				if tfm.get.room.name:sub(2) ~= tfm.get.room.playerList[author].tribeName then
+					return tfm.exec.chatMessage(translate("ERR_PERMS", target.community))
+				end
+			end
+
+			local map = args[1]:match("@?(%d+)")
+			if not map then return translate("ERR_CMD", target.community, nil, { syntax = "!npp [@code]"}) end
+			queuedMaps[#queuedMaps+1] = map
+			tfm.exec.chatMessage(translate("MAP_QUEUED", tfm.get.room.community, nil, { map = map, player = author }))
 		end
 
 }
