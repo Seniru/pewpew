@@ -1,6 +1,6 @@
 leaderboard = {}
 
-leaderboard.FILE_ID = 1
+leaderboard.FILE_ID = 2
 leaderboard.DUMMY_DATA = [[*souris1,0,0,0,xx|*souris2,0,0,0,xx|*souris3,0,0,0,xx|*souris4,0,0,0,xx|*souris5,0,0,0,xx|*souris6,0,0,0,xx|*souris7,0,0,0,xx|*souris8,0,0,0,xx|*souris9,0,0,0,xx|*souris10,0,0,0,xx|*souris11,0,0,0,xx|*souris12,0,0,0,xx|*souris13,0,0,0,xx|*souris14,0,0,0,xx|*souris15,0,0,0,xx|*souris16,0,0,0,xx|*souris17,0,0,0,xx|*souris18,0,0,0,xx|*souris19,0,0,0,xx|*souris20,0,0,0,xx|*souris21,0,0,0,xx|*souris22,0,0,0,xx|*souris23,0,0,0,xx|*souris24,0,0,0,xx|*souris25,0,0,0,xx|*souris26,0,0,0,xx|*souris27,0,0,0,xx|*souris28,0,0,0,xx|*souris29,0,0,0,xx|*souris30,0,0,0,xx|*souris31,0,0,0,xx|*souris32,0,0,0,xx|*souris33,0,0,0,xx|*souris34,0,0,0,xx|*souris35,0,0,0,xx|*souris36,0,0,0,xx|*souris37,0,0,0,xx|*souris38,0,0,0,xx|*souris39,0,0,0,xx|*souris40,0,0,0,xx|*souris41,0,0,0,xx|*souris42,0,0,0,xx|*souris43,0,0,0,xx|*souris44,0,0,0,xx|*souris45,0,0,0,xx|*souris46,0,0,0,xx|*souris47,0,0,0,xx|*souris48,0,0,0,xx|*souris49,0,0,0,xx|*souris50,0,0,0,xx]]
 
 leaderboard.needUpdate = false
@@ -31,12 +31,12 @@ leaderboard.load = function()
 	if started then print("[STATS] Loading leaderboard...") end
 end
 
-leaderboard.save = function(leaders)
+leaderboard.save = function(leaders, force)
 	local serialised, indexes = leaderboard.prepare(leaders)
-	if serialised == leaderboard.leaderboardData then return end
+	if (not force) and serialised == leaderboard.leaderboardData then return end
 	leaderboard.indexed = indexes
-	if tfm.get.room.uniquePlayers < 4 then return end
-	local started = system.saveFile(serialised, leaderboard.FILE_ID)
+	if (not force) and tfm.get.room.uniquePlayers < 4 then return end
+	local started = system.saveFile(serialised .. "\n\n" .. maps.dumpCache, leaderboard.FILE_ID)
 	if started then print("[STATS] Saving leaderboard...") end
 end
 

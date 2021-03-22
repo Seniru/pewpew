@@ -89,15 +89,14 @@ cmds = {
 		end,
 
 		["maps"] = function(args, msg, author)
+			p(maps)
 			local player = Player.players[author]
 			if not (admins[author] or (player:hasRole("staff") and player:hasRole("mapper"))) then return end
 			local res = "<b><BV>Current rotation:</BV></b> "
 			for index, map in next, rotation do
 				if index == currentMapIndex then
-					print("index is currentmaps")
 					res = res .. "<b><VP> &lt; @" .. map .. " &gt; </VP></b>, "
 				else
-					print("not")
 					res = res .. "@" .. map .. ", "
 				end
 				if #res > 980 then
@@ -114,18 +113,53 @@ cmds = {
 
 			if not isTribeHouse then
 				if not (admins[author] or (player:hasRole("staff") and player:hasRole("mapper"))) then
-					return tfm.exec.chatMessage(translate("ERR_PERMS", target.community))
+					return tfm.exec.chatMessage(translate("ERR_PERMS", target.community), author)
 				end
 			else
 				if tfm.get.room.name:sub(2) ~= tfm.get.room.playerList[author].tribeName then
-					return tfm.exec.chatMessage(translate("ERR_PERMS", target.community))
+					return tfm.exec.chatMessage(translate("ERR_PERMS", target.community), author)
 				end
 			end
 
 			local map = args[1]:match("@?(%d+)")
-			if not map then return translate("ERR_CMD", target.community, nil, { syntax = "!npp [@code]"}) end
+			if not map then return tfm.exec.chatMessage(translate("ERR_CMD", target.community, nil, { syntax = "!npp [@code]"}), author) end
 			queuedMaps[#queuedMaps+1] = map
-			tfm.exec.chatMessage(translate("MAP_QUEUED", tfm.get.room.community, nil, { map = map, player = author }))
+			tfm.exec.chatMessage(translate("MAP_QUEUED", tfm.get.room.community, nil, { map = map, player = author }), author)
+		end,
+
+		["addmap"] = function(args, msg, author)
+			local player = Player.players[author]
+			if not (admins[author] or (player:hasRole("staff") and player:hasRole("mapper"))) then return end
+			if tfm.get.room.xmlMapInfo.permCode ~= 41 then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error:</b> Map should be P41</R>", author) end
+			local map = tfm.get.room.xmlMapInfo.mapCode
+			if isInRotation(map) then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error:</b> The  map is already in the rotation</R>", author) end
+			maps.list[#maps.list + 1] = map
+			maps.dumpCache = table.concat(maps.list, ",")
+			maps.overwriteFile = true
+			tfm.exec.chatMessage(
+				("<N>[</N><R>•</R><N>] <N><ROSE><b>@%s</b></ROSE> [<ROSE><b>%s</b></ROSE>] has been added to the rotation. Please stay in the room for few minutes to save them properly.")
+					:format(map, tfm.get.room.xmlMapInfo.author),
+				author
+			)
+			leaderboardNotifyList[#leaderboardNotifyList + 1] = author
+		end,
+
+		["remmap"] = function(args, msg, author)
+			local player = Player.players[author]
+			if not (admins[author] or (player:hasRole("staff") and player:hasRole("mapper"))) then return end
+			local map = args[1]:match("@?(%d+)")
+			if not map then return tfm.exec.chatMessage(translate("ERR_CMD", target.community, nil, { syntax = "!remmap [@code]"}), author) end
+			local isExisting, index = isInRotation(map)
+			if not isExisting then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error:</b> The map is not in the rotation</R>", author) end
+			table.remove(maps.list, index)
+			maps.dumpCache = table.concat(maps.list, ",")
+			maps.overwriteFile = true
+			tfm.exec.chatMessage(
+				("<N>[</N><R>•</R><N>] <N><ROSE><b>@%s</b></ROSE> has been removed from the rotation. Please stay in the room for few minutes to save them properly.")
+					:format(map),
+				author
+			)
+			leaderboardNotifyList[#leaderboardNotifyList + 1] = author
 		end
 
 }

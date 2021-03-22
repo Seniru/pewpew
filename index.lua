@@ -31,6 +31,84 @@ table.tostring = function(tbl, depth)
 	return res:sub(1, res:len() - 2) .. "}"
 end
 
+local prettyify
+
+do
+
+	local typeLookup = {
+		["string"] = function(obj) return ("<VP>\"%s\"</VP>"):format(obj) end,
+		["number"] = function(obj) return ("<J>%s</J>"):format(obj) end,
+		["boolean"] = function(obj) return ("<J>%s</J>"):format(obj) end,
+		["function"] = function(obj) return ("<b><V>%s</V></b>"):format(obj) end,
+		["nil"] = function() return ("<G>nil</G>") end
+	}
+
+	local string_repeat = function(str, times)
+		local res = ""
+		while times > 0 do
+			res = res .. str
+			times = times - 1
+		end
+		return res
+	end
+
+	prettify = function(obj, depth, opt)
+
+		opt = opt or {}
+		opt.maxDepth = opt.maxDepth or 30
+		opt.truncateAt = opt.truncateAt or 30
+
+		local prettifyFn = typeLookup[type(obj)]
+		if (prettifyFn) then return { res = (prettifyFn(tostring(obj))), count = 1 } end -- not the type of object ({}, [])
+
+		if depth >= opt.maxDepth then
+			return {
+				res = ("<b><V>%s</V></b>"):format(tostring(obj)),
+				count = 1
+			}
+		end
+
+		local kvPairs = {}
+		local totalObjects = 0
+		local length = 0
+		local shouldTruncate = false
+
+		local previousKey = 0
+
+		for key, value in next, obj do
+
+			if not shouldTruncate then
+
+				local tn = tonumber(key)
+				key = tn and (((previousKey and tn - previousKey == 1) and "" or "[" .. key .. "]:")) or (key .. ":")
+				-- we only need to check if the previous key is a number, so a nil key doesn't matter
+				previousKey = tn
+				local prettified = prettify(value, depth + 1, opt)
+				kvPairs[#kvPairs + 1] = key .. " " .. prettified.res
+
+				totalObjects = totalObjects + prettified.count
+				if length >= opt.truncateAt then shouldTruncate = true end
+			end
+
+			length = length + 1
+
+		end
+
+		if shouldTruncate then kvPairs[#kvPairs] = (" <G><i>... %s more values</i></G>"):format(length - opt.truncateAt) end
+
+		if totalObjects < 6 then
+			return { res = "<N>{ " .. table.concat(kvPairs, ", ") .. " }</N>", count = totalObjects }
+		else
+			return { res = "<N>{ " .. table.concat(kvPairs, ",\n  " .. string_repeat("  ", depth)) .. " }</N>", count = totalObjects }
+		end
+
+	end
+
+end
+
+local prettyprint = function(obj, opt) print(prettify(obj, 0, opt or {}).res) end
+local p = prettyprint
+
 -- Thanks to Turkitutu
 -- https://pastebin.com/raw/Nw3y1A42
 
@@ -391,11 +469,15 @@ local a={}a.VERSION='1.5'a.__index=a;function a.new(b,c,d)local self=setmetatabl
 
 --==[[ init ]]==--
 
-local VERSION = "v2.3.0.6"
+local VERSION = "v2.3.1.0"
 local CHANGELOG =
 	[[
 
 <p align='center'><font size='20'><b><V>CHANGELOG</V></b></font> <BV><a href='event:log'>[View all]</a></BV></p><font size='12' face='Lucida Console'>
+
+<font size='15' face='Lucida Console'><b><BV>v2.3.1.0</BV></b></font> <i>(3/22/2021)</i>
+    • Added !npp [@code] to queue maps - works only inside your tribe house
+    • Major internal changes regarding map rotation
 
 <font size='15' face='Lucida Console'><b><BV>v2.3.0.6</BV></b></font> <i>(2/19/2021)</i>
     • Fixed and updated FR translations (Thanks to Jaker#9310)
@@ -430,10 +512,6 @@ local CHANGELOG =
     • Added a new role system. This is meant to give more recognition to the players who have contributed to pewpew. This is done through adding a name color to those players according to their roles (highest role). There will be more releases related to this role system soon!
 
 
-<font size='15' face='Lucida Console'><b><BV>v2.2.4.1</BV></b></font> <i>(12/14/2020)</i>
-    • Added christmas 2020 pack (Thanks for Thetiger#6961), get it before the sale ends :P
-    
-
 </font>
 ]]
 
@@ -454,7 +532,11 @@ local banned = {
 	["Sannntos#0000"] = true
 }
 
-local maps = { 521833, 401421, 541917, 541928, 541936, 541943, 527935, 559634, 559644, 888052, 878047, 885641, 770600, 770656, 772172, 891472, 589736, 589800, 589708, 900012, 901062, 754380, 901337, 901411, 892660, 907870, 910078, 1190467, 1252043, 1124380, 1016258, 1252299, 1255902, 1256808, 986790, 1285380, 1271249, 1255944, 1255983, 1085344, 1273114, 1276664, 1279258, 1286824, 1280135, 1280342, 1284861, 1287556, 1057753, 1196679, 1288489, 1292983, 1298164, 1298521, 1293189, 1296949, 1308378, 1311136, 1314419, 1314982, 1318248, 1312411, 1312589, 1312845, 1312933, 1313969, 1338762, 1339474, 1349878, 1297154, 644588, 1351237, 1354040, 1354375, 1362386, 1283234, 1370578, 1306592, 1360889, 1362753, 1408124, 1407949, 1407849, 1343986, 1408028, 1441370, 1443416, 1389255, 1427349, 1450527, 1424739, 869836, 1459902, 1392993, 1426457, 1542824, 1533474, 1561467, 1563534, 1566991, 1587241, 1416119, 1596270, 1601580, 1525751, 1582146, 1558167, 1420943, 1466487, 1642575, 1648013, 1646094, 1393097, 1643446, 1545219, 1583484, 1613092, 1627981, 1633374, 1633277, 1633251, 1585138, 1624034, 1616785, 1625916, 1667582, 1666996, 1675013, 1675316, 1531316, 1665413, 1681719, 1699880, 1688696, 623770, 1727243, 1531329, 1683915, 1689533, 1738601, 3756146, 7742371, 7781585, 7781591, 7791374, 7703556, 7795263, 7712465, 7712471, 7716829, 7713613, 7799245, 4675294, 7801165, 6255760, 7710672, 7702365, 7709752, 6207232, 7701302, 7701344, 3780736, 7810641, 7704070, 7773623 }
+maps = {
+	list = { 521833, 401421, 541917, 541928, 541936, 541943, 527935, 559634, 559644 },
+	dumpCache = "",
+	overwriteFile = false
+}
 
 local ENUM_ITEMS = {
 	SMALL_BOX = 		1,
@@ -667,6 +749,7 @@ local currentItem = ENUM_ITEMS.CANNON
 local isTribeHouse = tfm.get.room.isTribeHouse
 local statsEnabled = not isTribeHouse
 local rotation, queuedMaps, currentMapIndex = {}, {}, 0
+local leaderboardNotifyList = {}
 
 local leaderboard, shop, roles
 
@@ -1221,13 +1304,26 @@ end
 function eventFileLoaded(id, data)
 	-- print(table.tostring(leaderboard.leaders))
 	if id == leaderboard.FILE_ID or id == tostring(leaderboard.FILE_ID) then
-		print("[STATS] Leaderboard data loaded!")
-		if not (leaderboard.leaderboardData == data) then
-			leaderboard.leaderboardData = data
-			leaderboard.leaders = leaderboard.parseLeaderboard(data)
+		print("[STATS] Leaderboard and map data loaded!")
+
+		local sections = string.split(data, "\n\n")
+		local lBoardData = sections[1]
+
+		if maps.dumpCache ~= sections[2] and not maps.overwriteFile then
+			maps.dumpCache = sections[2]
+			maps.list = string.split(maps.dumpCache, ",")
+		end
+
+		if #rotation < 50 then
+			rotation = shuffleMaps(maps.list)
+		end
+
+		if not (leaderboard.leaderboardData == lBoardData) then
+			leaderboard.leaderboardData = lBoardData
+			leaderboard.leaders = leaderboard.parseLeaderboard(lBoardData)
 		end
 		for name, player in next, Player.players do leaderboard.addPlayer(player) end
-		leaderboard.save(leaderboard.leaders)
+		leaderboard.save(leaderboard.leaders, #leaderboardNotifyList > 0) -- force save when required
 	end
 end
 
@@ -1235,7 +1331,12 @@ function eventFileSaved(id)
 	if id == leaderboard.FILE_ID or id == tostring(leaderboard.FILE_ID) then
 		print("[STATS] Leaderboard saved!")
 		print(os.time())
+		for _, player in next, leaderboardNotifyList do
+			tfm.exec.chatMessage("<N>[</N><R>•</R><N>] Files have been updated!", player)
+		end
+		leaderboardNotifyList = {}
 		leaderboard.needUpdate = false
+		maps.overwriteFile = false
 	end
 end
 
@@ -1257,7 +1358,7 @@ end
 
 leaderboard = {}
 
-leaderboard.FILE_ID = 1
+leaderboard.FILE_ID = 2
 leaderboard.DUMMY_DATA = [[*souris1,0,0,0,xx|*souris2,0,0,0,xx|*souris3,0,0,0,xx|*souris4,0,0,0,xx|*souris5,0,0,0,xx|*souris6,0,0,0,xx|*souris7,0,0,0,xx|*souris8,0,0,0,xx|*souris9,0,0,0,xx|*souris10,0,0,0,xx|*souris11,0,0,0,xx|*souris12,0,0,0,xx|*souris13,0,0,0,xx|*souris14,0,0,0,xx|*souris15,0,0,0,xx|*souris16,0,0,0,xx|*souris17,0,0,0,xx|*souris18,0,0,0,xx|*souris19,0,0,0,xx|*souris20,0,0,0,xx|*souris21,0,0,0,xx|*souris22,0,0,0,xx|*souris23,0,0,0,xx|*souris24,0,0,0,xx|*souris25,0,0,0,xx|*souris26,0,0,0,xx|*souris27,0,0,0,xx|*souris28,0,0,0,xx|*souris29,0,0,0,xx|*souris30,0,0,0,xx|*souris31,0,0,0,xx|*souris32,0,0,0,xx|*souris33,0,0,0,xx|*souris34,0,0,0,xx|*souris35,0,0,0,xx|*souris36,0,0,0,xx|*souris37,0,0,0,xx|*souris38,0,0,0,xx|*souris39,0,0,0,xx|*souris40,0,0,0,xx|*souris41,0,0,0,xx|*souris42,0,0,0,xx|*souris43,0,0,0,xx|*souris44,0,0,0,xx|*souris45,0,0,0,xx|*souris46,0,0,0,xx|*souris47,0,0,0,xx|*souris48,0,0,0,xx|*souris49,0,0,0,xx|*souris50,0,0,0,xx]]
 
 leaderboard.needUpdate = false
@@ -1288,12 +1389,12 @@ leaderboard.load = function()
 	if started then print("[STATS] Loading leaderboard...") end
 end
 
-leaderboard.save = function(leaders)
+leaderboard.save = function(leaders, force)
 	local serialised, indexes = leaderboard.prepare(leaders)
-	if serialised == leaderboard.leaderboardData then return end
+	if (not force) and serialised == leaderboard.leaderboardData then return end
 	leaderboard.indexed = indexes
-	if tfm.get.room.uniquePlayers < 4 then return end
-	local started = system.saveFile(serialised, leaderboard.FILE_ID)
+	if (not force) and tfm.get.room.uniquePlayers < 4 then return end
+	local started = system.saveFile(serialised .. "\n\n" .. maps.dumpCache, leaderboard.FILE_ID)
 	if started then print("[STATS] Saving leaderboard...") end
 end
 
@@ -1841,15 +1942,14 @@ cmds = {
 		end,
 
 		["maps"] = function(args, msg, author)
+			p(maps)
 			local player = Player.players[author]
 			if not (admins[author] or (player:hasRole("staff") and player:hasRole("mapper"))) then return end
 			local res = "<b><BV>Current rotation:</BV></b> "
 			for index, map in next, rotation do
 				if index == currentMapIndex then
-					print("index is currentmaps")
 					res = res .. "<b><VP> &lt; @" .. map .. " &gt; </VP></b>, "
 				else
-					print("not")
 					res = res .. "@" .. map .. ", "
 				end
 				if #res > 980 then
@@ -1866,18 +1966,53 @@ cmds = {
 
 			if not isTribeHouse then
 				if not (admins[author] or (player:hasRole("staff") and player:hasRole("mapper"))) then
-					return tfm.exec.chatMessage(translate("ERR_PERMS", target.community))
+					return tfm.exec.chatMessage(translate("ERR_PERMS", target.community), author)
 				end
 			else
 				if tfm.get.room.name:sub(2) ~= tfm.get.room.playerList[author].tribeName then
-					return tfm.exec.chatMessage(translate("ERR_PERMS", target.community))
+					return tfm.exec.chatMessage(translate("ERR_PERMS", target.community), author)
 				end
 			end
 
 			local map = args[1]:match("@?(%d+)")
-			if not map then return translate("ERR_CMD", target.community, nil, { syntax = "!npp [@code]"}) end
+			if not map then return tfm.exec.chatMessage(translate("ERR_CMD", target.community, nil, { syntax = "!npp [@code]"}), author) end
 			queuedMaps[#queuedMaps+1] = map
-			tfm.exec.chatMessage(translate("MAP_QUEUED", tfm.get.room.community, nil, { map = map, player = author }))
+			tfm.exec.chatMessage(translate("MAP_QUEUED", tfm.get.room.community, nil, { map = map, player = author }), author)
+		end,
+
+		["addmap"] = function(args, msg, author)
+			local player = Player.players[author]
+			if not (admins[author] or (player:hasRole("staff") and player:hasRole("mapper"))) then return end
+			if tfm.get.room.xmlMapInfo.permCode ~= 41 then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error:</b> Map should be P41</R>", author) end
+			local map = tfm.get.room.xmlMapInfo.mapCode
+			if isInRotation(map) then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error:</b> The  map is already in the rotation</R>", author) end
+			maps.list[#maps.list + 1] = map
+			maps.dumpCache = table.concat(maps.list, ",")
+			maps.overwriteFile = true
+			tfm.exec.chatMessage(
+				("<N>[</N><R>•</R><N>] <N><ROSE><b>@%s</b></ROSE> [<ROSE><b>%s</b></ROSE>] has been added to the rotation. Please stay in the room for few minutes to save them properly.")
+					:format(map, tfm.get.room.xmlMapInfo.author),
+				author
+			)
+			leaderboardNotifyList[#leaderboardNotifyList + 1] = author
+		end,
+
+		["remmap"] = function(args, msg, author)
+			local player = Player.players[author]
+			if not (admins[author] or (player:hasRole("staff") and player:hasRole("mapper"))) then return end
+			local map = args[1]:match("@?(%d+)")
+			if not map then return tfm.exec.chatMessage(translate("ERR_CMD", target.community, nil, { syntax = "!remmap [@code]"}), author) end
+			local isExisting, index = isInRotation(map)
+			if not isExisting then return tfm.exec.chatMessage("<N>[</N><R>•</R><N>] <R><b>Error:</b> The map is not in the rotation</R>", author) end
+			table.remove(maps.list, index)
+			maps.dumpCache = table.concat(maps.list, ",")
+			maps.overwriteFile = true
+			tfm.exec.chatMessage(
+				("<N>[</N><R>•</R><N>] <N><ROSE><b>@%s</b></ROSE> has been removed from the rotation. Please stay in the room for few minutes to save them properly.")
+					:format(map),
+				author
+			)
+			leaderboardNotifyList[#leaderboardNotifyList + 1] = author
 		end
 
 }
@@ -1885,7 +2020,7 @@ cmds = {
 -- [[ aliases ]]
 cmds["p"] = cmds["profile"]
 
-local shuffleMaps = function(maps)
+shuffleMaps = function(maps)
 	local res = {}
 	for _, map in next, maps do
 		res[#res + 1] = map
@@ -1910,7 +2045,7 @@ newRound = function()
 		currentMapIndex = next(rotation, currentMapIndex)
 		tfm.exec.newGame(rotation[currentMapIndex])
 		if currentMapIndex >= #rotation then
-			rotation = shuffleMaps(maps)
+			rotation = shuffleMaps(maps.list)
 			currentMapIndex = 1
 		end
 	end
@@ -1935,7 +2070,6 @@ newRound = function()
 			closeSequence[1].images = { tfm.exec.addImage(assets.items[currentItem], ":1", 740, 330) }
 		end, 10000, true)
 	end
-
 end
 
 getPos = function(item, stance)
@@ -1971,6 +2105,12 @@ setNameColor = function(name)
 	local color = roles.colors[player.highestRole]
 	if not color then return end
 	tfm.exec.setNameColor(name, color)
+end
+
+isInRotation = function(map)
+	map = tostring(map):match("@?(%d+)")
+	for i, m in next, maps.list do if m == map then return true, i end end
+	return false
 end
 
 createPrettyUI = function(id, x, y, w, h, fixed, closeButton)
@@ -2073,7 +2213,7 @@ end
 
 do
 
-	rotation = shuffleMaps(maps)
+	rotation = shuffleMaps(maps.list)
 	currentMapIndex = 1
 	statsEnabled = (not isTribeHouse) and tfm.get.room.uniquePlayers >= MIN_PLAYERS
 

@@ -1,4 +1,4 @@
-local shuffleMaps = function(maps)
+shuffleMaps = function(maps)
 	local res = {}
 	for _, map in next, maps do
 		res[#res + 1] = map
@@ -23,7 +23,7 @@ newRound = function()
 		currentMapIndex = next(rotation, currentMapIndex)
 		tfm.exec.newGame(rotation[currentMapIndex])
 		if currentMapIndex >= #rotation then
-			rotation = shuffleMaps(maps)
+			rotation = shuffleMaps(maps.list)
 			currentMapIndex = 1
 		end
 	end
@@ -48,7 +48,6 @@ newRound = function()
 			closeSequence[1].images = { tfm.exec.addImage(assets.items[currentItem], ":1", 740, 330) }
 		end, 10000, true)
 	end
-
 end
 
 getPos = function(item, stance)
@@ -84,6 +83,12 @@ setNameColor = function(name)
 	local color = roles.colors[player.highestRole]
 	if not color then return end
 	tfm.exec.setNameColor(name, color)
+end
+
+isInRotation = function(map)
+	map = tostring(map):match("@?(%d+)")
+	for i, m in next, maps.list do if m == map then return true, i end end
+	return false
 end
 
 createPrettyUI = function(id, x, y, w, h, fixed, closeButton)
@@ -186,7 +191,7 @@ end
 
 do
 
-	rotation = shuffleMaps(maps)
+	rotation = shuffleMaps(maps.list)
 	currentMapIndex = 1
 	statsEnabled = (not isTribeHouse) and tfm.get.room.uniquePlayers >= MIN_PLAYERS
 
