@@ -18,6 +18,15 @@ roles.colors = {
 	["mapper"] = 0x87DF87
 }
 
+roles.images = {
+	["admin"] = "178598716f4.png",
+	["staff"] = "17859a9985c.png",
+	["developer"] = "17859b0531e.png",
+	["artist"] = "17859ab0277.png",
+	["translator"] = "17859b2cb23.png",
+	["mapper"] = "17859b68e86.png"
+}
+
 roles.addRole = function(player, role)
 	player.roles[role] = true
 	player.highestRole = roles.getHighestRole(player)

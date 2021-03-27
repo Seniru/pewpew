@@ -469,15 +469,22 @@ local a={}a.VERSION='1.5'a.__index=a;function a.new(b,c,d)local self=setmetatabl
 
 --==[[ init ]]==--
 
-local VERSION = "v2.3.1.0"
+local VERSION = "v2.3.2.0"
 local CHANGELOG =
 	[[
 
 <p align='center'><font size='20'><b><V>CHANGELOG</V></b></font> <BV><a href='event:log'>[View all]</a></BV></p><font size='12' face='Lucida Console'>
 
+<font size='15' face='Lucida Console'><b><BV>v2.3.2.0</BV></b></font> <i>(3/27/2021)</i>
+    • Added badges for the roles you have obtained!!!
+    • Fixed bugs that caused the leaderboards from not loading properly due to the last update
+    • Fixed some internal commands
+
+
 <font size='15' face='Lucida Console'><b><BV>v2.3.1.0</BV></b></font> <i>(3/22/2021)</i>
     • Added !npp [@code] to queue maps - works only inside your tribe house
     • Major internal changes regarding map rotation
+
 
 <font size='15' face='Lucida Console'><b><BV>v2.3.0.6</BV></b></font> <i>(2/19/2021)</i>
     • Fixed and updated FR translations (Thanks to Jaker#9310)
@@ -506,10 +513,6 @@ local CHANGELOG =
 
 <font size='15' face='Lucida Console'><b><BV>v2.3.0.1</BV></b></font> <i>(11/29/2020)</i>
     • Added new maps
-
-
-<font size='15' face='Lucida Console'><b><BV>v2.3.0.0</BV></b></font> <i>(12/27/2020)</i>
-    • Added a new role system. This is meant to give more recognition to the players who have contributed to pewpew. This is done through adding a name color to those players according to their roles (highest role). There will be more releases related to this role system soon!
 
 
 </font>
@@ -1391,9 +1394,9 @@ end
 
 leaderboard.save = function(leaders, force)
 	local serialised, indexes = leaderboard.prepare(leaders)
-	if (not force) and serialised == leaderboard.leaderboardData then return end
+	--if (not force)  then return end
 	leaderboard.indexed = indexes
-	if (not force) and tfm.get.room.uniquePlayers < 4 then return end
+	if (not force) and serialised == leaderboard.leaderboardData and tfm.get.room.uniquePlayers < 4 then return end
 	local started = system.saveFile(serialised .. "\n\n" .. maps.dumpCache, leaderboard.FILE_ID)
 	if started then print("[STATS] Saving leaderboard...") end
 end
@@ -1457,7 +1460,6 @@ leaderboard.displayLeaderboard = function(mode, page, target, keyPressed)
 		table.sort(leaders, function(p1, p2)
 			return leaderboard.scorePlayer(p1) > leaderboard.scorePlayer(p2)
 		end)
-
 		for i, leader in ipairs(leaders) do if leader.name == target then selfRank = i break end end
 		-- TODO: Add translations v
 		Panel.panels[356]:update(translate("SELF_RANK", targetPlayer.community, nil, { rank = selfRank }), target)
@@ -1827,6 +1829,15 @@ roles.colors = {
 	["mapper"] = 0x87DF87
 }
 
+roles.images = {
+	["admin"] = "178598716f4.png",
+	["staff"] = "17859a9985c.png",
+	["developer"] = "17859b0531e.png",
+	["artist"] = "17859ab0277.png",
+	["translator"] = "17859b2cb23.png",
+	["mapper"] = "17859b68e86.png"
+}
+
 roles.addRole = function(player, role)
 	player.roles[role] = true
 	player.highestRole = roles.getHighestRole(player)
@@ -1962,20 +1973,20 @@ cmds = {
 		end,
 
 		["npp"] = function(args, msg, author)
-			local target = Player.players[author]
+			local player = Player.players[author]
 
 			if not isTribeHouse then
 				if not (admins[author] or (player:hasRole("staff") and player:hasRole("mapper"))) then
-					return tfm.exec.chatMessage(translate("ERR_PERMS", target.community), author)
+					return tfm.exec.chatMessage(translate("ERR_PERMS", player.community), author)
 				end
 			else
 				if tfm.get.room.name:sub(2) ~= tfm.get.room.playerList[author].tribeName then
-					return tfm.exec.chatMessage(translate("ERR_PERMS", target.community), author)
+					return tfm.exec.chatMessage(translate("ERR_PERMS", player.community), author)
 				end
 			end
 
 			local map = args[1]:match("@?(%d+)")
-			if not map then return tfm.exec.chatMessage(translate("ERR_CMD", target.community, nil, { syntax = "!npp [@code]"}), author) end
+			if not map then return tfm.exec.chatMessage(translate("ERR_CMD", player.community, nil, { syntax = "!npp [@code]"}), author) end
 			queuedMaps[#queuedMaps+1] = map
 			tfm.exec.chatMessage(translate("MAP_QUEUED", tfm.get.room.community, nil, { map = map, player = author }), author)
 		end,
@@ -2155,6 +2166,14 @@ displayProfile = function(player, target, keyPressed)
 		if p.name == player.name then
 			lboardPos = i
 			break
+		end
+	end
+
+	local count = 0
+	for i, role in next, roles.list.featureArray do
+		if targetPlayer.roles[role] then
+			Panel.panels[220]:addImageTemp(Image(roles.images[role], "&1", 430 + count * 30, 82), target)
+			count = count + 1
 		end
 	end
 

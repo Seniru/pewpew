@@ -109,20 +109,20 @@ cmds = {
 		end,
 
 		["npp"] = function(args, msg, author)
-			local target = Player.players[author]
+			local player = Player.players[author]
 
 			if not isTribeHouse then
 				if not (admins[author] or (player:hasRole("staff") and player:hasRole("mapper"))) then
-					return tfm.exec.chatMessage(translate("ERR_PERMS", target.community), author)
+					return tfm.exec.chatMessage(translate("ERR_PERMS", player.community), author)
 				end
 			else
 				if tfm.get.room.name:sub(2) ~= tfm.get.room.playerList[author].tribeName then
-					return tfm.exec.chatMessage(translate("ERR_PERMS", target.community), author)
+					return tfm.exec.chatMessage(translate("ERR_PERMS", player.community), author)
 				end
 			end
 
 			local map = args[1]:match("@?(%d+)")
-			if not map then return tfm.exec.chatMessage(translate("ERR_CMD", target.community, nil, { syntax = "!npp [@code]"}), author) end
+			if not map then return tfm.exec.chatMessage(translate("ERR_CMD", player.community, nil, { syntax = "!npp [@code]"}), author) end
 			queuedMaps[#queuedMaps+1] = map
 			tfm.exec.chatMessage(translate("MAP_QUEUED", tfm.get.room.community, nil, { map = map, player = author }), author)
 		end,

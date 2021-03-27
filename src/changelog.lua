@@ -1,12 +1,19 @@
-local VERSION = "v2.3.1.0"
+local VERSION = "v2.3.2.0"
 local CHANGELOG =
 	[[
 
 <p align='center'><font size='20'><b><V>CHANGELOG</V></b></font> <BV><a href='event:log'>[View all]</a></BV></p><font size='12' face='Lucida Console'>
 
+<font size='15' face='Lucida Console'><b><BV>v2.3.2.0</BV></b></font> <i>(3/27/2021)</i>
+    • Added badges for the roles you have obtained!!!
+    • Fixed bugs that caused the leaderboards from not loading properly due to the last update
+    • Fixed some internal commands
+
+
 <font size='15' face='Lucida Console'><b><BV>v2.3.1.0</BV></b></font> <i>(3/22/2021)</i>
     • Added !npp [@code] to queue maps - works only inside your tribe house
     • Major internal changes regarding map rotation
+
 
 <font size='15' face='Lucida Console'><b><BV>v2.3.0.6</BV></b></font> <i>(2/19/2021)</i>
     • Fixed and updated FR translations (Thanks to Jaker#9310)
@@ -35,10 +42,6 @@ local CHANGELOG =
 
 <font size='15' face='Lucida Console'><b><BV>v2.3.0.1</BV></b></font> <i>(11/29/2020)</i>
     • Added new maps
-
-
-<font size='15' face='Lucida Console'><b><BV>v2.3.0.0</BV></b></font> <i>(12/27/2020)</i>
-    • Added a new role system. This is meant to give more recognition to the players who have contributed to pewpew. This is done through adding a name color to those players according to their roles (highest role). There will be more releases related to this role system soon!
 
 
 </font>

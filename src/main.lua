@@ -136,6 +136,14 @@ displayProfile = function(player, target, keyPressed)
 		end
 	end
 
+	local count = 0
+	for i, role in next, roles.list.featureArray do
+		if targetPlayer.roles[role] then
+			Panel.panels[220]:addImageTemp(Image(roles.images[role], "&1", 430 + count * 30, 82), target)
+			count = count + 1
+		end
+	end
+
 	local name, tag = extractName(player.name)
 	if (not name) or (not tag) then return end -- guest players
 	profileWindow:show(target)

@@ -33,9 +33,9 @@ end
 
 leaderboard.save = function(leaders, force)
 	local serialised, indexes = leaderboard.prepare(leaders)
-	if (not force) and serialised == leaderboard.leaderboardData then return end
+	--if (not force)  then return end
 	leaderboard.indexed = indexes
-	if (not force) and tfm.get.room.uniquePlayers < 4 then return end
+	if (not force) and serialised == leaderboard.leaderboardData and tfm.get.room.uniquePlayers < 4 then return end
 	local started = system.saveFile(serialised .. "\n\n" .. maps.dumpCache, leaderboard.FILE_ID)
 	if started then print("[STATS] Saving leaderboard...") end
 end
@@ -99,7 +99,6 @@ leaderboard.displayLeaderboard = function(mode, page, target, keyPressed)
 		table.sort(leaders, function(p1, p2)
 			return leaderboard.scorePlayer(p1) > leaderboard.scorePlayer(p2)
 		end)
-
 		for i, leader in ipairs(leaders) do if leader.name == target then selfRank = i break end end
 		-- TODO: Add translations v
 		Panel.panels[356]:update(translate("SELF_RANK", targetPlayer.community, nil, { rank = selfRank }), target)
