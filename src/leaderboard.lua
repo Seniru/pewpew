@@ -117,8 +117,8 @@ leaderboard.displayLeaderboard = function(mode, page, target, keyPressed)
 		nameTxt = nameTxt .. "            <b><V>" .. name .. "</V><N><font size='8'>" .. tag .. "</font></N></b><br>"
 		roundsTxt = roundsTxt .. leader.rounds .. "<br>"
 		deathsTxt = deathsTxt .. (leader.rounds - leader.survived) .. "<br>"
-		survivedTxt = survivedTxt .. leader.survived .. " <V><i>(" .. math.floor(leader.survived / (leader.rounds == 0 and 1 or leader.rounds) * 100) .. " %)</i></V><br>"
-		wonTxt = wonTxt .. leader.won .. " <V><i>(" .. math.floor(leader.won / (leader.rounds == 0 and 1 or leader.rounds) * 100) .. " %)</i></V><br>"
+		survivedTxt = survivedTxt .. leader.survived .. " <V><i><font size='9'>(" .. math.floor(leader.survived / (leader.rounds == 0 and 1 or leader.rounds) * 100) .. " %)</font></i></V><br>"
+		wonTxt = wonTxt .. leader.won .. " <V><i><font size='9'>(" .. math.floor(leader.won / (leader.rounds == 0 and 1 or leader.rounds) * 100) .. " %)</font></i></V><br>"
 		Panel.panels[351]:addImageTemp(Image(assets.community[leader.community], "&1", 170, 115 + 13 * counter), target)
 		if counter >= 10 then break end
 	end
