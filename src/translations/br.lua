@@ -21,7 +21,7 @@ translations["br"] = {
 	CMD_TITLE = "<font size='25' face='Comic Sans'><b><J>Comandos</J></b></font>",
 	CREDITS =   "\n\nArtist - <b><BV>Lightymouse</BV><G>#0421</G></b>\nTranslators - <b><BV>Overforyou</BV><G>#9290</G>, <BV>Nuttysquirrel</BV><G>#0626</G>, <BV>Star</BV><G>#6725</G>, <BV>Jaker</BV><G>#9310</G>, <BV>Santoex</BV><G>#0000</G></b>\n\n\nE muito obrigado por jogar pewpew!",
 	CREDS_TITLE = "<font size='25' face='Comic Sans'><b><R>Credits</R></b></font>",
-	OBJECTIVE = "<b>Sobreviva e mate os demais para poder vencer<
+	OBJECTIVE = "<b>Sobreviva e mate os demais para poder vencer</b>",
 	HELP_GOTIT = "<font size='15'><J><b><a href='event:close'>Entendi!</a></b></J></font>",
 	HELP_GITHUB = "<N>Quer ser um contribuidor desse module? Bacana! Saiba mais neste link</N> <VI><b><i>https://github.com/Seniru/pewpew</i></b></VI>",
 	HELP_DISCORD = "<N>Discord:</N> <VI><b><i>https://discord.gg/vaqgrgp</i></b></VI>",
