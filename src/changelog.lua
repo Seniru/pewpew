@@ -45,10 +45,5 @@ local CHANGELOG =
     • Minor fixes with the new role color system
     • Quick patch to get rid from farmers and hackers (will be a better system in future)
 
-
-<font size='15' face='Lucida Console'><b><BV>v2.3.0.1</BV></b></font> <i>(11/29/2020)</i>
-    • Added new maps
-
-
 </font>
 ]]
