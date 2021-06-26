@@ -469,11 +469,17 @@ local a={}a.VERSION='1.5'a.__index=a;function a.new(b,c,d)local self=setmetatabl
 
 --==[[ init ]]==--
 
-local VERSION = "v2.3.2.0"
+local VERSION = "v2.3.3.0"
 local CHANGELOG =
 	[[
 
 <p align='center'><font size='20'><b><V>CHANGELOG</V></b></font> <BV><a href='event:log'>[View all]</a></BV></p><font size='12' face='Lucida Console'>
+
+<font size='15' face='Lucida Console'><b><BV>v2.3.3.0</BV></b></font> <i>(6/12/2021)</i>
+    • Fixed the bug that displays your badges instead of showing the target's badges
+    • Added BR translations (Thanks to Santoex#0000)
+    • Changed the font size of ratios in leaderboard to '9' as a temporary fix for text wrapping issuess
+
 
 <font size='15' face='Lucida Console'><b><BV>v2.3.2.0</BV></b></font> <i>(3/27/2021)</i>
     • Added badges for the roles you have obtained!!!
@@ -797,11 +803,38 @@ translations["en"] = {
 }
 
 translations["br"] = {
-	LIVES_LEFT =    "<ROSE>Você possuí<N>${lives} <ROSE>vidas restantes. <VI>Renascendo em 3...",
-	LOST_ALL =      "<ROSE>Você perdeu todas as suas vidas!",
-	SD =            "<VP>Morte Súbita! Todos agora possuem <N>1 <VP>vida restante",
-	WELCOME =       "<VP>Bem vindo ao pewpew, <N>use a seta para baixo <VP>ou <N> a barra de espaço <VP>para atirar itens!",
-	SOLE =          "<ROSE>${player} é o último sobrevivente!"
+	LIVES_LEFT = "<ROSE>Você possuí <N>${lives} <ROSE>vidas restantes. <VI>Respawning in 3...",
+	LOST_ALL =	"<ROSE>Você perdeu todas as suas vidas!",
+	SD =		"<VP>Morte súbita! Todos agora possuem <N>1 <VP>vida restante",
+	WELCOME =	"<VP>Bem-vindo(a) ao pewpew, <N>duck <VP>or <N>pressione espaço <VP>para poder atirar itens!",
+	SOLE =		"<ROSE>${player} é o único sobrevivente!",
+	SURVIVORS = "<ROSE>${winners} e ${winner} sobreviveram nesta rodada!",
+	SELF_RANK = "<p align='center'>Seu rank: ${rank}</p>",
+	ROUNDS  =   "<font face='Lucida console'><N2>Rodadas jogadas</N2></font>",
+	DEATHS =    "<font face='Lucida console'><N2>Mortes</N2></font>",
+	SURVIVED =  "<font face='Lucida console'><N2>Rodadas sobreviventes</N2></font>",
+	WON =       "<font face='Lucida console'><N2>Rodadas ganhas</N2></font>",
+	LBOARD_POS = "<b><font face='Lucida console' color='#e3b134'>Tabela de classificação geral: ${pos}</font></b>",
+	EQUIPPED =  "Usando",
+	EQUIP =     "Usar",
+	BUY =       "Comprar",
+	POINTS =    "<font face='Lucida console' size='12'>   <b>Pontos:</b> <V>${points}</V></font>",
+	PACK_DESC = "\n\n<font face='Lucida console' size='12' color='#cccccc'><i>“ ${desc} ”</i></font>\n<p align='right'><font size='10'>- ${author}</font></p>",
+	GIFT_RECV = "<N>Você foi recompensado com <ROSE><b>${gift}</b></ROSE> por <ROSE><b>${admin}</b></ROSE>",
+	COMMANDS =  "\n\n<N2>[ <b>H</b> ]</N2> <N><ROSE>!help</ROSE> (exibe este menu de ajuda)</N><br><N2>[ <b>P</b> ]</N2> <N><ROSE>!profile <i>[player]</i></ROSE> (exibe o perfil do jogador)</N><br></N><N2>[ <b>O</b> ]</N2> <N><ROSE>!shop</ROSE> (exibe o shop)</N><br><N2>[ <b>L</b> ]</N2> <N>(exibe a classificação)</N><br><br><N><ROSE>!changelog</ROSE> (exibe o changelog)</N><br><br>",
+	CMD_TITLE = "<font size='25' face='Comic Sans'><b><J>Comandos</J></b></font>",
+	CREDITS =   "\n\nArtist - <b><BV>Lightymouse</BV><G>#0421</G></b>\nTranslators - <b><BV>Overforyou</BV><G>#9290</G>, <BV>Nuttysquirrel</BV><G>#0626</G>, <BV>Star</BV><G>#6725</G>, <BV>Jaker</BV><G>#9310</G>, <BV>Santoex</BV><G>#0000</G></b>\n\n\nE muito obrigado por jogar pewpew!",
+	CREDS_TITLE = "<font size='25' face='Comic Sans'><b><R>Credits</R></b></font>",
+	OBJECTIVE = "<b>Sobreviva e mate os demais para poder vencer</b>",
+	HELP_GOTIT = "<font size='15'><J><b><a href='event:close'>Entendi!</a></b></J></font>",
+	HELP_GITHUB = "<N>Quer ser um contribuidor desse module? Bacana! Saiba mais neste link</N> <VI><b><i>https://github.com/Seniru/pewpew</i></b></VI>",
+	HELP_DISCORD = "<N>Discord:</N> <VI><b><i>https://discord.gg/vaqgrgp</i></b></VI>",
+	HELP_MAP = "<N>Quer adicionar seus mapas ao pewpew? Saiba mais neste link</N> <VI><b><i>https://atelier801.com/topic?f=6&t=892550</i></b></VI>",
+	NEW_ROLE = "<N><ROSE><b>${player}</b></ROSE> é agora um <ROSE><b>${role}</b></ROSE>",
+	KICK_ROLE = "<N><ROSE><b>${player}</b></ROSE> não é um <ROSE><b>${role}</b></ROSE> mais! ;c",
+	ERR_PERMS = "<N>[</N><R>•</R><N>] <R><b>Erro: Você não tem permissão para usar esse comando!</b></R>",
+	ERR_CMD =   "<N>[</N><R>•</R><N>] <R><b>Erro no comando<br>\tUsage:</b><font face='Lucida console'>${syntax}</i></font></R>",
+	MAP_QUEUED ="<N><ROSE><b>@${map}</b></ROSE> foi colocado na fila por <ROSE><b>${player}</b></ROSE>"
 }
 
 translations["es"] = {
@@ -1478,8 +1511,8 @@ leaderboard.displayLeaderboard = function(mode, page, target, keyPressed)
 		nameTxt = nameTxt .. "            <b><V>" .. name .. "</V><N><font size='8'>" .. tag .. "</font></N></b><br>"
 		roundsTxt = roundsTxt .. leader.rounds .. "<br>"
 		deathsTxt = deathsTxt .. (leader.rounds - leader.survived) .. "<br>"
-		survivedTxt = survivedTxt .. leader.survived .. " <V><i>(" .. math.floor(leader.survived / (leader.rounds == 0 and 1 or leader.rounds) * 100) .. " %)</i></V><br>"
-		wonTxt = wonTxt .. leader.won .. " <V><i>(" .. math.floor(leader.won / (leader.rounds == 0 and 1 or leader.rounds) * 100) .. " %)</i></V><br>"
+		survivedTxt = survivedTxt .. leader.survived .. " <V><i><font size='9'>(" .. math.floor(leader.survived / (leader.rounds == 0 and 1 or leader.rounds) * 100) .. " %)</font></i></V><br>"
+		wonTxt = wonTxt .. leader.won .. " <V><i><font size='9'>(" .. math.floor(leader.won / (leader.rounds == 0 and 1 or leader.rounds) * 100) .. " %)</font></i></V><br>"
 		Panel.panels[351]:addImageTemp(Image(assets.community[leader.community], "&1", 170, 115 + 13 * counter), target)
 		if counter >= 10 then break end
 	end
@@ -1523,6 +1556,7 @@ shop.packs = {
 			description_locales = {
 				en = "It's all random 0m0",
 				fr = "C'est que du hasard 0m0",
+				br = "É tudo aleatório 0m0",
 			},
 
 			skins = {
@@ -1547,6 +1581,7 @@ shop.packs = {
 			description_locales = {
 				en = "Default item pack",
 				fr = "Pack de texture par défaut.",
+				br = "Pacote de itens padrão",
 			},
 
 			skins = {
@@ -1571,6 +1606,7 @@ shop.packs = {
 			description_locales = {
 				en = "Back in old days...",
 				fr = "Comme au bon vieux temps...",
+				br = "De volta aos velhos tempos...",
 			},
 
 			skins = {
@@ -1595,6 +1631,7 @@ shop.packs = {
 			description_locales = {
 				en = "Meow!",
 				fr = "Miaou !",
+				br = "Miau!",
 			},
 
 			skins = {
@@ -1619,6 +1656,7 @@ shop.packs = {
 			description_locales = {
 				en = "Only for the strongest kings!",
 				fr = "Seulement pour les rois les plus fort !",
+				br = "Apenas para os reis mais fortes!",
 			},
 
 			skins = {
@@ -1644,6 +1682,7 @@ shop.packs = {
 			description_locales = {
 				en = "Trick or Treat!?",
 				fr = "Un bonbon ou un sort !?",
+				br = "Gostosuras ou Travessuras?",
 			},
 
 			skins = {
@@ -1669,6 +1708,7 @@ shop.packs = {
 			description_locales = {
 				en = "Ho ho ho, Merry Christmas!!",
 				fr = "Ho ho Ho, Joyeux Noël !!",
+				br = "Ho ho ho, Feliz Natal!!",
 			},
 
 			skins = {
@@ -2171,7 +2211,7 @@ displayProfile = function(player, target, keyPressed)
 
 	local count = 0
 	for i, role in next, roles.list.featureArray do
-		if targetPlayer.roles[role] then
+		if player.roles[role] then
 			Panel.panels[220]:addImageTemp(Image(roles.images[role], "&1", 430 + count * 30, 82), target)
 			count = count + 1
 		end

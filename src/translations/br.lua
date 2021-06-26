@@ -31,3 +31,4 @@ translations["br"] = {
 	ERR_PERMS = "<N>[</N><R>•</R><N>] <R><b>Erro: Você não tem permissão para usar esse comando!</b></R>",
 	ERR_CMD =   "<N>[</N><R>•</R><N>] <R><b>Erro no comando<br>\tUsage:</b><font face='Lucida console'>${syntax}</i></font></R>",
 	MAP_QUEUED ="<N><ROSE><b>@${map}</b></ROSE> foi colocado na fila por <ROSE><b>${player}</b></ROSE>"
+}

@@ -1,8 +1,14 @@
-local VERSION = "v2.3.2.0"
+local VERSION = "v2.3.3.0"
 local CHANGELOG =
 	[[
 
 <p align='center'><font size='20'><b><V>CHANGELOG</V></b></font> <BV><a href='event:log'>[View all]</a></BV></p><font size='12' face='Lucida Console'>
+
+<font size='15' face='Lucida Console'><b><BV>v2.3.3.0</BV></b></font> <i>(6/12/2021)</i>
+    • Fixed the bug that displays your badges instead of showing the target's badges
+    • Added BR translations (Thanks to Santoex#0000)
+    • Changed the font size of ratios in leaderboard to '9' as a temporary fix for text wrapping issuess
+
 
 <font size='15' face='Lucida Console'><b><BV>v2.3.2.0</BV></b></font> <i>(3/27/2021)</i>
     • Added badges for the roles you have obtained!!!

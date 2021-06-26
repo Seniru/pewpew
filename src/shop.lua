@@ -25,6 +25,7 @@ shop.packs = {
 			description_locales = {
 				en = "It's all random 0m0",
 				fr = "C'est que du hasard 0m0",
+				br = "É tudo aleatório 0m0",
 			},
 
 			skins = {
@@ -49,6 +50,7 @@ shop.packs = {
 			description_locales = {
 				en = "Default item pack",
 				fr = "Pack de texture par défaut.",
+				br = "Pacote de itens padrão",
 			},
 
 			skins = {
@@ -73,6 +75,7 @@ shop.packs = {
 			description_locales = {
 				en = "Back in old days...",
 				fr = "Comme au bon vieux temps...",
+				br = "De volta aos velhos tempos...",
 			},
 
 			skins = {
@@ -97,6 +100,7 @@ shop.packs = {
 			description_locales = {
 				en = "Meow!",
 				fr = "Miaou !",
+				br = "Miau!",
 			},
 
 			skins = {
@@ -121,6 +125,7 @@ shop.packs = {
 			description_locales = {
 				en = "Only for the strongest kings!",
 				fr = "Seulement pour les rois les plus fort !",
+				br = "Apenas para os reis mais fortes!",
 			},
 
 			skins = {
@@ -146,6 +151,7 @@ shop.packs = {
 			description_locales = {
 				en = "Trick or Treat!?",
 				fr = "Un bonbon ou un sort !?",
+				br = "Gostosuras ou Travessuras?",
 			},
 
 			skins = {
@@ -171,6 +177,7 @@ shop.packs = {
 			description_locales = {
 				en = "Ho ho ho, Merry Christmas!!",
 				fr = "Ho ho Ho, Joyeux Noël !!",
+				br = "Ho ho ho, Feliz Natal!!",
 			},
 
 			skins = {
