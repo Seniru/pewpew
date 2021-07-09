@@ -9,8 +9,8 @@ leaderboard.leaderboardData = leaderboard.leaderboardData or leaderboard.DUMMY_D
 
 leaderboard.parseLeaderboard = function(data)
 	local res = {}
-	for i, entry in next, string.split(data, "|") do
-		local fields = string.split(entry, ",")
+	for i, entry in next, stringutils.split(data, "|") do
+		local fields = stringutils.split(entry, ",")
 		local name = fields[1]
 		res[name] = { name = name, rounds = tonumber(fields[2]), survived = tonumber(fields[3]), won = tonumber(fields[4]), community = fields[5] }
 		res[name].score = leaderboard.scorePlayer(res[name])

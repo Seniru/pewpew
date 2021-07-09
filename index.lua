@@ -1,8 +1,9 @@
 --==[[ libs ]]==--
 
-string.format = function(s, tab) return (s:gsub('($%b{})', function(w) return tab[w:sub(3, -2)] or w end)) end
+local stringutils = {}
+stringutils.format = function(s, tab) return (s:gsub('($%b{})', function(w) return tab[w:sub(3, -2)] or w end)) end
 
-string.split = function(s, delimiter)
+stringutils.split = function(s, delimiter)
 	result = {}
 	for match in (s .. delimiter):gmatch("(.-)" .. delimiter) do
 		table.insert(result, match)
@@ -987,7 +988,7 @@ local translate = function(term, lang, page, kwargs)
 	end
 	translation = page and translation[page] or translation
 	if not translation then return end
-	return string.format(translation, kwargs)
+	return stringutils.format(translation, kwargs)
 end
 
 
@@ -1337,12 +1338,12 @@ function eventFileLoaded(id, data)
 	if id == leaderboard.FILE_ID or id == tostring(leaderboard.FILE_ID) then
 		print("[STATS] Leaderboard and map data loaded!")
 
-		local sections = string.split(data, "\n\n")
+		local sections = stringutils.split(data, "\n\n")
 		local lBoardData = sections[1]
 
 		if maps.dumpCache ~= sections[2] and not maps.overwriteFile then
 			maps.dumpCache = sections[2]
-			maps.list = string.split(maps.dumpCache, ",")
+			maps.list = stringutils.split(maps.dumpCache, ",")
 		end
 
 		if #rotation < 50 then
@@ -1372,7 +1373,7 @@ function eventFileSaved(id)
 end
 
 function eventChatCommand(name, cmd)
-	local args = string.split(cmd, " ")
+	local args = stringutils.split(cmd, " ")
 	if cmds[args[1]] then
 		local cmdArgs = {}
 		for i = 2, #args do cmdArgs[#cmdArgs + 1] = args[i] end
@@ -1398,8 +1399,8 @@ leaderboard.leaderboardData = leaderboard.leaderboardData or leaderboard.DUMMY_D
 
 leaderboard.parseLeaderboard = function(data)
 	local res = {}
-	for i, entry in next, string.split(data, "|") do
-		local fields = string.split(entry, ",")
+	for i, entry in next, stringutils.split(data, "|") do
+		local fields = stringutils.split(entry, ",")
 		local name = fields[1]
 		res[name] = { name = name, rounds = tonumber(fields[2]), survived = tonumber(fields[3]), won = tonumber(fields[4]), community = fields[5] }
 		res[name].score = leaderboard.scorePlayer(res[name])
@@ -2358,7 +2359,7 @@ do
 				:addPanel(
 					Panel(650, "", 80, 350, 240, 20, nil, 0x324650, 1, true)
 						:setActionListener(function(id, name, event)
-							local key, value = table.unpack(string.split(event, ":"))
+							local key, value = table.unpack(stringutils.split(event, ":"))
 							local player = Player.players[name]
 							local pack = shop.packs[value]
 							if not pack then return end

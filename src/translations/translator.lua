@@ -7,5 +7,5 @@ local translate = function(term, lang, page, kwargs)
 	end
 	translation = page and translation[page] or translation
 	if not translation then return end
-	return string.format(translation, kwargs)
+	return stringutils.format(translation, kwargs)
 end

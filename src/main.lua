@@ -290,7 +290,7 @@ do
 				:addPanel(
 					Panel(650, "", 80, 350, 240, 20, nil, 0x324650, 1, true)
 						:setActionListener(function(id, name, event)
-							local key, value = table.unpack(string.split(event, ":"))
+							local key, value = table.unpack(stringutils.split(event, ":"))
 							local player = Player.players[name]
 							local pack = shop.packs[value]
 							if not pack then return end

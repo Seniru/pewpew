@@ -3,12 +3,12 @@ function eventFileLoaded(id, data)
 	if id == leaderboard.FILE_ID or id == tostring(leaderboard.FILE_ID) then
 		print("[STATS] Leaderboard and map data loaded!")
 
-		local sections = string.split(data, "\n\n")
+		local sections = stringutils.split(data, "\n\n")
 		local lBoardData = sections[1]
 
 		if maps.dumpCache ~= sections[2] and not maps.overwriteFile then
 			maps.dumpCache = sections[2]
-			maps.list = string.split(maps.dumpCache, ",")
+			maps.list = stringutils.split(maps.dumpCache, ",")
 		end
 
 		if #rotation < 50 then
