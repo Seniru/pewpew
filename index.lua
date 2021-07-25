@@ -2069,6 +2069,12 @@ cmds["p"] = cmds["profile"]
 
 shuffleMaps = function(maps)
 	local res = {}
+	local latest = {}
+	for i = #maps, #maps - 20, -1 do
+		local map = maps[i]
+		latest[#latest + 1] = map
+		res[#res + 1] = map
+	end
 	for _, map in next, maps do
 		res[#res + 1] = map
 		res[#res + 1] = map
@@ -2076,6 +2082,9 @@ shuffleMaps = function(maps)
 	table.sort(res, function(e1, e2)
 		return math.random() <= 0.5
 	end)
+	for _, map in next, latest do
+		table.insert(res, math.random(25), map)
+	end
 	return res
 end
 
