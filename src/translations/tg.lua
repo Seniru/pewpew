@@ -1,4 +1,4 @@
-translations["ph"] = {
+translations["tg"] = {
 	LIVES_LEFT = "<ROSE>Mayroon kang <N>${lives} <ROSE>buhay na natitira. <VI>Respawning sa 3...",
 	LOST_ALL =	"<ROSE>Nawala lahat nang buhay mo!",
 	SD =		"<VP>Biglaang kamatayan! Lahat ay mayroong <N>1 <VP>buhay na natitira",

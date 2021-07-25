@@ -23,7 +23,7 @@ function Player.new(name)
 	self.alive = false
 	self.lives = 0
 	self.inCooldown = true
-	self.community = tfm.get.room.playerList[name].community
+	self.community = tfm.get.room.playerList[name].language
 	self.hearts = {}
 
 	self.rounds = 0
@@ -135,7 +135,7 @@ function Player:die()
 		local winner = next(Player.alive)
 		local winnerPlayer = Player.players[winner]
 		local n, t = extractName(winner)
-		tfm.exec.chatMessage(translate("SOLE", tfm.get.room.community, nil, {player = "<b><VI>" .. n .. "</VI><font size='8'><N2>" .. t .. "</N2></font></b>"}))
+		tfm.exec.chatMessage(translate("SOLE", tfm.get.room.language, nil, {player = "<b><VI>" .. n .. "</VI><font size='8'><N2>" .. t .. "</N2></font></b>"}))
 		tfm.exec.giveCheese(winner)
 		tfm.exec.playerVictory(winner)
 

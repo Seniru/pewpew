@@ -26,6 +26,7 @@ shop.packs = {
 				en = "It's all random 0m0",
 				fr = "C'est que du hasard 0m0",
 				br = "É tudo aleatório 0m0",
+				ur = "Sab random hai 0m0"
 			},
 
 			skins = {
@@ -51,6 +52,7 @@ shop.packs = {
 				en = "Default item pack",
 				fr = "Pack de texture par défaut.",
 				br = "Pacote de itens padrão",
+				ur = "Default cheezon ka pack"
 			},
 
 			skins = {
@@ -76,6 +78,7 @@ shop.packs = {
 				en = "Back in old days...",
 				fr = "Comme au bon vieux temps...",
 				br = "De volta aos velhos tempos...",
+				ur = "Puranay dino mein..."
 			},
 
 			skins = {
@@ -126,6 +129,7 @@ shop.packs = {
 				en = "Only for the strongest kings!",
 				fr = "Seulement pour les rois les plus fort !",
 				br = "Apenas para os reis mais fortes!",
+				ur = "Sab se bahadur badshah ke liye!"
 			},
 
 			skins = {
@@ -152,6 +156,7 @@ shop.packs = {
 				en = "Trick or Treat!?",
 				fr = "Un bonbon ou un sort !?",
 				br = "Gostosuras ou Travessuras?",
+				ur = "Trick ya treat!?"
 			},
 
 			skins = {
@@ -178,6 +183,7 @@ shop.packs = {
 				en = "Ho ho ho, Merry Christmas!!",
 				fr = "Ho ho Ho, Joyeux Noël !!",
 				br = "Ho ho ho, Feliz Natal!!",
+				ur = "Ho ho ho, Christmas mubarak!!"
 			},
 
 			skins = {

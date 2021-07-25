@@ -124,7 +124,7 @@ cmds = {
 			local map = args[1]:match("@?(%d+)")
 			if not map then return tfm.exec.chatMessage(translate("ERR_CMD", player.community, nil, { syntax = "!npp [@code]"}), author) end
 			queuedMaps[#queuedMaps+1] = map
-			tfm.exec.chatMessage(translate("MAP_QUEUED", tfm.get.room.community, nil, { map = map, player = author }), author)
+			tfm.exec.chatMessage(translate("MAP_QUEUED", tfm.get.room.language, nil, { map = map, player = author }), author)
 		end,
 
 		["addmap"] = function(args, msg, author)

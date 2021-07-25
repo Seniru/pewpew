@@ -5,7 +5,7 @@ function eventLoop(tc, tr)
 	if tr < 0 and initialized then
 		if not suddenDeath then
 			suddenDeath = true
-			tfm.exec.chatMessage(translate("SD", tfm.get.room.community))
+			tfm.exec.chatMessage(translate("SD", tfm.get.room.language))
 			for name, player in next, Player.alive do
 				player:setLives(1)
 			end
@@ -32,7 +32,7 @@ function eventLoop(tc, tr)
 					winners = winners .. "<b><VI>" .. n .. "</VI><font size='8'><N2>" .. t .. "</N2></font></b>" .. ", "
 					aliveCount = aliveCount - 1
 				end
-				tfm.exec.chatMessage(translate("SURVIVORS", tfm.get.room.community, nil, { winners = winners, winner = winner }))
+				tfm.exec.chatMessage(translate("SURVIVORS", tfm.get.room.language, nil, { winners = winners, winner = winner }))
 			end
 			newRoundStarted = false
 			Timer("newRound", newRound, 3 * 1000)

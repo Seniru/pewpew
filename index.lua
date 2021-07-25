@@ -905,7 +905,7 @@ translations["tr"] = {
 	KICK_ROLE =     "<N><ROSE><b>${player}</b></ROSE> artık bir <ROSE><b>${role}</b></ROSE> değil! ;c"
 }
 
-translations["ph"] = {
+translations["tg"] = {
 	LIVES_LEFT = "<ROSE>Mayroon kang <N>${lives} <ROSE>buhay na natitira. <VI>Respawning sa 3...",
 	LOST_ALL =	"<ROSE>Nawala lahat nang buhay mo!",
 	SD =		"<VP>Biglaang kamatayan! Lahat ay mayroong <N>1 <VP>buhay na natitira",
@@ -979,6 +979,41 @@ translations["hu"] = {
 	KICK_ROLE = "<N><ROSE><b>${player}</b></ROSE> nem <ROSE><b>${role}</b></ROSE> többé! ;c",
 }
 
+translations["ur"] = {
+	LIVES_LEFT = "<ROSE>Ap ke pas <N>${lives} <ROSE>lives hain. <VI>Apke zinda honay me time hai 3...",
+	LOST_ALL =    "<ROSE>Ap apni saari lives kho chukay hain!",
+	SD =        "<VP>Sudden Death! Sab ke paas <N>1 <VP>life hai",
+	WELCOME =    "<VP>Pewpew me khushamadeed!, <N>duck <VP>ya <N>spacebar <VP>se items shoot karain!",
+	SOLE =        "<ROSE>${player} sole survivor hain!",
+	SURVIVORS = "<ROSE>${winners} aur ${winner} is round round ke survivors hai!",
+	SELF_RANK = "<p align='center'>Apka rank: ${rank}</p>",
+	ROUNDS  =   "<font face='Lucida console'><N2>Rounds khelay</N2></font>",
+	DEATHS =    "<font face='Lucida console'><N2>Deaths</N2></font>",
+	SURVIVED =  "<font face='Lucida console'><N2>Rounds survived</N2></font>",
+	WON =       "<font face='Lucida console'><N2>Rounds jeetay</N2></font>",
+	LBOARD_POS = "<b><font face='Lucida console' color='#e3b134'>Aalmi leaderboard: ${pos}</font></b>",
+	EQUIPPED =  "Equipped",
+	EQUIP =     "Equip",
+	BUY =       "Khareedien",
+	POINTS =    "<font face='Lucida console' size='12'>   <b>Points:</b> <V>${points}</V></font>",
+	PACK_DESC = "\n\n<font face='Lucida console' size='12' color='#cccccc'><i>“ ${desc} ”</i></font>\n<p align='right'><font size='10'>- ${author}</font></p>",
+	GIFT_RECV = "<N>Ap ko <ROSE><b>${admin}</b></ROSE> ne <ROSE><b>${gift}</b></ROSE> inaam diya hai",
+	COMMANDS =  "\n\n<N2>[ <b>H</b> ]</N2> <N><ROSE>!help</ROSE> (help menu dekhnay ke liye)</N><br><N2>[ <b>P</b> ]</N2> <N><ROSE>!profile <i>[player]</i></ROSE> (Player ki profile dekhnay ke liye)</N><br></N><N2>[ <b>O</b> ]</N2> <N><ROSE>!shop</ROSE> (dukaan kholnay ke liye)</N><br><N2>[ <b>L</b> ]</N2> <N>(leaderboard kholnay ke liye)</N><br><br><N><ROSE>!changelog</ROSE> (changelog dekhnay ke liye)</N><br><br>",
+	CMD_TITLE = "<font size='25' face='Comic Sans'><b><J>Commands</J></b></font>",
+	CREDITS =   "\n\nArtist - <b><BV>Lightymouse</BV><G>#0421</G></b>\nTranslators - <b><BV>Overforyou</BV><G>#9290</G>, <BV>Nuttysquirrel</BV><G>#0626</G>, <BV>Star</BV><G>#6725</G>, <BV>Jaker</BV><G>#9310</G>, <BV>Maha010</BV><G>#0000</G></b>\n\n\nPewpew khelnay ke liye shukariya!",
+	CREDS_TITLE = "<font size='25' face='Comic Sans'><b><R>Credits</R></b></font>",
+	OBJECTIVE = "<b>Dusron ko maarein aur jeetein.</b>",
+	HELP_GOTIT = "<font size='15'><J><b><a href='event:close'>Got it!</a></b></J></font>",
+	HELP_GITHUB = "<N>Kiya aap bhi is module ki madad krna chahtay hain? Is link pr jayein</N> <VI><b><i>https://github.com/Seniru/pewpew</i></b></VI>",
+	HELP_DISCORD = "<N>Discord:</N> <VI><b><i>https://discord.gg/vaqgrgp</i></b></VI>",
+	HELP_MAP = "<N>Kiya aap apnay maps pewpew mein daalna chahtay hai? Is link pr jayein</N> <VI><b><i>https://atelier801.com/topic?f=6&t=892550</i></b></VI>",
+	NEW_ROLE = "<N><ROSE><b>${player}</b></ROSE> ab <ROSE><b>${role}</b></ROSE> hain!",
+	KICK_ROLE = "<N><ROSE><b>${player}</b></ROSE> ab <ROSE><b>${role}</b></ROSE> nahi hain! ;c",
+	ERR_PERMS = "<N>[</N><R>•</R><N>] <R><b>Error: Ap ye command istemaal nahi kr saktay!</b></R>",
+	ERR_CMD =   "<N>[</N><R>•</R><N>] <R><b>Command mein ghalti hai.<br>\tUsage:</b><font face='Lucida console'>${syntax}</i></font></R>",
+	MAP_QUEUED ="<ROSE><b>${player}</b></ROSE> ne <N><ROSE><b>@${map}</b></ROSE> queue mein daala hai."
+}
+
 local translate = function(term, lang, page, kwargs)
 	local translation
 	if translations[lang] then
@@ -1019,7 +1054,7 @@ function Player.new(name)
 	self.alive = false
 	self.lives = 0
 	self.inCooldown = true
-	self.community = tfm.get.room.playerList[name].community
+	self.community = tfm.get.room.playerList[name].language
 	self.hearts = {}
 
 	self.rounds = 0
@@ -1131,7 +1166,7 @@ function Player:die()
 		local winner = next(Player.alive)
 		local winnerPlayer = Player.players[winner]
 		local n, t = extractName(winner)
-		tfm.exec.chatMessage(translate("SOLE", tfm.get.room.community, nil, {player = "<b><VI>" .. n .. "</VI><font size='8'><N2>" .. t .. "</N2></font></b>"}))
+		tfm.exec.chatMessage(translate("SOLE", tfm.get.room.language, nil, {player = "<b><VI>" .. n .. "</VI><font size='8'><N2>" .. t .. "</N2></font></b>"}))
 		tfm.exec.giveCheese(winner)
 		tfm.exec.playerVictory(winner)
 
@@ -1188,7 +1223,7 @@ function eventLoop(tc, tr)
 	if tr < 0 and initialized then
 		if not suddenDeath then
 			suddenDeath = true
-			tfm.exec.chatMessage(translate("SD", tfm.get.room.community))
+			tfm.exec.chatMessage(translate("SD", tfm.get.room.language))
 			for name, player in next, Player.alive do
 				player:setLives(1)
 			end
@@ -1215,7 +1250,7 @@ function eventLoop(tc, tr)
 					winners = winners .. "<b><VI>" .. n .. "</VI><font size='8'><N2>" .. t .. "</N2></font></b>" .. ", "
 					aliveCount = aliveCount - 1
 				end
-				tfm.exec.chatMessage(translate("SURVIVORS", tfm.get.room.community, nil, { winners = winners, winner = winner }))
+				tfm.exec.chatMessage(translate("SURVIVORS", tfm.get.room.language, nil, { winners = winners, winner = winner }))
 			end
 			newRoundStarted = false
 			Timer("newRound", newRound, 3 * 1000)
@@ -1553,6 +1588,7 @@ shop.packs = {
 				en = "It's all random 0m0",
 				fr = "C'est que du hasard 0m0",
 				br = "É tudo aleatório 0m0",
+				ur = "Sab random hai 0m0"
 			},
 
 			skins = {
@@ -1578,6 +1614,7 @@ shop.packs = {
 				en = "Default item pack",
 				fr = "Pack de texture par défaut.",
 				br = "Pacote de itens padrão",
+				ur = "Default cheezon ka pack"
 			},
 
 			skins = {
@@ -1603,6 +1640,7 @@ shop.packs = {
 				en = "Back in old days...",
 				fr = "Comme au bon vieux temps...",
 				br = "De volta aos velhos tempos...",
+				ur = "Puranay dino mein..."
 			},
 
 			skins = {
@@ -1653,6 +1691,7 @@ shop.packs = {
 				en = "Only for the strongest kings!",
 				fr = "Seulement pour les rois les plus fort !",
 				br = "Apenas para os reis mais fortes!",
+				ur = "Sab se bahadur badshah ke liye!"
 			},
 
 			skins = {
@@ -1679,6 +1718,7 @@ shop.packs = {
 				en = "Trick or Treat!?",
 				fr = "Un bonbon ou un sort !?",
 				br = "Gostosuras ou Travessuras?",
+				ur = "Trick ya treat!?"
 			},
 
 			skins = {
@@ -1705,6 +1745,7 @@ shop.packs = {
 				en = "Ho ho ho, Merry Christmas!!",
 				fr = "Ho ho Ho, Joyeux Noël !!",
 				br = "Ho ho ho, Feliz Natal!!",
+				ur = "Ho ho ho, Christmas mubarak!!"
 			},
 
 			skins = {
@@ -1878,7 +1919,7 @@ roles.addRole = function(player, role)
 	player.roles[role] = true
 	player.highestRole = roles.getHighestRole(player)
 	setNameColor(player.name)
-	tfm.exec.chatMessage(translate("NEW_ROLE", tfm.get.room.community, nil, { player = player.name, role = role }))
+	tfm.exec.chatMessage(translate("NEW_ROLE", tfm.get.room.language, nil, { player = player.name, role = role }))
 	player:savePlayerData()
 end
 
@@ -1887,7 +1928,7 @@ roles.removeRole = function(player, role)
 	player.highestRole = roles.getHighestRole(player)
 	tfm.exec.setNameColor(player.name, 0) -- set it to default color in case of all the colors are removed
 	setNameColor(player.name)
-	tfm.exec.chatMessage(translate("KICK_ROLE", tfm.get.room.community, nil, { player = player.name, role = role }))
+	tfm.exec.chatMessage(translate("KICK_ROLE", tfm.get.room.language, nil, { player = player.name, role = role }))
 	player:savePlayerData()
 end
 
@@ -2024,7 +2065,7 @@ cmds = {
 			local map = args[1]:match("@?(%d+)")
 			if not map then return tfm.exec.chatMessage(translate("ERR_CMD", player.community, nil, { syntax = "!npp [@code]"}), author) end
 			queuedMaps[#queuedMaps+1] = map
-			tfm.exec.chatMessage(translate("MAP_QUEUED", tfm.get.room.community, nil, { map = map, player = author }), author)
+			tfm.exec.chatMessage(translate("MAP_QUEUED", tfm.get.room.language, nil, { map = map, player = author }), author)
 		end,
 
 		["addmap"] = function(args, msg, author)
