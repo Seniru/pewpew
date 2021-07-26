@@ -32,5 +32,7 @@ translations["en"] = {
 	ERR_CMD =   "<N>[</N><R>•</R><N>] <R><b>Error in command<br>\tUsage:</b><font face='Lucida console'>${syntax}</i></font></R>",
 	MAP_QUEUED ="<N><ROSE><b>@${map}</b></ROSE> has been queued by <ROSE><b>${player}</b></ROSE>",
 	STATS_ENABLED = "${author}<G> - @${code}   |   </G><V>STATS ENABLED",
-	STATS_DISABLED = "${author}<G> - @${code}   |   </G><R>STATS DISABLED"
+	STATS_DISABLED = "${author}<G> - @${code}   |   </G><R>STATS DISABLED",
+	SHOW_CLOGS = "<p align='center'><a href='event:changelog'><b>Show changelog</b></a></p>",
+	NEW_VERSION = "<font size='16'><p align='center'><b><J>NEW VERSION <T>${version}</T></J></b></p></font>"
 }

@@ -147,6 +147,7 @@ local assets = {
 		scrollbarFg = "1719e173ac6.png"
 	},
 	community = {
+		int= "1651b327097.png",
 		xx = "1651b327097.png",
 		ar = "1651b32290a.png",
 		bg = "1651b300203.png",
@@ -170,11 +171,11 @@ local assets = {
 		lt = "1651b31811c.png",
 		lv = "1651b319906.png",
 		nl = "1651b31b0dc.png",
-		ph = "1651b31c891.png",
 		pl = "1651b31e0cf.png",
 		pt = "1651b3019c0.png",
 		ro = "1651b31f950.png",
 		ru = "1651b321113.png",
+		tg = "1651b31c891.png",
 		tr = "1651b3240e8.png",
 		vk = "1651b3258b3.png"
 	},
@@ -220,6 +221,11 @@ local dHandler = DataHandler.new("pew", {
 		index = 7,
 		type = "number",
 		default = 0
+	},
+	version = {
+		index = 8,
+		type = "string",
+		default = "v0.0.0.0"
 	}
 })
 

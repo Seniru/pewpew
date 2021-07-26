@@ -32,4 +32,16 @@ function eventPlayerDataLoaded(name, data)
 	player.highestRole = roles.getHighestRole(player)
 	setNameColor(name)
 
+	player.version = dHandler:get(name, "version")
+	if player.version ~= VERSION then
+		player.version = VERSION
+		player:savePlayerData()
+		if VERSION_IMG then
+			player.openedWindow = newsWindow
+			newsWindow:show(name)
+			Panel.panels[1050]:update(translate("SHOW_CLOGS", player.community))
+			Panel.panels[1051]:update(translate("NEW_VERSION", player.community, nil, { version = VERSION }))
+		end
+	end
+
 end

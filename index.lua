@@ -470,11 +470,16 @@ local a={}a.VERSION='1.5'a.__index=a;function a.new(b,c,d)local self=setmetatabl
 
 --==[[ init ]]==--
 
-local VERSION = "v2.3.4.0"
+local VERSION = "v2.4.0.0"
+local VERSION_IMG = "17ae1de8a18.png"
 local CHANGELOG =
 	[[
 
 <p align='center'><font size='20'><b><V>CHANGELOG</V></b></font> <BV><a href='event:log'>[View all]</a></BV></p><font size='12' face='Lucida Console'>
+
+<font size='15' face='Lucida Console'><b><BV>v2.4.0.0</BV></b></font> <i>(7/26/2021)</i>
+    • Added a news windows
+
 
 <font size='15' face='Lucida Console'><b><BV>v2.3.4.0</BV></b></font> <i>(7/26/2021)</i>
     • Added UR (urdu) translations (Thanks to Maha010#0000)
@@ -670,6 +675,7 @@ local assets = {
 		scrollbarFg = "1719e173ac6.png"
 	},
 	community = {
+		int= "1651b327097.png",
 		xx = "1651b327097.png",
 		ar = "1651b32290a.png",
 		bg = "1651b300203.png",
@@ -693,11 +699,11 @@ local assets = {
 		lt = "1651b31811c.png",
 		lv = "1651b319906.png",
 		nl = "1651b31b0dc.png",
-		ph = "1651b31c891.png",
 		pl = "1651b31e0cf.png",
 		pt = "1651b3019c0.png",
 		ro = "1651b31f950.png",
 		ru = "1651b321113.png",
+		tg = "1651b31c891.png",
 		tr = "1651b3240e8.png",
 		vk = "1651b3258b3.png"
 	},
@@ -743,6 +749,11 @@ local dHandler = DataHandler.new("pew", {
 		index = 7,
 		type = "number",
 		default = 0
+	},
+	version = {
+		index = 8,
+		type = "string",
+		default = "v0.0.0.0"
 	}
 })
 
@@ -798,7 +809,9 @@ translations["en"] = {
 	ERR_CMD =   "<N>[</N><R>•</R><N>] <R><b>Error in command<br>\tUsage:</b><font face='Lucida console'>${syntax}</i></font></R>",
 	MAP_QUEUED ="<N><ROSE><b>@${map}</b></ROSE> has been queued by <ROSE><b>${player}</b></ROSE>",
 	STATS_ENABLED = "${author}<G> - @${code}   |   </G><V>STATS ENABLED",
-	STATS_DISABLED = "${author}<G> - @${code}   |   </G><R>STATS DISABLED"
+	STATS_DISABLED = "${author}<G> - @${code}   |   </G><R>STATS DISABLED",
+	SHOW_CLOGS = "<p align='center'><a href='event:changelog'><b>Show changelog</b></a></p>",
+	NEW_VERSION = "<font size='16'><p align='center'><b><J>NEW VERSION <T>${version}</T></J></b></p></font>"
 }
 
 translations["br"] = {
@@ -1072,6 +1085,7 @@ function Player.new(name)
 
 	self.tempEquipped = nil
 	self.openedWindow = nil
+	self.version = "v0.0.0.0"
 
 	for key, code in next, keys do system.bindKeyboard(name, code, true, true) end
 
@@ -1202,6 +1216,7 @@ function Player:savePlayerData()
 	dHandler:set(name, "packs", shop.packsBitList:encode(self.packs))
 	dHandler:set(name, "equipped", self.equipped == "Random" and -1 or shop.packsBitList:find(self.equipped))
 	dHandler:set(name, "roles", roles.list:encode(self.roles))
+	dHandler:set(name, "version", self.version)
 	system.savePlayerData(name, "v2" .. dHandler:dumpPlayer(name))
 end
 
@@ -1372,6 +1387,18 @@ function eventPlayerDataLoaded(name, data)
 	player.roles = roles.list:decode(dHandler:get(name, "roles"))
 	player.highestRole = roles.getHighestRole(player)
 	setNameColor(name)
+
+	player.version = dHandler:get(name, "version")
+	if player.version ~= VERSION then
+		player.version = VERSION
+		player:savePlayerData()
+		if VERSION_IMG then
+			player.openedWindow = newsWindow
+			newsWindow:show(name)
+			Panel.panels[1050]:update(translate("SHOW_CLOGS", player.community))
+			Panel.panels[1051]:update(translate("NEW_VERSION", player.community, nil, { version = VERSION }))
+		end
+	end
 
 end
 
@@ -2501,6 +2528,15 @@ do
 					tfm.exec.chatMessage(translate("HELP_MAP", Player.players[name].community), name)
 				end)
 		)
+
+	newsWindow = createPrettyUI(10, 70, 50, 670, 330, true, true)
+		:addImage(Image(VERSION_IMG, "&1", 80, 83))
+		:addPanel(Panel(1050, "$SHOW_CLOGS", 80, 357, 650, 18, 0x1A3846, 0x1A3846, 1, true)
+			:setActionListener(function(id, name, event)
+				displayChangelog(name)
+			end)
+		)
+		:addPanel(Panel(1051, "$VERSION", 80, 60, 650, 25, nil, nil, 0, trues))
 
 end
 

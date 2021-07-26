@@ -385,4 +385,13 @@ do
 				end)
 		)
 
+	newsWindow = createPrettyUI(10, 70, 50, 670, 330, true, true)
+		:addImage(Image(VERSION_IMG, "&1", 80, 83))
+		:addPanel(Panel(1050, "$SHOW_CLOGS", 80, 357, 650, 18, 0x1A3846, 0x1A3846, 1, true)
+			:setActionListener(function(id, name, event)
+				displayChangelog(name)
+			end)
+		)
+		:addPanel(Panel(1051, "$VERSION", 80, 60, 650, 25, nil, nil, 0, trues))
+
 end

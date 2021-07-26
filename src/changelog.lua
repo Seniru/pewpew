@@ -1,8 +1,13 @@
-local VERSION = "v2.3.4.0"
+local VERSION = "v2.4.0.0"
+local VERSION_IMG = "17ae1de8a18.png"
 local CHANGELOG =
 	[[
 
 <p align='center'><font size='20'><b><V>CHANGELOG</V></b></font> <BV><a href='event:log'>[View all]</a></BV></p><font size='12' face='Lucida Console'>
+
+<font size='15' face='Lucida Console'><b><BV>v2.4.0.0</BV></b></font> <i>(7/26/2021)</i>
+    • Added a news windows
+
 
 <font size='15' face='Lucida Console'><b><BV>v2.3.4.0</BV></b></font> <i>(7/26/2021)</i>
     • Added UR (urdu) translations (Thanks to Maha010#0000)

@@ -38,6 +38,7 @@ function Player.new(name)
 
 	self.tempEquipped = nil
 	self.openedWindow = nil
+	self.version = "v0.0.0.0"
 
 	for key, code in next, keys do system.bindKeyboard(name, code, true, true) end
 
@@ -168,5 +169,6 @@ function Player:savePlayerData()
 	dHandler:set(name, "packs", shop.packsBitList:encode(self.packs))
 	dHandler:set(name, "equipped", self.equipped == "Random" and -1 or shop.packsBitList:find(self.equipped))
 	dHandler:set(name, "roles", roles.list:encode(self.roles))
+	dHandler:set(name, "version", self.version)
 	system.savePlayerData(name, "v2" .. dHandler:dumpPlayer(name))
 end
