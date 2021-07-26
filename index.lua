@@ -1001,7 +1001,7 @@ translations["ur"] = {
 	SD =        "<VP>Sudden Death! Sab ke paas <N>1 <VP>life hai",
 	WELCOME =    "<VP>Pewpew me khushamadeed!, <N>duck <VP>ya <N>spacebar <VP>se items shoot karain!",
 	SOLE =        "<ROSE>${player} sole survivor hain!",
-	SURVIVORS = "<ROSE>${winners} aur ${winner} is round round ke survivors hai!",
+	SURVIVORS = "<ROSE>${winners} aur ${winner} is round ke survivors hai!",
 	SELF_RANK = "<p align='center'>Apka rank: ${rank}</p>",
 	ROUNDS  =   "<font face='Lucida console'><N2>Rounds khelay</N2></font>",
 	DEATHS =    "<font face='Lucida console'><N2>Deaths</N2></font>",
