@@ -470,11 +470,18 @@ local a={}a.VERSION='1.5'a.__index=a;function a.new(b,c,d)local self=setmetatabl
 
 --==[[ init ]]==--
 
-local VERSION = "v2.3.3.0"
+local VERSION = "v2.3.4.0"
 local CHANGELOG =
 	[[
 
 <p align='center'><font size='20'><b><V>CHANGELOG</V></b></font> <BV><a href='event:log'>[View all]</a></BV></p><font size='12' face='Lucida Console'>
+
+<font size='15' face='Lucida Console'><b><BV>v2.3.4.0</BV></b></font> <i>(7/26/2021)</i>
+    • Added UR (urdu) translations (Thanks to Maha010#0000)
+    • Changed the map rotation algorithm to play latest maps more frequent
+    • Added an indicator for stats enabled/disabled
+    • Fixed not showing all the credits for some languages
+
 
 <font size='15' face='Lucida Console'><b><BV>v2.3.3.0</BV></b></font> <i>(6/12/2021)</i>
     • Fixed the bug that displays your badges instead of showing the target's badges
@@ -510,12 +517,6 @@ local CHANGELOG =
 <font size='15' face='Lucida Console'><b><BV>v2.3.0.3</BV></b></font> <i>(1/19/2021)</i>
     • Added new maps
 
-
-<font size='15' face='Lucida Console'><b><BV>v2.3.0.2</BV></b></font> <i>(1/08/2021)</i>
-    • End of christmas sale!
-    • Added new maps
-    • Minor fixes with the new role color system
-    • Quick patch to get rid from farmers and hackers (will be a better system in future)
 
 </font>
 ]]
