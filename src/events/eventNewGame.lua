@@ -16,4 +16,8 @@ function eventNewGame()
 			end, 1000, false, tfm.exec.addImage(assets.count3, ":1", 145, -120))
 		end, Player.playerCount == 1 and 0 or 4000)
 	end
+	ui.setMapName(translate(statsEnabled and "STATS_ENABLED" or "STATS_DISABLED", tfm.get.room.community, nil, {
+		author = tfm.get.room.xmlMapInfo.author,
+		code = tfm.get.room.xmlMapInfo.mapCode
+	}))
 end
