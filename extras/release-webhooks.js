@@ -15,7 +15,6 @@ let main = async () => {
         .setURL(releaseInfo.url)
         .setColor("#00b0f4")
         .setDescription(`**${releaseInfo.name}**\n\n${releaseInfo.body}`)
-        .addField("Pre-release", releaseInfo.prerelease ? ":white_check_mark:" : ":x:", true)
         .addField("Assets", releaseInfo.assets_url, true)
         .setFooter("Published at")
         .setTimestamp(releaseInfo.published_at);
