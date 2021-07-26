@@ -19,7 +19,7 @@ translations["hu"] = {
 	GIFT_RECV = "<N><ROSE><b>${admin}</b></ROSE> megjutalmazott téged ezzel: <ROSE><b>${gift}</b></ROSE>",
 	COMMANDS =  "\n\n<N2>[ <b>H</b> ]</N2> <N><ROSE>!help</ROSE> (megnyitja a segítség menüt)</N><br><N2>[ <b>P</b> ]</N2> <N><ROSE>!profile <i>[játékosNév]</i></ROSE> (megnyitja a játékosNév profilját)</N><br></N><N2>[ <b>O</b> ]</N2> <N><ROSE>!shop</ROSE> (megnyitja a boltot)</N><br><N2>[ <b>L</b> ]</N2> <N>(megnyitja a ranglistát)</N><br><br><N><ROSE>!changelog</ROSE> (megnyitja a változásokat)</N><br><br>",
 	CMD_TITLE = "<font size='25' face='Comic Sans'><b><J>Parancsok</J></b></font>",
-	CREDITS =   "\n\nMűvész - <b><BV>Lightymouse</BV><G>#0421</G></b>\nFordítók - <b><BV>Overforyou</BV><G>#9290</G>, <BV>Nuttysquirrel</BV><G>#0626</G>, <BV>Star</BV><G>#6725</G>, <BV>Jaker</BV><G>#9310</G></b>\n\n\nÉs köszönöm, hogy játszol a pewpew -el!",
+	CREDITS =   "\n\nMűvész - <b>${artists}</b>\nFordítók - <b>${translators}</b>\n\n\nÉs köszönöm, hogy játszol a pewpew -el!",
 	CREDS_TITLE = "<font size='25' face='Comic Sans'><b><R>Kreditek</R></b></font>",
 	OBJECTIVE = "<b>Éld túl és ölj meg másokat a győzelemért</b>",
 	HELP_GOTIT = "<font size='15'><J><b><a href='event:close'>Értem!</a></b></J></font>",

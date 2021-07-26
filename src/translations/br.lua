@@ -19,7 +19,7 @@ translations["br"] = {
 	GIFT_RECV = "<N>Você foi recompensado com <ROSE><b>${gift}</b></ROSE> por <ROSE><b>${admin}</b></ROSE>",
 	COMMANDS =  "\n\n<N2>[ <b>H</b> ]</N2> <N><ROSE>!help</ROSE> (exibe este menu de ajuda)</N><br><N2>[ <b>P</b> ]</N2> <N><ROSE>!profile <i>[player]</i></ROSE> (exibe o perfil do jogador)</N><br></N><N2>[ <b>O</b> ]</N2> <N><ROSE>!shop</ROSE> (exibe o shop)</N><br><N2>[ <b>L</b> ]</N2> <N>(exibe a classificação)</N><br><br><N><ROSE>!changelog</ROSE> (exibe o changelog)</N><br><br>",
 	CMD_TITLE = "<font size='25' face='Comic Sans'><b><J>Comandos</J></b></font>",
-	CREDITS =   "\n\nArtist - <b><BV>Lightymouse</BV><G>#0421</G></b>\nTranslators - <b><BV>Overforyou</BV><G>#9290</G>, <BV>Nuttysquirrel</BV><G>#0626</G>, <BV>Star</BV><G>#6725</G>, <BV>Jaker</BV><G>#9310</G>, <BV>Santoex</BV><G>#0000</G></b>\n\n\nE muito obrigado por jogar pewpew!",
+	CREDITS =   "\n\nArtist - <b>${artists}</b>\nTranslators - <b>${translators}</b>\n\n\nE muito obrigado por jogar pewpew!",
 	CREDS_TITLE = "<font size='25' face='Comic Sans'><b><R>Credits</R></b></font>",
 	OBJECTIVE = "<b>Sobreviva e mate os demais para poder vencer</b>",
 	HELP_GOTIT = "<font size='15'><J><b><a href='event:close'>Entendi!</a></b></J></font>",

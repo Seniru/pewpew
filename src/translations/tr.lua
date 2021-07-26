@@ -19,7 +19,7 @@ translations["tr"] = {
 	GIFT_RECV =     "<N>Ödülendirildin seni ödülendiren kişi <ROSE><b>${gift}</b></ROSE> by <ROSE><b>${admin}</b></ROSE>",
 	COMMANDS =      "\n\n<N2>[ <b>H</b> ]</N2> <N><ROSE>!help</ROSE> (yardım menüsünü açar)</N><br><N2>[ <b>P</b> ]</N2> <N><ROSE>!profile <i>[oyuncu]</i></ROSE> (istediğiniz kişinin profiline bakarsınız)</N><br></N><N2>[ <b>O</b> ]</N2> <N><ROSE>!shop</ROSE> (Marketi açar)</N><br><N2>[ <b>L</b> ]</N2> <N>(Skor Tablosunu açar)</N><br><br><N><ROSE>!changelog</ROSE> (displays the changelog)</N><br><br>",
 	CMD_TITLE =     "<font size='25' face='Comic Sans'><b><J>Komutlar</J></b></font>",
-	CREDITS =       "\n\nÇizimler - <b><BV>Lightymouse</BV><G>#0421</G></b>\nÇevirmenler - <b><BV>Overforyou</BV><G>#9290</G>, <BV>Nuttysquirrel</BV><G>#0626</G>, <BV>Star</BV><G>#6725</G>, <BV>Jaker</BV><G>#9310</G></b>\n\n\nVe pewpew oynadığınız için teşekkür ederiz!",
+	CREDITS =       "\n\nÇizimler - <b>${artists}</b>\nÇevirmenler - <b>${translators}</b>\n\n\nVe pewpew oynadığınız için teşekkür ederiz!",
 	CREDS_TITLE =   "<font size='25' face='Comic Sans'><b><R>Krediler</R></b></font>",
 	OBJECTIVE =     "<b>Hayatta kal ve kazanmak için başkalarını öldür</b>",
 	HELP_GOTIT =    "<font size='15'><J><b><a href='event:close'>Anladım!</a></b></J></font>",

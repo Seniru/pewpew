@@ -784,7 +784,7 @@ translations["en"] = {
 	GIFT_RECV = "<N>You have been rewarded with <ROSE><b>${gift}</b></ROSE> by <ROSE><b>${admin}</b></ROSE>",
 	COMMANDS =  "\n\n<N2>[ <b>H</b> ]</N2> <N><ROSE>!help</ROSE> (displays this help menu)</N><br><N2>[ <b>P</b> ]</N2> <N><ROSE>!profile <i>[player]</i></ROSE> (displays the profile of the player)</N><br></N><N2>[ <b>O</b> ]</N2> <N><ROSE>!shop</ROSE> (displays the shop)</N><br><N2>[ <b>L</b> ]</N2> <N>(displays the leaderboard)</N><br><br><N><ROSE>!changelog</ROSE> (displays the changelog)</N><br><br>",
 	CMD_TITLE = "<font size='25' face='Comic Sans'><b><J>Commands</J></b></font>",
-	CREDITS =   "\n\nArtist - <b><BV>Lightymouse</BV><G>#0421</G></b>\nTranslators - <b><BV>Overforyou</BV><G>#9290</G>, <BV>Nuttysquirrel</BV><G>#0626</G>, <BV>Star</BV><G>#6725</G>, <BV>Jaker</BV><G>#9310</G></b>\n\n\nAnd thank you for playing pewpew!",
+	CREDITS =   "\n\nArtist - <b>${artists}</b>\nTranslators - <b>${translators}</b>\n\n\nAnd thank you for playing pewpew!",
 	CREDS_TITLE = "<font size='25' face='Comic Sans'><b><R>Credits</R></b></font>",
 	OBJECTIVE = "<b>Survive and kill others to win</b>",
 	HELP_GOTIT = "<font size='15'><J><b><a href='event:close'>Got it!</a></b></J></font>",
@@ -795,7 +795,9 @@ translations["en"] = {
 	KICK_ROLE = "<N><ROSE><b>${player}</b></ROSE> is not a <ROSE><b>${role}</b></ROSE> anymore! ;c",
 	ERR_PERMS = "<N>[</N><R>•</R><N>] <R><b>Error: You are not permitted to use this command!</b></R>",
 	ERR_CMD =   "<N>[</N><R>•</R><N>] <R><b>Error in command<br>\tUsage:</b><font face='Lucida console'>${syntax}</i></font></R>",
-	MAP_QUEUED ="<N><ROSE><b>@${map}</b></ROSE> has been queued by <ROSE><b>${player}</b></ROSE>"
+	MAP_QUEUED ="<N><ROSE><b>@${map}</b></ROSE> has been queued by <ROSE><b>${player}</b></ROSE>",
+	STATS_ENABLED = "${author}<G> - @${code}   |   </G><V>STATS ENABLED",
+	STATS_DISABLED = "${author}<G> - @${code}   |   </G><R>STATS DISABLED"
 }
 
 translations["br"] = {
@@ -819,7 +821,7 @@ translations["br"] = {
 	GIFT_RECV = "<N>Você foi recompensado com <ROSE><b>${gift}</b></ROSE> por <ROSE><b>${admin}</b></ROSE>",
 	COMMANDS =  "\n\n<N2>[ <b>H</b> ]</N2> <N><ROSE>!help</ROSE> (exibe este menu de ajuda)</N><br><N2>[ <b>P</b> ]</N2> <N><ROSE>!profile <i>[player]</i></ROSE> (exibe o perfil do jogador)</N><br></N><N2>[ <b>O</b> ]</N2> <N><ROSE>!shop</ROSE> (exibe o shop)</N><br><N2>[ <b>L</b> ]</N2> <N>(exibe a classificação)</N><br><br><N><ROSE>!changelog</ROSE> (exibe o changelog)</N><br><br>",
 	CMD_TITLE = "<font size='25' face='Comic Sans'><b><J>Comandos</J></b></font>",
-	CREDITS =   "\n\nArtist - <b><BV>Lightymouse</BV><G>#0421</G></b>\nTranslators - <b><BV>Overforyou</BV><G>#9290</G>, <BV>Nuttysquirrel</BV><G>#0626</G>, <BV>Star</BV><G>#6725</G>, <BV>Jaker</BV><G>#9310</G>, <BV>Santoex</BV><G>#0000</G></b>\n\n\nE muito obrigado por jogar pewpew!",
+	CREDITS =   "\n\nArtist - <b>${artists}</b>\nTranslators - <b>${translators}</b>\n\n\nE muito obrigado por jogar pewpew!",
 	CREDS_TITLE = "<font size='25' face='Comic Sans'><b><R>Credits</R></b></font>",
 	OBJECTIVE = "<b>Sobreviva e mate os demais para poder vencer</b>",
 	HELP_GOTIT = "<font size='15'><J><b><a href='event:close'>Entendi!</a></b></J></font>",
@@ -862,7 +864,7 @@ translations["fr"] = {
 	GIFT_RECV = "<N>Tu as été récompensé avec un(e) <ROSE><b>${gift}</b></ROSE> de la part de <ROSE><b>${admin}</b></ROSE>",
 	COMMANDS =  "\n\n<N2>[ <b>H</b> ]</N2> <N><ROSE>!help</ROSE> (Affiche le menu d'aide)</N><br><N2>[ <b>P</b> ]</N2> <N><ROSE>!profile <i>[joueur]</i></ROSE> (Affiche le profile d'un joueur)</N><br></N><N2>[ <b>O</b> ]</N2> <N><ROSE>!shop</ROSE> (Ouvre le magasin)</N><br><N2>[ <b>L</b> ]</N2> <N>(Affiche le classement)</N><br><br><N><ROSE>!changelog</ROSE> (Affiche l'historique des changements)</N><br><br>",
 	CMD_TITLE = "<font size='25' face='Comic Sans'><b><J>Commandes</J></b></font>",
-	CREDITS =   "\n\nArtiste - <b><BV>Lightymouse</BV><G>#0421</G></b>\nTraducteurs - <b><BV>Overforyou</BV><G>#9290</G>, <BV>Nuttysquirrel</BV><G>#0626</G>, <BV>Star</BV><G>#6725</G>, <BV>Jaker</BV><G>#9310</G></b>\n\n\nEt merci de jouer à Pewpew!",
+	CREDITS =   "\n\nArtiste - <b>${artists}</b>\nTraducteurs - <b>${translators}</b>\n\n\nEt merci de jouer à Pewpew!",
 	CREDS_TITLE = "<font size='25' face='Comic Sans'><b><R>Credits</R></b></font>",
 	OBJECTIVE = "<b>Survie et tue les autres pour gagner.</b>",
 	HELP_GOTIT = "<font size='15'><J><b><a href='event:close'>Compris !</a></b></J></font>",
@@ -894,7 +896,7 @@ translations["tr"] = {
 	GIFT_RECV =     "<N>Ödülendirildin seni ödülendiren kişi <ROSE><b>${gift}</b></ROSE> by <ROSE><b>${admin}</b></ROSE>",
 	COMMANDS =      "\n\n<N2>[ <b>H</b> ]</N2> <N><ROSE>!help</ROSE> (yardım menüsünü açar)</N><br><N2>[ <b>P</b> ]</N2> <N><ROSE>!profile <i>[oyuncu]</i></ROSE> (istediğiniz kişinin profiline bakarsınız)</N><br></N><N2>[ <b>O</b> ]</N2> <N><ROSE>!shop</ROSE> (Marketi açar)</N><br><N2>[ <b>L</b> ]</N2> <N>(Skor Tablosunu açar)</N><br><br><N><ROSE>!changelog</ROSE> (displays the changelog)</N><br><br>",
 	CMD_TITLE =     "<font size='25' face='Comic Sans'><b><J>Komutlar</J></b></font>",
-	CREDITS =       "\n\nÇizimler - <b><BV>Lightymouse</BV><G>#0421</G></b>\nÇevirmenler - <b><BV>Overforyou</BV><G>#9290</G>, <BV>Nuttysquirrel</BV><G>#0626</G>, <BV>Star</BV><G>#6725</G>, <BV>Jaker</BV><G>#9310</G></b>\n\n\nVe pewpew oynadığınız için teşekkür ederiz!",
+	CREDITS =       "\n\nÇizimler - <b>${artists}</b>\nÇevirmenler - <b>${translators}</b>\n\n\nVe pewpew oynadığınız için teşekkür ederiz!",
 	CREDS_TITLE =   "<font size='25' face='Comic Sans'><b><R>Krediler</R></b></font>",
 	OBJECTIVE =     "<b>Hayatta kal ve kazanmak için başkalarını öldür</b>",
 	HELP_GOTIT =    "<font size='15'><J><b><a href='event:close'>Anladım!</a></b></J></font>",
@@ -968,7 +970,7 @@ translations["hu"] = {
 	GIFT_RECV = "<N><ROSE><b>${admin}</b></ROSE> megjutalmazott téged ezzel: <ROSE><b>${gift}</b></ROSE>",
 	COMMANDS =  "\n\n<N2>[ <b>H</b> ]</N2> <N><ROSE>!help</ROSE> (megnyitja a segítség menüt)</N><br><N2>[ <b>P</b> ]</N2> <N><ROSE>!profile <i>[játékosNév]</i></ROSE> (megnyitja a játékosNév profilját)</N><br></N><N2>[ <b>O</b> ]</N2> <N><ROSE>!shop</ROSE> (megnyitja a boltot)</N><br><N2>[ <b>L</b> ]</N2> <N>(megnyitja a ranglistát)</N><br><br><N><ROSE>!changelog</ROSE> (megnyitja a változásokat)</N><br><br>",
 	CMD_TITLE = "<font size='25' face='Comic Sans'><b><J>Parancsok</J></b></font>",
-	CREDITS =   "\n\nMűvész - <b><BV>Lightymouse</BV><G>#0421</G></b>\nFordítók - <b><BV>Overforyou</BV><G>#9290</G>, <BV>Nuttysquirrel</BV><G>#0626</G>, <BV>Star</BV><G>#6725</G>, <BV>Jaker</BV><G>#9310</G></b>\n\n\nÉs köszönöm, hogy játszol a pewpew -el!",
+	CREDITS =   "\n\nMűvész - <b>${artists}</b>\nFordítók - <b>${translators}</b>\n\n\nÉs köszönöm, hogy játszol a pewpew -el!",
 	CREDS_TITLE = "<font size='25' face='Comic Sans'><b><R>Kreditek</R></b></font>",
 	OBJECTIVE = "<b>Éld túl és ölj meg másokat a győzelemért</b>",
 	HELP_GOTIT = "<font size='15'><J><b><a href='event:close'>Értem!</a></b></J></font>",
@@ -1000,7 +1002,7 @@ translations["ur"] = {
 	GIFT_RECV = "<N>Ap ko <ROSE><b>${admin}</b></ROSE> ne <ROSE><b>${gift}</b></ROSE> inaam diya hai",
 	COMMANDS =  "\n\n<N2>[ <b>H</b> ]</N2> <N><ROSE>!help</ROSE> (help menu dekhnay ke liye)</N><br><N2>[ <b>P</b> ]</N2> <N><ROSE>!profile <i>[player]</i></ROSE> (Player ki profile dekhnay ke liye)</N><br></N><N2>[ <b>O</b> ]</N2> <N><ROSE>!shop</ROSE> (dukaan kholnay ke liye)</N><br><N2>[ <b>L</b> ]</N2> <N>(leaderboard kholnay ke liye)</N><br><br><N><ROSE>!changelog</ROSE> (changelog dekhnay ke liye)</N><br><br>",
 	CMD_TITLE = "<font size='25' face='Comic Sans'><b><J>Commands</J></b></font>",
-	CREDITS =   "\n\nArtist - <b><BV>Lightymouse</BV><G>#0421</G></b>\nTranslators - <b><BV>Overforyou</BV><G>#9290</G>, <BV>Nuttysquirrel</BV><G>#0626</G>, <BV>Star</BV><G>#6725</G>, <BV>Jaker</BV><G>#9310</G>, <BV>Maha010</BV><G>#0000</G></b>\n\n\nPewpew khelnay ke liye shukariya!",
+	CREDITS =   "\n\nArtist - <b>${artists}</b>\nTranslators - <b>${translators}</b>\n\n\nPewpew khelnay ke liye shukariya!",
 	CREDS_TITLE = "<font size='25' face='Comic Sans'><b><R>Credits</R></b></font>",
 	OBJECTIVE = "<b>Dusron ko maarein aur jeetein.</b>",
 	HELP_GOTIT = "<font size='15'><J><b><a href='event:close'>Got it!</a></b></J></font>",
@@ -1296,6 +1298,10 @@ function eventNewGame()
 			end, 1000, false, tfm.exec.addImage(assets.count3, ":1", 145, -120))
 		end, Player.playerCount == 1 and 0 or 4000)
 	end
+	ui.setMapName(translate(statsEnabled and "STATS_ENABLED" or "STATS_DISABLED", tfm.get.room.community, nil, {
+		author = tfm.get.room.xmlMapInfo.author,
+		code = tfm.get.room.xmlMapInfo.mapCode
+	}))
 end
 
 function eventPlayerDied(name)
@@ -2291,7 +2297,10 @@ displayHelp = function(target, keyPressed)
 	Panel.panels[820]:update(translate("COMMANDS", commu), target)
 	Panel.panels[705]:update(translate("CMD_TITLE",  commu), target)
 
-	Panel.panels[920]:update(translate("CREDITS", commu), target)
+	Panel.panels[920]:update(translate("CREDITS", commu, nil, {
+		artists = "<BV>Lightymouse</BV><G>#0421</G>",
+		translators = "<BV>Overjoy06#0000</BV><G>#0000</G>, <BV>Nuttysquirrel</BV><G>#0626</G>, <BV>Star</BV><G>#6725</G>, <BV>Jaker</BV><G>#9310</G>, <BV>Santoex</BV><G>#0000</G>, <BV>Maha010</BV><G>#0000</G>"
+	}), target)
 	Panel.panels[706]:update(translate("CREDS_TITLE", commu), target)
 
 	Panel.panels[701]:update(translate("OBJECTIVE", commu), target)

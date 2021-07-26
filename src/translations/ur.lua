@@ -19,7 +19,7 @@ translations["ur"] = {
 	GIFT_RECV = "<N>Ap ko <ROSE><b>${admin}</b></ROSE> ne <ROSE><b>${gift}</b></ROSE> inaam diya hai",
 	COMMANDS =  "\n\n<N2>[ <b>H</b> ]</N2> <N><ROSE>!help</ROSE> (help menu dekhnay ke liye)</N><br><N2>[ <b>P</b> ]</N2> <N><ROSE>!profile <i>[player]</i></ROSE> (Player ki profile dekhnay ke liye)</N><br></N><N2>[ <b>O</b> ]</N2> <N><ROSE>!shop</ROSE> (dukaan kholnay ke liye)</N><br><N2>[ <b>L</b> ]</N2> <N>(leaderboard kholnay ke liye)</N><br><br><N><ROSE>!changelog</ROSE> (changelog dekhnay ke liye)</N><br><br>",
 	CMD_TITLE = "<font size='25' face='Comic Sans'><b><J>Commands</J></b></font>",
-	CREDITS =   "\n\nArtist - <b><BV>Lightymouse</BV><G>#0421</G></b>\nTranslators - <b><BV>Overforyou</BV><G>#9290</G>, <BV>Nuttysquirrel</BV><G>#0626</G>, <BV>Star</BV><G>#6725</G>, <BV>Jaker</BV><G>#9310</G>, <BV>Maha010</BV><G>#0000</G></b>\n\n\nPewpew khelnay ke liye shukariya!",
+	CREDITS =   "\n\nArtist - <b>${artists}</b>\nTranslators - <b>${translators}</b>\n\n\nPewpew khelnay ke liye shukariya!",
 	CREDS_TITLE = "<font size='25' face='Comic Sans'><b><R>Credits</R></b></font>",
 	OBJECTIVE = "<b>Dusron ko maarein aur jeetein.</b>",
 	HELP_GOTIT = "<font size='15'><J><b><a href='event:close'>Got it!</a></b></J></font>",
