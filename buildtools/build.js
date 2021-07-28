@@ -12,6 +12,7 @@ combine({
       "libs/Windows.lua",
       "libs/timers4tfm.lua",
       "libs/DataHandler.lua",
+      "libs/xmllib.lua"
     ],
   },
   init: { files: ["src/changelog.lua", "src/init.lua"] },

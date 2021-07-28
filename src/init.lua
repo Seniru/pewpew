@@ -238,6 +238,7 @@ local currentItem = ENUM_ITEMS.CANNON
 local isTribeHouse = tfm.get.room.isTribeHouse
 local statsEnabled = not isTribeHouse
 local rotation, queuedMaps, currentMapIndex = {}, {}, 0
+local mapProps = { allowed = nil, restricted = nil, grey = nil, items = items, fromQueue = false }
 local leaderboardNotifyList = {}
 
 local leaderboard, shop, roles

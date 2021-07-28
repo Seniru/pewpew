@@ -30,6 +30,20 @@ table.tostring = function(tbl, depth)
 	return res:sub(1, res:len() - 2) .. "}"
 end
 
+table.map = function(tbl, fn)
+	local res = {}
+	for k, v in next, tbl do
+		res[k] = fn(v)
+	end
+	return res
+end
+
+table.find = function(tbl, val)
+	for k, v in next, tbl do
+		if v == val then return k end
+	end
+end
+
 local prettyify
 
 do

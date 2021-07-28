@@ -32,6 +32,20 @@ table.tostring = function(tbl, depth)
 	return res:sub(1, res:len() - 2) .. "}"
 end
 
+table.map = function(tbl, fn)
+	local res = {}
+	for k, v in next, tbl do
+		res[k] = fn(v)
+	end
+	return res
+end
+
+table.find = function(tbl, val)
+	for k, v in next, tbl do
+		if v == val then return k end
+	end
+end
+
 local prettyify
 
 do
@@ -467,6 +481,9 @@ local a={}a.__index=a;a._timers={}setmetatable(a,{__call=function(b,...)return b
 --[[DataHandler v22]]
 local a={}a.VERSION='1.5'a.__index=a;function a.new(b,c,d)local self=setmetatable({},a)assert(b,'Invalid module ID (nil)')assert(b~='','Invalid module ID (empty text)')assert(c,'Invalid skeleton (nil)')for e,f in next,c do f.type=f.type or type(f.default)end;self.players={}self.moduleID=b;self.moduleSkeleton=c;self.moduleIndexes={}self.otherOptions=d;self.otherData={}self.originalStuff={}for e,f in pairs(c)do self.moduleIndexes[f.index]=e end;if self.otherOptions then self.otherModuleIndexes={}for e,f in pairs(self.otherOptions)do self.otherModuleIndexes[e]={}for g,h in pairs(f)do h.type=h.type or type(h.default)self.otherModuleIndexes[e][h.index]=g end end end;return self end;function a.newPlayer(self,i,j)assert(i,'Invalid player name (nil)')assert(i~='','Invalid player name (empty text)')self.players[i]={}self.otherData[i]={}j=j or''local function k(l)local m={}for n in string.gsub(l,'%b{}',function(o)return o:gsub(',','\0')end):gmatch('[^,]+')do n=n:gsub('%z',',')if string.match(n,'^{.-}$')then table.insert(m,k(string.match(n,'^{(.-)}$')))else table.insert(m,tonumber(n)or n)end end;return m end;local function p(c,q)for e,f in pairs(c)do if f.index==q then return e end end;return 0 end;local function r(c)local s=0;for e,f in pairs(c)do if f.index>s then s=f.index end end;return s end;local function t(b,c,u,v)local w=1;local x=r(c)b="__"..b;if v then self.players[i][b]={}end;local function y(n,z,A,B)local C;if z=="number"then C=tonumber(n)or B elseif z=="string"then C=string.match(n and n:gsub('\\"','"')or'',"^\"(.-)\"$")or B elseif z=="table"then C=string.match(n or'',"^{(.-)}$")C=C and k(C)or B elseif z=="boolean"then if n then C=n=='1'else C=B end end;if v then self.players[i][b][A]=C else self.players[i][A]=C end end;if#u>0 then for n in string.gsub(u,'%b{}',function(o)return o:gsub(',','\0')end):gmatch('[^,]+')do n=n:gsub('%z',','):gsub('\9',',')local A=p(c,w)local z=c[A].type;local B=c[A].default;y(n,z,A,B)w=w+1 end end;if w<=x then for D=w,x do local A=p(c,D)local z=c[A].type;local B=c[A].default;y(nil,z,A,B)end end end;local E,F=self:getModuleData(j)self.originalStuff[i]=F;if not E[self.moduleID]then E[self.moduleID]='{}'end;t(self.moduleID,self.moduleSkeleton,E[self.moduleID]:sub(2,-2),false)if self.otherOptions then for b,c in pairs(self.otherOptions)do if not E[b]then local G={}for e,f in pairs(c)do local z=f.type or type(f.default)if z=='string'then G[f.index]='"'..tostring(f.default:gsub('"','\\"'))..'"'elseif z=='table'then G[f.index]='{}'elseif z=='number'then G[f.index]=f.default elseif z=='boolean'then G[f.index]=f.default and'1'or'0'end end;E[b]='{'..table.concat(G,',')..'}'end end end;for b,u in pairs(E)do if b~=self.moduleID then if self.otherOptions and self.otherOptions[b]then t(b,self.otherOptions[b],u:sub(2,-2),true)else self.otherData[i][b]=u end end end end;function a.dumpPlayer(self,i)local m={}local function H(I)local m={}for e,f in pairs(I)do local J=type(f)if J=='table'then m[#m+1]='{'m[#m+1]=H(f)if m[#m]:sub(-1)==','then m[#m]=m[#m]:sub(1,-2)end;m[#m+1]='}'m[#m+1]=','else if J=='string'then m[#m+1]='"'m[#m+1]=f:gsub('"','\\"')m[#m+1]='"'elseif J=='boolean'then m[#m+1]=f and'1'or'0'else m[#m+1]=f end;m[#m+1]=','end end;if m[#m]==','then m[#m]=''end;return table.concat(m)end;local function K(i,b)local m={b,'=','{'}local L=self.players[i]local M=self.moduleIndexes;local N=self.moduleSkeleton;if self.moduleID~=b then M=self.otherModuleIndexes[b]N=self.otherOptions[b]b='__'..b;L=self.players[i][b]end;if not L then return''end;for D=1,#M do local A=M[D]local z=N[A].type;if z=='string'then m[#m+1]='"'m[#m+1]=L[A]:gsub('"','\\"')m[#m+1]='"'elseif z=='number'then m[#m+1]=L[A]elseif z=='boolean'then m[#m+1]=L[A]and'1'or'0'elseif z=='table'then m[#m+1]='{'m[#m+1]=H(L[A])m[#m+1]='}'end;m[#m+1]=','end;if m[#m]==','then m[#m]='}'else m[#m+1]='}'end;return table.concat(m)end;m[#m+1]=K(i,self.moduleID)if self.otherOptions then for e,f in pairs(self.otherOptions)do local u=K(i,e)if u~=''then m[#m+1]=','m[#m+1]=u end end end;for e,f in pairs(self.otherData[i])do m[#m+1]=','m[#m+1]=e;m[#m+1]='='m[#m+1]=f end;return table.concat(m)..self.originalStuff[i]end;function a.get(self,i,A,O)if not O then return self.players[i][A]else assert(self.players[i]['__'..O],'Module data not available ('..O..')')return self.players[i]['__'..O][A]end end;function a.set(self,i,A,C,O)if O then self.players[i]['__'..O][A]=C else self.players[i][A]=C end;return self end;function a.save(self,i)system.savePlayerData(i,self:dumpPlayer(i))end;function a.removeModuleData(self,i,O)assert(O,"Invalid module name (nil)")assert(O~='',"Invalid module name (empty text)")assert(O~=self.moduleID,"Invalid module name (current module data structure)")if self.otherData[i][O]then self.otherData[i][O]=nil;return true else if self.otherOptions and self.otherOptions[O]then self.players[i]['__'..O]=nil;return true end end;return false end;function a.getModuleData(self,l)local m={}for b,u in string.gmatch(l,'([0-9A-Za-z_]+)=(%b{})')do local P=self:getTextBetweenQuotes(u:sub(2,-2))for D=1,#P do P[D]=P[D]:gsub("[%(%)%.%%%+%-%*%?%[%]%^%$]","%%%0")u=u:gsub(P[D],P[D]:gsub(',','\9'))end;m[b]=u end;for e,f in pairs(m)do l=l:gsub(e..'='..f:gsub('\9',','):gsub("[%(%)%.%%%+%-%*%?%[%]%^%$]","%%%0")..',?','')end;return m,l end;function a.convertFromOld(self,Q,R)assert(Q,'Old data is nil')assert(R,'Old skeleton is nil')local function S(l,T)local m={}for U in string.gmatch(l,'[^'..T..']+')do m[#m+1]=U end;return m end;local E=S(Q,'?')local m={}for D=1,#E do local O=E[D]:match('([0-9a-zA-Z]+)=')local u=S(E[D]:gsub(O..'=',''):gsub(',,',',\8,'),',')local G={}for V=1,#u do if R[O][V]then if R[O][V]=='table'then G[#G+1]='{'if u[V]~='\8'then local I=S(u[V],'#')for W=1,#I do G[#G+1]=I[W]G[#G+1]=','end;if G[#G]==','then table.remove(G)end end;G[#G+1]='},'elseif R[O][V]=='string'then G[#G+1]='"'if u[V]~='\8'then G[#G+1]=u[V]end;G[#G+1]='"'G[#G+1]=','else if u[V]~='\8'then G[#G+1]=u[V]else G[#G+1]=0 end;G[#G+1]=','end end end;if G[#G]==','then table.remove(G)end;m[#m+1]=O;m[#m+1]='='m[#m+1]='{'m[#m+1]=table.concat(G)m[#m+1]='}'m[#m+1]=','end;if m[#m]==','then table.remove(m)end;return table.concat(m)end;function a.convertFromDataManager(self,Q,R)assert(Q,'Old data is nil')assert(R,'Old skeleton is nil')local function S(l,T)local m={}for U in string.gmatch(l,'[^'..T..']+')do m[#m+1]=U end;return m end;local E=S(Q,'§')local m={}for D=1,#E do local O=E[D]:match('%[(.-)%]')local u=S(E[D]:gsub('%['..O..'%]%((.-)%)','%1'),'#')local G={}for V=1,#u do if R[V]=='table'then local I=S(u[V],'&')G[#G+1]='{'for W=1,#I do if tonumber(I[W])then G[#G+1]=I[W]G[#G+1]=','else G[#G+1]='"'G[#G+1]=I[W]G[#G+1]='"'G[#G+1]=','end end;if G[#G]==','then table.remove(G)end;G[#G+1]='}'G[#G+1]=','else if R[V]=='string'then G[#G+1]='"'G[#G+1]=u[V]G[#G+1]='"'else G[#G+1]=u[V]end;G[#G+1]=','end end;if G[#G]==','then table.remove(G)end;m[#m+1]=O;m[#m+1]='='m[#m+1]='{'m[#m+1]=table.concat(G)m[#m+1]='}'end;return table.concat(m)end;function a.getTextBetweenQuotes(self,l)local m={}local X=1;local Y=0;local Z=false;for D=1,#l do local _=l:sub(D,D)if _=='"'then if l:sub(D-1,D-1)~='\\'then if Y==0 then X=D;Y=Y+1 else Y=Y-1;if Y==0 then m[#m+1]=l:sub(X,D)end end end end end;return m end;DataHandler=a
 
+--[[ Makinit's XML library ]]--
+local a="Makinit's XML library"local b="[%a_:][%w%.%-_:]*"function parseXml(c,d)if not d then c=string.gsub(c,"<!%[CDATA%[(.-)%]%]>",xmlEscape)c=string.gsub(c,"<%?.-%?>","")c=string.gsub(c,"<!%-%-.-%-%->","")c=string.gsub(c,"<!.->","")end;local e={}local f={}local g=e;for h,i,j,k,l in string.gmatch(c,"<(/?)("..b..")(.-)(/?)>%s*([^<]*)%s*")do if h=="/"then local m=f[g]if m and i==g.name then g=m end else local n={name=i,attribute={}}table.insert(g,n)f[n]=g;if k~="/"then g=n end;for i,o in string.gmatch(j,"("..b..")%s*=%s*\"(.-)\"")do n.attribute[i]=d and o or xmlUnescape(o)end end;if l~=""then local n={text=d and l or xmlUnescape(l)}table.insert(g,n)f[n]=g end end;return e[1]end;function generateXml(g,d)if g.name then local c="<"..g.name;for i,o in pairs(g.attribute)do c=c.." "..i.."=\""..(d and tostring(o)or xmlEscape(tostring(o))).."\""end;if#g==0 then c=c.." />"else c=c..">"for p,n in ipairs(g)do c=c..generateXml(n,d)end;c=c.."</"..g.name..">"end;return c elseif g.text then return d and tostring(g.text)or xmlEscape(tostring(g.text))end end;function path(q,...)q={q}for p,i in ipairs(arg)do local r={}for p,s in ipairs(q)do for p,n in ipairs(s)do if n.name==i then table.insert(r,n)end end end;q=r end;return q end;local t={}function xmlEscape(u)local v=t[u]if not v then local w=string.gsub;v=w(u,"&","&amp;")v=w(v,"\"","&quot;")v=w(v,"'","&apos;")v=w(v,"<","&lt;")v=w(v,">","&gt;")t[u]=v end;return v end;local x={}function xmlUnescape(u)local v=x[u]if not v then local w=string.gsub;v=w(u,"&quot;","\"")v=w(v,"&apos;","'")v=w(v,"&lt;","<")v=w(v,"&gt;",">")v=w(v,"&#(%d%d?%d?%d?);",dec2char)v=w(v,"&#x(%x%x?%x?%x?);",hex2char)v=w(v,"&amp;","&")x[u]=v end;return v end;function dec2char(y)y=tonumber(y)return string.char(y>255 and 0 or y)end;function hex2char(y)y=tonumber(y,16)return string.char(y>255 and 0 or y)end
+
 
 --==[[ init ]]==--
 
@@ -766,6 +783,7 @@ local currentItem = ENUM_ITEMS.CANNON
 local isTribeHouse = tfm.get.room.isTribeHouse
 local statsEnabled = not isTribeHouse
 local rotation, queuedMaps, currentMapIndex = {}, {}, 0
+local mapProps = { allowed = nil, restricted = nil, grey = nil, items = items, fromQueue = false }
 local leaderboardNotifyList = {}
 
 local leaderboard, shop, roles
@@ -811,7 +829,9 @@ translations["en"] = {
 	STATS_ENABLED = "${author}<G> - @${code}   |   </G><V>STATS ENABLED",
 	STATS_DISABLED = "${author}<G> - @${code}   |   </G><R>STATS DISABLED",
 	SHOW_CLOGS = "<p align='center'><a href='event:changelog'><b>Show changelog</b></a></p>",
-	NEW_VERSION = "<font size='16'><p align='center'><b><J>NEW VERSION <T>${version}</T></J></b></p></font>"
+	NEW_VERSION = "<font size='16'><p align='center'><b><J>NEW VERSION <T>${version}</T></J></b></p></font>",
+	MAP_ERROR = "<N>[</N><R>•</R><N>]</N> <R><b>[Map Error]</b>: Reason: <font face='Lucida console'>${reason}</font>\nRetrying another map in 3...</R>",
+	LIST_MAP_PROPS = "<ROSE>[Map Info]</ROSE> <J>@${code}</J> - ${author}\n<ROSE>[Map Info]</ROSE> <VP>Item list:</VP> <N>${items}\n<ROSE>[Map Info]</ROSE> <VP>Allowed:</VP> <N>${allowed}\n<ROSE>[Map Info]</ROSE> <VP>Restricted:</VP> <N>${restricted}"
 }
 
 translations["br"] = {
@@ -1296,28 +1316,91 @@ function eventKeyboard(name, key, down, x, y)
 	end
 end
 
+local attributes = { "ALLOWED", "RESTRICT", "GREY" }
+
 function eventNewGame()
-	if initialized then
-		Timer("pre", function()
-			Timer("count3", function(count3)
-				tfm.exec.removeImage(count3)
-				Timer("count2", function(count2)
-					tfm.exec.removeImage(count2)
-					Timer("count1", function(count1)
-						tfm.exec.removeImage(count1)
-						newRoundStarted = true
-						Timer("roundStart", function(imageGo)
-							tfm.exec.removeImage(imageGo)
-						end, 1000, false, tfm.exec.addImage(assets.newRound, ":1", 145, -120))
-					end, 1000, false, tfm.exec.addImage(assets.count1, ":1", 145, -120))
-				end, 1000, false, tfm.exec.addImage(assets.count2, ":1", 145, -120))
-			end, 1000, false, tfm.exec.addImage(assets.count3, ":1", 145, -120))
-		end, Player.playerCount == 1 and 0 or 4000)
+	if not initialized then return end
+	local fromQueue = mapProps.fromQueue
+	mapProps = { allowed = nil, restricted = nil, grey = nil, items = items, fromQueue = fromQueue }
+	local xml = tfm.get.room.xmlMapInfo.xml:upper()
+	local hasSpecialAttrs = false
+
+	for _, attr in next, attributes do
+		if xml:find(attr) then
+			hasSpecialAttrs = true
+			break
+		end
 	end
+
+	-- Handle special map attributes
+	local dom = parseXml(xml, true)
+	local P = path(dom, "P")[1]
+	if hasSpecialAttrs then
+
+		mapProps.allowed = P.attribute.ALLOWED
+		mapProps.restricted = P.attribute.RESTRICT
+
+		local mapFailback = function(err)
+			tfm.exec.chatMessage(translate("MAP_ERROR", tfm.get.room.community, nil, { reason = err}))
+			newRoundStarted = false
+			Timer("newRound", newRound, 3 * 1000)
+			tfm.exec.setGameTime(4, true)
+		end
+
+		if mapProps.allowed then
+			mapProps.allowed = stringutils.split(mapProps.allowed, ",")
+			mapProps.items = table.map(mapProps.allowed, tonumber)
+		end
+		if mapProps.restricted then
+			mapProps.restricted = table.map(stringutils.split(mapProps.restricted, ","), tonumber)
+			if table.find(mapProps.restricted, 17) then return mapFailback("Item 17 cannot be a restricted item") end
+			for _, item in next, mapProps.restricted do
+				local _, msg = pcall(function() table.remove(mapProps.items, table.find(mapProps.items, item)) end)
+				print(msg)
+			end
+		end
+
+		if fromQueue then
+			tfm.exec.chatMessage(translate("LIST_MAP_PROPS", tfm.get.room.language, nil, {
+				code = tfm.get.room.xmlMapInfo.mapCode,
+				author = tfm.get.room.xmlMapInfo.author,
+				items = table.concat(mapProps.items or {"-"}, ", "),
+				allowed = table.concat(mapProps.allowed or {"-"}, ", "),
+				restricted = table.concat(mapProps.restricted or {"-"}, ", "),
+			}))
+		end
+
+	end
+
+	-- other visual tasks
+	local changeItemTimer = Timer._timers["changeItem"]
+	if changeItemTimer then
+		changeItemTimer:setArgs(mapProps.items)
+		changeItemTimer:call()
+		changeItemTimer:reset()
+	end
+
 	ui.setMapName(translate(statsEnabled and "STATS_ENABLED" or "STATS_DISABLED", tfm.get.room.community, nil, {
 		author = tfm.get.room.xmlMapInfo.author,
 		code = tfm.get.room.xmlMapInfo.mapCode
 	}))
+
+	Timer("pre", function()
+		Timer("count3", function(count3)
+			tfm.exec.removeImage(count3)
+			Timer("count2", function(count2)
+				tfm.exec.removeImage(count2)
+				Timer("count1", function(count1)
+					tfm.exec.removeImage(count1)
+					newRoundStarted = true
+					Timer("roundStart", function(imageGo)
+						tfm.exec.removeImage(imageGo)
+					end, 1000, false, tfm.exec.addImage(assets.newRound, ":1", 145, -120))
+				end, 1000, false, tfm.exec.addImage(assets.count1, ":1", 145, -120))
+			end, 1000, false, tfm.exec.addImage(assets.count2, ":1", 145, -120))
+		end, 1000, false, tfm.exec.addImage(assets.count3, ":1", 145, -120))
+	end, Player.playerCount == 1 and 0 or 4000)
+
 end
 
 function eventPlayerDied(name)
@@ -2168,10 +2251,12 @@ newRound = function()
 	newRoundStarted = false
 	suddenDeath = false
 	statsEnabled = (not isTribeHouse) and tfm.get.room.uniquePlayers >= MIN_PLAYERS
+	mapProps.fromQueue = false
 
 	if #queuedMaps > 0 then
 		tfm.exec.newGame(queuedMaps[1])
 		table.remove(queuedMaps, 1)
+		mapProps.fromQueue = true
 	else
 		currentMapIndex = next(rotation, currentMapIndex)
 		tfm.exec.newGame(rotation[currentMapIndex])
@@ -2191,7 +2276,7 @@ newRound = function()
 	if not initialized then
 		initialized = true
 		closeSequence[1].images = { tfm.exec.addImage(assets.items[currentItem],":1", 740, 330) }
-		Timer("changeItem", function()
+		Timer("changeItem", function(items)
 			if math.random(1, 3) == 3 then
 				currentItem = ENUM_ITEMS.CANNON
 			else

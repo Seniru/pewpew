@@ -24,10 +24,12 @@ newRound = function()
 	newRoundStarted = false
 	suddenDeath = false
 	statsEnabled = (not isTribeHouse) and tfm.get.room.uniquePlayers >= MIN_PLAYERS
+	mapProps.fromQueue = false
 
 	if #queuedMaps > 0 then
 		tfm.exec.newGame(queuedMaps[1])
 		table.remove(queuedMaps, 1)
+		mapProps.fromQueue = true
 	else
 		currentMapIndex = next(rotation, currentMapIndex)
 		tfm.exec.newGame(rotation[currentMapIndex])
@@ -47,7 +49,7 @@ newRound = function()
 	if not initialized then
 		initialized = true
 		closeSequence[1].images = { tfm.exec.addImage(assets.items[currentItem],":1", 740, 330) }
-		Timer("changeItem", function()
+		Timer("changeItem", function(items)
 			if math.random(1, 3) == 3 then
 				currentItem = ENUM_ITEMS.CANNON
 			else
