@@ -1355,8 +1355,7 @@ function eventNewGame()
 			mapProps.restricted = table.map(stringutils.split(mapProps.restricted, ","), tonumber)
 			if table.find(mapProps.restricted, 17) then return mapFailback("Item 17 cannot be a restricted item") end
 			for _, item in next, mapProps.restricted do
-				local _, msg = pcall(function() table.remove(mapProps.items, table.find(mapProps.items, item)) end)
-				print(msg)
+				table.remove(mapProps.items, table.find(mapProps.items, item))
 			end
 		end
 
