@@ -64,7 +64,7 @@ class Bot(aiotfm.Client):
 
 			res += "{medal}{flag}  **{name} **\n     ┗`(`     :trophy: {wins} :heart: {survives} :skull: {deaths} `)` `/` {rounds}\n".format(
 				medal = ":first_place:" if i == 1 else (":second_place:" if i == 2 else (":third_place:" if i == 3 else ":medal:")),
-				flag = ":flag_" + ("gb" if commu in ["en", "e2", "xx"] else commu) + ":",
+				flag = ":flag_" + ("gb" if commu in ["en", "e2", "xx", "int"] else commu) + ":",
 				name = name_tag[0] + "`" + name_tag[1] + "`",
 				wins = str(wins).ljust(5),
 				survives = str(survives).ljust(5),
