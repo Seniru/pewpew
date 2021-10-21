@@ -557,7 +557,9 @@ local admins = {
 
 -- TEMP: Temporary fix to get rid of farmers and hackers
 local banned = {
-	["Sannntos#0000"] = true
+	["Sannntos#0000"] = true,
+	["Bofmfodo#1438"] = true,
+	["Rimuru#7401"] = true
 }
 
 maps = {
