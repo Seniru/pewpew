@@ -487,12 +487,16 @@ local a="Makinit's XML library"local b="[%a_:][%w%.%-_:]*"function parseXml(c,d)
 
 --==[[ init ]]==--
 
-local VERSION = "v2.4.0.0"
-local VERSION_IMG = "17ae1de8a18.png"
+local VERSION = "v2.5.0.0"
+local VERSION_IMG = nil
 local CHANGELOG =
 	[[
 
 <p align='center'><font size='20'><b><V>CHANGELOG</V></b></font> <BV><a href='event:log'>[View all]</a></BV></p><font size='12' face='Lucida Console'>
+
+<font size='15' face='Lucida Console'><b><BV>v2.5.0.0</BV></b></font> <i>(7/26/2021)</i>
+    • Added new map parameters ALLOWED="" and RESTRICTED="", check the map submission thread for more information!
+
 
 <font size='15' face='Lucida Console'><b><BV>v2.4.0.0</BV></b></font> <i>(7/26/2021)</i>
     • Added a news windows
@@ -525,19 +529,6 @@ local CHANGELOG =
 <font size='15' face='Lucida Console'><b><BV>v2.3.0.6</BV></b></font> <i>(2/19/2021)</i>
     • Fixed and updated FR translations (Thanks to Jaker#9310)
     • Added HU translations
-
-    
-<font size='15' face='Lucida Console'><b><BV>v2.3.0.5</BV></b></font> <i>(1/20/2021)</i>
-    • Fixed and updated TR translations (Thanks to Star#6725)
-    • Fixed the fonts in the changelog menu
-
-
-<font size='15' face='Lucida Console'><b><BV>v2.3.0.4</BV></b></font> <i>(1/20/2021)</i>
-    • Temporary fix for room crashing when changing name color (role system)
-
-
-<font size='15' face='Lucida Console'><b><BV>v2.3.0.3</BV></b></font> <i>(1/19/2021)</i>
-    • Added new maps
 
 
 </font>
