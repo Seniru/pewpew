@@ -1,9 +1,13 @@
-local VERSION = "v2.5.0.0"
+local VERSION = "v2.5.1.0"
 local VERSION_IMG = nil
 local CHANGELOG =
 	[[
 
 <p align='center'><font size='20'><b><V>CHANGELOG</V></b></font> <BV><a href='event:log'>[View all]</a></BV></p><font size='12' face='Lucida Console'>
+
+<font size='15' face='Lucida Console'><b><BV>v2.5.1.0</BV></b></font> <i>(7/26/2021)</i>
+    • Minor permission changes for some commands
+
 
 <font size='15' face='Lucida Console'><b><BV>v2.5.0.0</BV></b></font> <i>(7/26/2021)</i>
     • Added new map parameters ALLOWED="" and RESTRICTED="", check the map submission thread for more information!

@@ -21,7 +21,8 @@ cmds = {
 
 		["give"] = function(args, msg, author)
 
-			if not admins[author] then return end
+			local player = Player.players[author]
+			if not (admins[author] or player:hasRole("staff")) then return end
 
 			local FORMAT_ERR_MSG = "<N>[</N><R>•</R><N>] <R><b>Error in command<br>\tUsage:</b><font face='Lucida console'> !give <i>[points|pack] [target] [value]</i></font></R>"
 			local TARGET_UNREACHABLE_ERR = "<N>[</N><R>•</R><N>] <R><b>Error: Target unreachable!</b></R>"
@@ -63,7 +64,8 @@ cmds = {
 		end,
 
 		["pw"] = function(args, msg, author)
-			if not admins[author] then return end
+			local player = Player.players[author]
+			if not (admins[author] or player:hasRole("staff")) then return end
 			local pw = msg:match("^pw (.+)")
 			tfm.exec.setRoomPassword(pw)
 			if (not pw) or pw == "" then tfm.exec.chatMessage("<N>[</N><ROSE>•</ROSE><N>] Removed the password!", author)
@@ -112,7 +114,7 @@ cmds = {
 			local player = Player.players[author]
 
 			if not isTribeHouse then
-				if not (admins[author] or (player:hasRole("staff") and player:hasRole("mapper"))) then
+				if not (admins[author] or player:hasRole("staff")) then
 					return tfm.exec.chatMessage(translate("ERR_PERMS", player.community), author)
 				end
 			else

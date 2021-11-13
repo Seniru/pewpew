@@ -487,12 +487,16 @@ local a="Makinit's XML library"local b="[%a_:][%w%.%-_:]*"function parseXml(c,d)
 
 --==[[ init ]]==--
 
-local VERSION = "v2.5.0.0"
+local VERSION = "v2.5.1.0"
 local VERSION_IMG = nil
 local CHANGELOG =
 	[[
 
 <p align='center'><font size='20'><b><V>CHANGELOG</V></b></font> <BV><a href='event:log'>[View all]</a></BV></p><font size='12' face='Lucida Console'>
+
+<font size='15' face='Lucida Console'><b><BV>v2.5.1.0</BV></b></font> <i>(7/26/2021)</i>
+    • Minor permission changes for some commands
+
 
 <font size='15' face='Lucida Console'><b><BV>v2.5.0.0</BV></b></font> <i>(7/26/2021)</i>
     • Added new map parameters ALLOWED="" and RESTRICTED="", check the map submission thread for more information!
@@ -2071,7 +2075,8 @@ cmds = {
 
 		["give"] = function(args, msg, author)
 
-			if not admins[author] then return end
+			local player = Player.players[author]
+			if not (admins[author] or player:hasRole("staff")) then return end
 
 			local FORMAT_ERR_MSG = "<N>[</N><R>•</R><N>] <R><b>Error in command<br>\tUsage:</b><font face='Lucida console'> !give <i>[points|pack] [target] [value]</i></font></R>"
 			local TARGET_UNREACHABLE_ERR = "<N>[</N><R>•</R><N>] <R><b>Error: Target unreachable!</b></R>"
@@ -2113,7 +2118,8 @@ cmds = {
 		end,
 
 		["pw"] = function(args, msg, author)
-			if not admins[author] then return end
+			local player = Player.players[author]
+			if not (admins[author] or player:hasRole("staff")) then return end
 			local pw = msg:match("^pw (.+)")
 			tfm.exec.setRoomPassword(pw)
 			if (not pw) or pw == "" then tfm.exec.chatMessage("<N>[</N><ROSE>•</ROSE><N>] Removed the password!", author)
@@ -2162,7 +2168,7 @@ cmds = {
 			local player = Player.players[author]
 
 			if not isTribeHouse then
-				if not (admins[author] or (player:hasRole("staff") and player:hasRole("mapper"))) then
+				if not (admins[author] or player:hasRole("staff")) then
 					return tfm.exec.chatMessage(translate("ERR_PERMS", player.community), author)
 				end
 			else
