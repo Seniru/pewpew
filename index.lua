@@ -1149,8 +1149,12 @@ function Player:shoot(x, y)
 		local rot = getRot(currentItem, stance)
 		local xSpeed = currentItem == 34 and 60 or 40
 
+		local equippedPackName = self.tempEquipped or self.equipped
+		local equippedPack = shop.packs[equippedPackName]
+		local skin = equippedPack.skins[currentItem]
+
 		local object = tfm.exec.addShamanObject(
-			currentItem,
+			(skin and skin.id or nil) or currentItem,
 			x + pos.x,
 			y + pos.y,
 			rot,
@@ -1159,10 +1163,8 @@ function Player:shoot(x, y)
 			currentItem == 32 or currentItem == 62
 		)
 
-		local equippedPackName = self.tempEquipped or self.equipped
-		local equippedPack = shop.packs[equippedPackName]
-		local skin = equippedPack.skins[currentItem]
-		if (equippedPackName ~= "Default" and equippedPackName ~= "Random") and skin and skin.image then
+		-- skin.adj and not skin.img for convinience (since all "image"s have an adjustment)
+		if (equippedPackName ~= "Default" and equippedPackName ~= "Random") and skin and skin.adj then
 			tfm.exec.addImage(
 				skin.image,
 				"#" .. object,
@@ -1874,6 +1876,54 @@ shop.packs = {
 
 		},
 
+		["Fast Food"] = {
+			coverImage = "1765abc248e.png",
+			coverAdj = { x = 0, y = 0 },
+			description = "Fast food",
+			author = "Transformice",
+			price = 300,
+
+			description_locales = {
+				en = "Fast food",
+			},
+
+			skins = {
+				[ENUM_ITEMS.CANNON] =  { image = "17d3c95486b.png", id = 1723 },
+				[ENUM_ITEMS.ANVIL] = { image = "17d3c952d71.png", id = 1011 },
+				[ENUM_ITEMS.BALL] =  { image = "17d3c95133a.png", id = 623 },
+				[ENUM_ITEMS.BLUE_BALOON] = { image = "17d3c957551.png", id = 2830 },
+				[ENUM_ITEMS.LARGE_BOX] =  { image = "17d3c94b6b3.png", id = 229 },
+				[ENUM_ITEMS.SMALL_BOX] =  { image = "17d3c947c84.png", id = 125 },
+				[ENUM_ITEMS.LARGE_PLANK] =  { image = "17d3c94f5cd.png", id = 428 },
+				[ENUM_ITEMS.SMALL_PLANK] =  { image = "17d3c94d6fb.png", id = 325 }
+			}
+
+		},
+
+		["Pirate"] = {
+			coverImage = "1765abc248e.png",
+			coverAdj = { x = 0, y = 0 },
+			description = "Ahoy!",
+			author = "Transformice",
+			price = 300,
+
+			description_locales = {
+				en = "Ahoy!",
+			},
+
+			skins = {
+				[ENUM_ITEMS.CANNON] =  { image = "17d3cb1161a.png", id = 1733 },
+				[ENUM_ITEMS.ANVIL] = { image = "17d3cb0f1c1.png", id = 1018 },
+				[ENUM_ITEMS.BALL] =  { image = "17d3cb0c5c7.png", id = 632 },
+				[ENUM_ITEMS.BLUE_BALOON] = { image = "17d3cb13b9f.png", id = 2839 },
+				[ENUM_ITEMS.LARGE_BOX] =  { image = "17d3cb040a4.png", id = 240 },
+				[ENUM_ITEMS.SMALL_BOX] =  { image = "17d3cb08651.png", id = 137 },
+				[ENUM_ITEMS.LARGE_PLANK] =  { image = "17d3cb0a590.png", id = 438 },
+				[ENUM_ITEMS.SMALL_PLANK] =  { image = "17d3cb05f0f.png", id = 335 }
+			}
+
+		},
+
 
 }
 
@@ -1883,7 +1933,7 @@ for pack in next, shop.packs do shop.totalPacks = shop.totalPacks + 1 end
 shop.totalPages = math.ceil((shop.totalPacks) / 6)
 
 shop.packsBitList = BitList {
-	"Default", "Poisson", "Catto", "Royal", "Halloween 2020", "Christmas 2020"
+	"Default", "Poisson", "Catto", "Royal", "Halloween 2020", "Christmas 2020", "Fast Food", "Pirate"
 }
 
 shop.displayShop = function(target, page, keyPressed)
