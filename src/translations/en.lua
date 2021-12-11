@@ -36,5 +36,6 @@ translations["en"] = {
 	SHOW_CLOGS = "<p align='center'><a href='event:changelog'><b>Show changelog</b></a></p>",
 	NEW_VERSION = "<font size='16'><p align='center'><b><J>NEW VERSION <T>${version}</T></J></b></p></font>",
 	MAP_ERROR = "<N>[</N><R>•</R><N>]</N> <R><b>[Map Error]</b>: Reason: <font face='Lucida console'>${reason}</font>\nRetrying another map in 3...</R>",
-	LIST_MAP_PROPS = "<ROSE>[Map Info]</ROSE> <J>@${code}</J> - ${author}\n<ROSE>[Map Info]</ROSE> <VP>Item list:</VP> <N>${items}\n<ROSE>[Map Info]</ROSE> <VP>Allowed:</VP> <N>${allowed}\n<ROSE>[Map Info]</ROSE> <VP>Restricted:</VP> <N>${restricted}"
+	LIST_MAP_PROPS = "<ROSE>[Map Info]</ROSE> <J>@${code}</J> - ${author}\n<ROSE>[Map Info]</ROSE> <VP>Item list:</VP> <N>${items}\n<ROSE>[Map Info]</ROSE> <VP>Allowed:</VP> <N>${allowed}\n<ROSE>[Map Info]</ROSE> <VP>Restricted:</VP> <N>${restricted}",
+	DATA_LOAD_ERROR = "<N>[</N><R>•</R><N>]</N> <R><b>[Error]</b>: We had an issue loading your data; as a result we have stopped saving your data in this room. Rejoining the room might fix the problem.</R>"
 }

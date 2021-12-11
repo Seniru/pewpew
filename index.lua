@@ -487,12 +487,16 @@ local a="Makinit's XML library"local b="[%a_:][%w%.%-_:]*"function parseXml(c,d)
 
 --==[[ init ]]==--
 
-local VERSION = "v2.5.1.0"
+local VERSION = "v2.5.2.0"
 local VERSION_IMG = nil
 local CHANGELOG =
 	[[
 
 <p align='center'><font size='20'><b><V>CHANGELOG</V></b></font> <BV><a href='event:log'>[View all]</a></BV></p><font size='12' face='Lucida Console'>
+
+<font size='15' face='Lucida Console'><b><BV>v2.5.2.0</BV></b></font> <i>(7/26/2021)</i>
+    • Player data fail safeback
+
 
 <font size='15' face='Lucida Console'><b><BV>v2.5.1.0</BV></b></font> <i>(7/26/2021)</i>
     • Minor permission changes for some commands
@@ -528,11 +532,6 @@ local CHANGELOG =
 <font size='15' face='Lucida Console'><b><BV>v2.3.1.0</BV></b></font> <i>(3/22/2021)</i>
     • Added !npp [@code] to queue maps - works only inside your tribe house
     • Major internal changes regarding map rotation
-
-
-<font size='15' face='Lucida Console'><b><BV>v2.3.0.6</BV></b></font> <i>(2/19/2021)</i>
-    • Fixed and updated FR translations (Thanks to Jaker#9310)
-    • Added HU translations
 
 
 </font>
@@ -828,7 +827,8 @@ translations["en"] = {
 	SHOW_CLOGS = "<p align='center'><a href='event:changelog'><b>Show changelog</b></a></p>",
 	NEW_VERSION = "<font size='16'><p align='center'><b><J>NEW VERSION <T>${version}</T></J></b></p></font>",
 	MAP_ERROR = "<N>[</N><R>•</R><N>]</N> <R><b>[Map Error]</b>: Reason: <font face='Lucida console'>${reason}</font>\nRetrying another map in 3...</R>",
-	LIST_MAP_PROPS = "<ROSE>[Map Info]</ROSE> <J>@${code}</J> - ${author}\n<ROSE>[Map Info]</ROSE> <VP>Item list:</VP> <N>${items}\n<ROSE>[Map Info]</ROSE> <VP>Allowed:</VP> <N>${allowed}\n<ROSE>[Map Info]</ROSE> <VP>Restricted:</VP> <N>${restricted}"
+	LIST_MAP_PROPS = "<ROSE>[Map Info]</ROSE> <J>@${code}</J> - ${author}\n<ROSE>[Map Info]</ROSE> <VP>Item list:</VP> <N>${items}\n<ROSE>[Map Info]</ROSE> <VP>Allowed:</VP> <N>${allowed}\n<ROSE>[Map Info]</ROSE> <VP>Restricted:</VP> <N>${restricted}",
+	DATA_LOAD_ERROR = "<N>[</N><R>•</R><N>]</N> <R><b>[Error]</b>: We had an issue loading your data; as a result we have stopped saving your data in this room. Rejoining the room might fix the problem.</R>"
 }
 
 translations["br"] = {
@@ -1099,6 +1099,7 @@ function Player.new(name)
 	self.packsArray = {}
 	self.equipped = 1
 	self.roles = {}
+	self._dataSafeLoaded = false
 
 	self.tempEquipped = nil
 	self.openedWindow = nil
@@ -1225,6 +1226,7 @@ end
 
 function Player:savePlayerData()
 	-- if tfm.get.room.uniquePlayers < MIN_PLAYERS then return end
+	if not self._dataSafeLoaded then return end
 	local name = self.name
 	dHandler:set(name, "rounds", self.rounds)
 	dHandler:set(name, "survived", self.survived)
@@ -1247,7 +1249,10 @@ function eventNewPlayer(name)
 	Timer("banner_" .. name, function(image)
 		tfm.exec.removeImage(image)
 	end, 5000, false, tfm.exec.addImage(assets.banner, ":1", 120, -85, name))
-	system.loadPlayerData(name)
+	player._dataSafeLoaded = system.loadPlayerData(name)
+	if not player._dataSafeLoaded then
+		tfm.exec.chatMessage(translate("DATA_LOAD_ERROR", player.community), name)
+	end
 	setNameColor(name)
 end
 

@@ -1,9 +1,13 @@
-local VERSION = "v2.5.1.0"
+local VERSION = "v2.5.2.0"
 local VERSION_IMG = nil
 local CHANGELOG =
 	[[
 
 <p align='center'><font size='20'><b><V>CHANGELOG</V></b></font> <BV><a href='event:log'>[View all]</a></BV></p><font size='12' face='Lucida Console'>
+
+<font size='15' face='Lucida Console'><b><BV>v2.5.2.0</BV></b></font> <i>(7/26/2021)</i>
+    • Player data fail safeback
+
 
 <font size='15' face='Lucida Console'><b><BV>v2.5.1.0</BV></b></font> <i>(7/26/2021)</i>
     • Minor permission changes for some commands
@@ -39,11 +43,6 @@ local CHANGELOG =
 <font size='15' face='Lucida Console'><b><BV>v2.3.1.0</BV></b></font> <i>(3/22/2021)</i>
     • Added !npp [@code] to queue maps - works only inside your tribe house
     • Major internal changes regarding map rotation
-
-
-<font size='15' face='Lucida Console'><b><BV>v2.3.0.6</BV></b></font> <i>(2/19/2021)</i>
-    • Fixed and updated FR translations (Thanks to Jaker#9310)
-    • Added HU translations
 
 
 </font>

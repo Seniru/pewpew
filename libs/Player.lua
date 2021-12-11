@@ -35,6 +35,7 @@ function Player.new(name)
 	self.packsArray = {}
 	self.equipped = 1
 	self.roles = {}
+	self._dataSafeLoaded = false
 
 	self.tempEquipped = nil
 	self.openedWindow = nil
@@ -161,6 +162,7 @@ end
 
 function Player:savePlayerData()
 	-- if tfm.get.room.uniquePlayers < MIN_PLAYERS then return end
+	if not self._dataSafeLoaded then return end
 	local name = self.name
 	dHandler:set(name, "rounds", self.rounds)
 	dHandler:set(name, "survived", self.survived)
