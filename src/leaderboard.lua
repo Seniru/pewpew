@@ -45,6 +45,7 @@ leaderboard.scorePlayer = function(player)
 end
 
 leaderboard.addPlayer = function(player)
+	if not player._dataSafeLoaded then return end
 	local score = leaderboard.scorePlayer(player)
 	leaderboard.leaders[player.name] = { name = player.name, rounds = player.rounds, survived = player.survived, won = player.won, community = player.community, score = score }
 end
