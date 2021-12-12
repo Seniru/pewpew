@@ -2416,7 +2416,7 @@ displayHelp = function(target, keyPressed)
 
 	Panel.panels[920]:update(translate("CREDITS", commu, nil, {
 		artists = "<BV>Lightymouse</BV><G>#0421</G>",
-		translators = "<BV>Overjoy06#0000</BV><G>#0000</G>, <BV>Nuttysquirrel</BV><G>#0626</G>, <BV>Star</BV><G>#6725</G>, <BV>Jaker</BV><G>#9310</G>, <BV>Santoex</BV><G>#0000</G>, <BV>Maha010</BV><G>#0000</G>"
+		translators = "<BV>Overjoy06</BV><G>#0000</G>, <BV>Lightymouse</BV><G>#0421</G>, <BV>Nuttysquirrel</BV><G>#0626</G>, <BV>Star</BV><G>#6725</G>, <BV>Jaker</BV><G>#9310</G>, <BV>Santoex</BV><G>#0000</G>, <BV>Maha010</BV><G>#0000</G>"
 	}), target)
 	Panel.panels[706]:update(translate("CREDS_TITLE", commu), target)
 
