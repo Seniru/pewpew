@@ -1925,6 +1925,54 @@ shop.packs = {
 		},
 
 
+		["Derpy"] = {
+			coverImage = "17dae029cb3.png",
+			coverAdj = { x = 10, y = 2 },
+			description = "*_*",
+			author = "Transformice",
+			price = 300,
+
+			description_locales = {
+				en = "*_*",
+			},
+
+			skins = {
+				[ENUM_ITEMS.CANNON] =  { },
+				[ENUM_ITEMS.ANVIL] = { },
+				[ENUM_ITEMS.BALL] =  { image = "17dae02380f.png", id = 633 },
+				[ENUM_ITEMS.BLUE_BALOON] = { image = "17dae029cb3.png", id = 2840 },
+				[ENUM_ITEMS.LARGE_BOX] =  { },
+				[ENUM_ITEMS.SMALL_BOX] =  { },
+				[ENUM_ITEMS.LARGE_PLANK] =  { image = "17dae01648d.png", id = 439 },
+				[ENUM_ITEMS.SMALL_PLANK] =  { image = "17dae01dc22.png", id = 336 }
+			}
+
+		},
+
+		["The Spook"] = {
+			coverImage = "1765abc248e.png",
+			coverAdj = { x = 0, y = 0 },
+			description = "It's really spooky...",
+			author = "Transformice",
+			price = 300,
+
+			description_locales = {
+				en = "It's really spooky...",
+			},
+
+			skins = {
+				[ENUM_ITEMS.CANNON] =  { image = "17dae1324a0.png", id = 1734 },
+				[ENUM_ITEMS.ANVIL] = { image = "17dae14380b.png", id = 1005 },
+				[ENUM_ITEMS.BALL] =  { image = "17dae15686c.png", id = 602 },
+				[ENUM_ITEMS.BLUE_BALOON] = { image = "17dae16cbcc.png", id = 2824 },
+				[ENUM_ITEMS.LARGE_BOX] =  { image = "17dae17c63a.png", id = 204 },
+				[ENUM_ITEMS.SMALL_BOX] =  { image = "17dae121e30.png", id = 107 },
+				[ENUM_ITEMS.LARGE_PLANK] =  { image = "17dae1a5ef3.png", id = 404 },
+				[ENUM_ITEMS.SMALL_PLANK] =  { image = "17dae1ad746.png", id = 303 }
+			}
+
+		},
+
 }
 
 shop.totalPacks = 0
@@ -1933,7 +1981,7 @@ for pack in next, shop.packs do shop.totalPacks = shop.totalPacks + 1 end
 shop.totalPages = math.ceil((shop.totalPacks) / 6)
 
 shop.packsBitList = BitList {
-	"Default", "Poisson", "Catto", "Royal", "Halloween 2020", "Christmas 2020", "Fast Food", "Pirate"
+	"Default", "Poisson", "Catto", "Royal", "Halloween 2020", "Christmas 2020", "Fast Food", "Pirate", "Derpy", "The Spook"
 }
 
 shop.displayShop = function(target, page, keyPressed)
