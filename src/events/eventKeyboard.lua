@@ -13,5 +13,8 @@ function eventKeyboard(name, key, down, x, y)
 		leaderboard.displayLeaderboard("global", 1, name, true)
 	elseif key == keys.LETTER_O then
 		shop.displayShop(name, 1, true)
+	elseif key == keys.LETTER_U then
+		specWaitingList[name] = true
+		Player.players[name]:toggleSpectator()
 	end
 end

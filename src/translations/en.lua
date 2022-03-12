@@ -17,7 +17,7 @@ translations["en"] = {
 	POINTS =    "<font face='Lucida console' size='12'>   <b>Points:</b> <V>${points}</V></font>",
 	PACK_DESC = "\n\n<font face='Lucida console' size='12' color='#cccccc'><i>“ ${desc} ”</i></font>\n<p align='right'><font size='10'>- ${author}</font></p>",
 	GIFT_RECV = "<N>You have been rewarded with <ROSE><b>${gift}</b></ROSE> by <ROSE><b>${admin}</b></ROSE>",
-	COMMANDS =  "\n\n<N2>[ <b>H</b> ]</N2> <N><ROSE>!help</ROSE> (displays this help menu)</N><br><N2>[ <b>P</b> ]</N2> <N><ROSE>!profile <i>[player]</i></ROSE> (displays the profile of the player)</N><br></N><N2>[ <b>O</b> ]</N2> <N><ROSE>!shop</ROSE> (displays the shop)</N><br><N2>[ <b>L</b> ]</N2> <N>(displays the leaderboard)</N><br><br><N><ROSE>!changelog</ROSE> (displays the changelog)</N><br><br>",
+	COMMANDS =  "\n\n<N2>[ <b>H</b> ]</N2> <N><ROSE>!help</ROSE> (displays this help menu)</N><br><N2>[ <b>P</b> ]</N2> <N><ROSE>!profile <i>[player]</i></ROSE> (displays the profile of the player)</N><br></N><N2>[ <b>O</b> ]</N2> <N><ROSE>!shop</ROSE> (displays the shop)</N><br><N2>[ <b>L</b> ]</N2> <N>(displays the leaderboard)</N><br><N2>[ <b>U</b> ]</N2> <N>(toggles spectator mode)</N><br><br><N><ROSE>!changelog</ROSE> (displays the changelog)</N><br><br>",
 	CMD_TITLE = "<font size='25' face='Comic Sans'><b><J>Commands</J></b></font>",
 	CREDITS =   "\n\nArtist - <b>${artists}</b>\nTranslators - <b>${translators}</b>\n\n\nAnd thank you for playing pewpew!",
 	CREDS_TITLE = "<font size='25' face='Comic Sans'><b><R>Credits</R></b></font>",
@@ -37,5 +37,7 @@ translations["en"] = {
 	NEW_VERSION = "<font size='16'><p align='center'><b><J>NEW VERSION <T>${version}</T></J></b></p></font>",
 	MAP_ERROR = "<N>[</N><R>•</R><N>]</N> <R><b>[Map Error]</b>: Reason: <font face='Lucida console'>${reason}</font>\nRetrying another map in 3...</R>",
 	LIST_MAP_PROPS = "<ROSE>[Map Info]</ROSE> <J>@${code}</J> - ${author}\n<ROSE>[Map Info]</ROSE> <VP>Item list:</VP> <N>${items}\n<ROSE>[Map Info]</ROSE> <VP>Allowed:</VP> <N>${allowed}\n<ROSE>[Map Info]</ROSE> <VP>Restricted:</VP> <N>${restricted}",
-	DATA_LOAD_ERROR = "<N>[</N><R>•</R><N>]</N> <R><b>[Error]</b>: We had an issue loading your data; as a result we have stopped saving your data in this room. Rejoining the room might fix the problem.</R>"
+	DATA_LOAD_ERROR = "<N>[</N><R>•</R><N>]</N> <R><b>[Error]</b>: We had an issue loading your data; as a result we have stopped saving your data in this room. Rejoining the room might fix the problem.</R>",
+	SPEC_MODE_ON = "<N><ROSE>Spectator mode</ROSE> will be <VP>enabled</VP> from the next round onwards!</ROSE></N>",
+	SPEC_MODE_OFF = "<N><ROSE>Spectator mode</ROSE> will be <R>disabled</R> from the next round onwards!</ROSE></N>",
 }

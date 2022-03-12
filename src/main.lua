@@ -23,7 +23,6 @@ newRound = function()
 
 	newRoundStarted = false
 	suddenDeath = false
-	statsEnabled = (not isTribeHouse) and tfm.get.room.uniquePlayers >= MIN_PLAYERS
 	mapProps.fromQueue = false
 
 	if #queuedMaps > 0 then
@@ -44,7 +43,16 @@ newRound = function()
 	Player.alive = {}
 	Player.aliveCount = 0
 
-	for name, player in next, Player.players do player:refresh() end
+	for name, player in next, Player.players do
+		if not player.isSpecMode then
+			player:refresh()
+		else
+			tfm.exec.killPlayer(name)
+			tfm.exec.setPlayerScore(name, -1)
+		end
+	end
+	specWaitingList = {}
+	statsEnabled = (not isTribeHouse) and math.min(tfm.get.room.uniquePlayers, Player.aliveCount) >= MIN_PLAYERS
 
 	if not initialized then
 		initialized = true

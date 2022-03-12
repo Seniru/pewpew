@@ -85,6 +85,7 @@ local keys = {
 	LETTER_L    = 76,
 	LETTER_O    = 79,
 	LETTER_P    = 80,
+	LETTER_U	= 85
 }
 
 local assets = {
@@ -241,6 +242,6 @@ local isTribeHouse = tfm.get.room.isTribeHouse
 local statsEnabled = not isTribeHouse
 local rotation, queuedMaps, currentMapIndex = {}, {}, 0
 local mapProps = { allowed = nil, restricted = nil, grey = nil, items = items, fromQueue = false }
-local leaderboardNotifyList = {}
+local leaderboardNotifyList, specWaitingList = {}, {}
 
 local leaderboard, shop, roles

@@ -35,6 +35,7 @@ function Player.new(name)
 	self.packsArray = {}
 	self.equipped = 1
 	self.roles = {}
+	self.isSpecMode = false
 	self._dataSafeLoaded = false
 
 	self.tempEquipped = nil
@@ -74,7 +75,7 @@ function Player:setLives(lives)
 end
 
 function Player:shoot(x, y)
-	if newRoundStarted and self.alive and not self.inCooldown then
+	if newRoundStarted and self.alive and (not(self.isSpecMode and not specWaitingList[self.name])) and (not self.inCooldown) then
 		if self.equipped == "Random" and not self.tempEquipped then
 			self.tempEquipped = #self.packsArray == 0 and "Default" or self.packsArray[math.random(#self.packsArray)]
 		end
@@ -154,6 +155,15 @@ function Player:die()
 		Timer("newRound", newRound, 3 * 1000)
 	end
 
+end
+
+function Player:toggleSpectator()
+	self.isSpecMode = not self.isSpecMode
+	tfm.exec.chatMessage(translate(self.isSpecMode and "SPEC_MODE_ON" or "SPEC_MODE_OFF", self.community), self.name)
+	if Player.aliveCount == 0 and not self.isSpecMode then
+		suddenDeath = true
+		tfm.exec.setGameTime(3, true)
+	end
 end
 
 function Player:hasRole(role)

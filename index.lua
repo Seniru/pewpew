@@ -487,12 +487,16 @@ local a="Makinit's XML library"local b="[%a_:][%w%.%-_:]*"function parseXml(c,d)
 
 --==[[ init ]]==--
 
-local VERSION = "v2.5.2.0"
-local VERSION_IMG = nil
+local VERSION = "v2.6.0.0"
+local VERSION_IMG = "17f7ef9aa88.png"
 local CHANGELOG =
 	[[
 
 <p align='center'><font size='20'><b><V>CHANGELOG</V></b></font> <BV><a href='event:log'>[View all]</a></BV></p><font size='12' face='Lucida Console'>
+
+<font size='15' face='Lucida Console'><b><BV>v2.6.0.0</BV></b></font> <i>(7/26/2021)</i>
+    • Added spectator mode (press U to toggle!)
+
 
 <font size='15' face='Lucida Console'><b><BV>v2.5.2.0</BV></b></font> <i>(7/26/2021)</i>
     • Player data fail safeback
@@ -527,11 +531,6 @@ local CHANGELOG =
     • Added badges for the roles you have obtained!!!
     • Fixed bugs that caused the leaderboards from not loading properly due to the last update
     • Fixed some internal commands
-
-
-<font size='15' face='Lucida Console'><b><BV>v2.3.1.0</BV></b></font> <i>(3/22/2021)</i>
-    • Added !npp [@code] to queue maps - works only inside your tribe house
-    • Major internal changes regarding map rotation
 
 
 </font>
@@ -624,6 +623,7 @@ local keys = {
 	LETTER_L    = 76,
 	LETTER_O    = 79,
 	LETTER_P    = 80,
+	LETTER_U	= 85
 }
 
 local assets = {
@@ -780,7 +780,7 @@ local isTribeHouse = tfm.get.room.isTribeHouse
 local statsEnabled = not isTribeHouse
 local rotation, queuedMaps, currentMapIndex = {}, {}, 0
 local mapProps = { allowed = nil, restricted = nil, grey = nil, items = items, fromQueue = false }
-local leaderboardNotifyList = {}
+local leaderboardNotifyList, specWaitingList = {}, {}
 
 local leaderboard, shop, roles
 
@@ -808,7 +808,7 @@ translations["en"] = {
 	POINTS =    "<font face='Lucida console' size='12'>   <b>Points:</b> <V>${points}</V></font>",
 	PACK_DESC = "\n\n<font face='Lucida console' size='12' color='#cccccc'><i>“ ${desc} ”</i></font>\n<p align='right'><font size='10'>- ${author}</font></p>",
 	GIFT_RECV = "<N>You have been rewarded with <ROSE><b>${gift}</b></ROSE> by <ROSE><b>${admin}</b></ROSE>",
-	COMMANDS =  "\n\n<N2>[ <b>H</b> ]</N2> <N><ROSE>!help</ROSE> (displays this help menu)</N><br><N2>[ <b>P</b> ]</N2> <N><ROSE>!profile <i>[player]</i></ROSE> (displays the profile of the player)</N><br></N><N2>[ <b>O</b> ]</N2> <N><ROSE>!shop</ROSE> (displays the shop)</N><br><N2>[ <b>L</b> ]</N2> <N>(displays the leaderboard)</N><br><br><N><ROSE>!changelog</ROSE> (displays the changelog)</N><br><br>",
+	COMMANDS =  "\n\n<N2>[ <b>H</b> ]</N2> <N><ROSE>!help</ROSE> (displays this help menu)</N><br><N2>[ <b>P</b> ]</N2> <N><ROSE>!profile <i>[player]</i></ROSE> (displays the profile of the player)</N><br></N><N2>[ <b>O</b> ]</N2> <N><ROSE>!shop</ROSE> (displays the shop)</N><br><N2>[ <b>L</b> ]</N2> <N>(displays the leaderboard)</N><br><N2>[ <b>U</b> ]</N2> <N>(toggles spectator mode)</N><br><br><N><ROSE>!changelog</ROSE> (displays the changelog)</N><br><br>",
 	CMD_TITLE = "<font size='25' face='Comic Sans'><b><J>Commands</J></b></font>",
 	CREDITS =   "\n\nArtist - <b>${artists}</b>\nTranslators - <b>${translators}</b>\n\n\nAnd thank you for playing pewpew!",
 	CREDS_TITLE = "<font size='25' face='Comic Sans'><b><R>Credits</R></b></font>",
@@ -828,7 +828,9 @@ translations["en"] = {
 	NEW_VERSION = "<font size='16'><p align='center'><b><J>NEW VERSION <T>${version}</T></J></b></p></font>",
 	MAP_ERROR = "<N>[</N><R>•</R><N>]</N> <R><b>[Map Error]</b>: Reason: <font face='Lucida console'>${reason}</font>\nRetrying another map in 3...</R>",
 	LIST_MAP_PROPS = "<ROSE>[Map Info]</ROSE> <J>@${code}</J> - ${author}\n<ROSE>[Map Info]</ROSE> <VP>Item list:</VP> <N>${items}\n<ROSE>[Map Info]</ROSE> <VP>Allowed:</VP> <N>${allowed}\n<ROSE>[Map Info]</ROSE> <VP>Restricted:</VP> <N>${restricted}",
-	DATA_LOAD_ERROR = "<N>[</N><R>•</R><N>]</N> <R><b>[Error]</b>: We had an issue loading your data; as a result we have stopped saving your data in this room. Rejoining the room might fix the problem.</R>"
+	DATA_LOAD_ERROR = "<N>[</N><R>•</R><N>]</N> <R><b>[Error]</b>: We had an issue loading your data; as a result we have stopped saving your data in this room. Rejoining the room might fix the problem.</R>",
+	SPEC_MODE_ON = "<N><ROSE>Spectator mode</ROSE> will be <VP>enabled</VP> from the next round onwards!</ROSE></N>",
+	SPEC_MODE_OFF = "<N><ROSE>Spectator mode</ROSE> will be <R>disabled</R> from the next round onwards!</ROSE></N>",
 }
 
 translations["br"] = {
@@ -1099,6 +1101,7 @@ function Player.new(name)
 	self.packsArray = {}
 	self.equipped = 1
 	self.roles = {}
+	self.isSpecMode = false
 	self._dataSafeLoaded = false
 
 	self.tempEquipped = nil
@@ -1138,7 +1141,7 @@ function Player:setLives(lives)
 end
 
 function Player:shoot(x, y)
-	if newRoundStarted and self.alive and not self.inCooldown then
+	if newRoundStarted and self.alive and (not(self.isSpecMode and not specWaitingList[self.name])) and (not self.inCooldown) then
 		if self.equipped == "Random" and not self.tempEquipped then
 			self.tempEquipped = #self.packsArray == 0 and "Default" or self.packsArray[math.random(#self.packsArray)]
 		end
@@ -1218,6 +1221,15 @@ function Player:die()
 		Timer("newRound", newRound, 3 * 1000)
 	end
 
+end
+
+function Player:toggleSpectator()
+	self.isSpecMode = not self.isSpecMode
+	tfm.exec.chatMessage(translate(self.isSpecMode and "SPEC_MODE_ON" or "SPEC_MODE_OFF", self.community), self.name)
+	if Player.aliveCount == 0 and not self.isSpecMode then
+		suddenDeath = true
+		tfm.exec.setGameTime(3, true)
+	end
 end
 
 function Player:hasRole(role)
@@ -1315,6 +1327,9 @@ function eventKeyboard(name, key, down, x, y)
 		leaderboard.displayLeaderboard("global", 1, name, true)
 	elseif key == keys.LETTER_O then
 		shop.displayShop(name, 1, true)
+	elseif key == keys.LETTER_U then
+		specWaitingList[name] = true
+		Player.players[name]:toggleSpectator()
 	end
 end
 
@@ -1407,6 +1422,7 @@ end
 function eventPlayerDied(name)
 	local player = Player.players[name]
 	if not player then return end
+	if player.isSpecMode and not specWaitingList[name] then return end
 	if not newRoundStarted then
 		tfm.exec.respawnPlayer(name)
 		return player:refresh()
@@ -2254,7 +2270,6 @@ newRound = function()
 
 	newRoundStarted = false
 	suddenDeath = false
-	statsEnabled = (not isTribeHouse) and tfm.get.room.uniquePlayers >= MIN_PLAYERS
 	mapProps.fromQueue = false
 
 	if #queuedMaps > 0 then
@@ -2275,7 +2290,16 @@ newRound = function()
 	Player.alive = {}
 	Player.aliveCount = 0
 
-	for name, player in next, Player.players do player:refresh() end
+	for name, player in next, Player.players do
+		if not player.isSpecMode then
+			player:refresh()
+		else
+			tfm.exec.killPlayer(name)
+			tfm.exec.setPlayerScore(name, -1)
+		end
+	end
+	specWaitingList = {}
+	statsEnabled = (not isTribeHouse) and math.min(tfm.get.room.uniquePlayers, Player.aliveCount) >= MIN_PLAYERS
 
 	if not initialized then
 		initialized = true
