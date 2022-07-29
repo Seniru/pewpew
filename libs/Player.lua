@@ -87,8 +87,12 @@ function Player:shoot(x, y)
 		local rot = getRot(currentItem, stance)
 		local xSpeed = currentItem == 34 and 60 or 40
 
+		local equippedPackName = self.tempEquipped or self.equipped
+		local equippedPack = shop.packs[equippedPackName]
+		local skin = equippedPack.skins[currentItem]
+
 		local object = tfm.exec.addShamanObject(
-			currentItem,
+			(skin and skin.id or nil) or currentItem,
 			x + pos.x,
 			y + pos.y,
 			rot,
@@ -97,10 +101,8 @@ function Player:shoot(x, y)
 			currentItem == 32 or currentItem == 62
 		)
 
-		local equippedPackName = self.tempEquipped or self.equipped
-		local equippedPack = shop.packs[equippedPackName]
-		local skin = equippedPack.skins[currentItem]
-		if (equippedPackName ~= "Default" and equippedPackName ~= "Random") and skin and skin.image then
+		-- skin.adj and not skin.img for convinience (since all "image"s have an adjustment)
+		if (equippedPackName ~= "Default" and equippedPackName ~= "Random") and skin and skin.adj then
 			tfm.exec.addImage(
 				skin.image,
 				"#" .. object,

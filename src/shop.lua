@@ -199,6 +199,102 @@ shop.packs = {
 
 		},
 
+		["Fast Food"] = {
+			coverImage = "17d3c952d71.png",
+			coverAdj = { x = 10, y = 10 },
+			description = "Fast food at your service!",
+			author = "Transformice",
+			price = 300,
+
+			description_locales = {
+				en = "Fast food at your service!",
+			},
+
+			skins = {
+				[ENUM_ITEMS.CANNON] =  { image = "17d3c95486b.png", id = 1723 },
+				[ENUM_ITEMS.ANVIL] = { image = "17d3c952d71.png", id = 1011 },
+				[ENUM_ITEMS.BALL] =  { image = "17d3c95133a.png", id = 623 },
+				[ENUM_ITEMS.BLUE_BALOON] = { image = "17d3c957551.png", id = 2830 },
+				[ENUM_ITEMS.LARGE_BOX] =  { image = "17d3c94b6b3.png", id = 229 },
+				[ENUM_ITEMS.SMALL_BOX] =  { image = "17d3c947c84.png", id = 125 },
+				[ENUM_ITEMS.LARGE_PLANK] =  { image = "17d3c94f5cd.png", id = 428 },
+				[ENUM_ITEMS.SMALL_PLANK] =  { image = "17d3c94d6fb.png", id = 325 }
+			}
+
+		},
+
+		["Pirate"] = {
+			coverImage = "17d3cb13b9f.png",
+			coverAdj = { x = 10, y = 0 },
+			description = "Ahoy!",
+			author = "Transformice",
+			price = 300,
+
+			description_locales = {
+				en = "Ahoy!",
+			},
+
+			skins = {
+				[ENUM_ITEMS.CANNON] =  { image = "17d3cb1161a.png", id = 1733 },
+				[ENUM_ITEMS.ANVIL] = { image = "17d3cb0f1c1.png", id = 1018 },
+				[ENUM_ITEMS.BALL] =  { image = "17d3cb0c5c7.png", id = 632 },
+				[ENUM_ITEMS.BLUE_BALOON] = { image = "17d3cb13b9f.png", id = 2839 },
+				[ENUM_ITEMS.LARGE_BOX] =  { image = "17d3cb040a4.png", id = 240 },
+				[ENUM_ITEMS.SMALL_BOX] =  { image = "17d3cb08651.png", id = 137 },
+				[ENUM_ITEMS.LARGE_PLANK] =  { image = "17d3cb0a590.png", id = 438 },
+				[ENUM_ITEMS.SMALL_PLANK] =  { image = "17d3cb05f0f.png", id = 335 }
+			}
+
+		},
+
+
+		["Derpy"] = {
+			coverImage = "17dae029cb3.png",
+			coverAdj = { x = 10, y = 2 },
+			description = "*_*",
+			author = "Transformice",
+			price = 300,
+
+			description_locales = {
+				en = "*_*",
+			},
+
+			skins = {
+				[ENUM_ITEMS.CANNON] =  { },
+				[ENUM_ITEMS.ANVIL] = { },
+				[ENUM_ITEMS.BALL] =  { image = "17dae02380f.png", id = 633 },
+				[ENUM_ITEMS.BLUE_BALOON] = { image = "17dae029cb3.png", id = 2840 },
+				[ENUM_ITEMS.LARGE_BOX] =  { },
+				[ENUM_ITEMS.SMALL_BOX] =  { },
+				[ENUM_ITEMS.LARGE_PLANK] =  { image = "17dae01648d.png", id = 439 },
+				[ENUM_ITEMS.SMALL_PLANK] =  { image = "17dae01dc22.png", id = 336 }
+			}
+
+		},
+
+		["The Spook"] = {
+			coverImage = "17dae16cbcc.png",
+			coverAdj = { x = 10, y = 0 },
+			description = "It's really spooky...",
+			author = "Transformice",
+			price = 300,
+
+			description_locales = {
+				en = "It's really spooky...",
+			},
+
+			skins = {
+				[ENUM_ITEMS.CANNON] =  { image = "17dae1324a0.png", id = 1734 },
+				[ENUM_ITEMS.ANVIL] = { image = "17dae14380b.png", id = 1005 },
+				[ENUM_ITEMS.BALL] =  { image = "17dae15686c.png", id = 602 },
+				[ENUM_ITEMS.BLUE_BALOON] = { image = "17dae16cbcc.png", id = 2824 },
+				[ENUM_ITEMS.LARGE_BOX] =  { image = "17dae17c63a.png", id = 204 },
+				[ENUM_ITEMS.SMALL_BOX] =  { image = "17dae121e30.png", id = 107 },
+				[ENUM_ITEMS.LARGE_PLANK] =  { image = "17dae1a5ef3.png", id = 404 },
+				[ENUM_ITEMS.SMALL_PLANK] =  { image = "17dae1ad746.png", id = 303 }
+			}
+
+		},
 
 }
 
@@ -208,7 +304,7 @@ for pack in next, shop.packs do shop.totalPacks = shop.totalPacks + 1 end
 shop.totalPages = math.ceil((shop.totalPacks) / 6)
 
 shop.packsBitList = BitList {
-	"Default", "Poisson", "Catto", "Royal", "Halloween 2020", "Christmas 2020"
+	"Default", "Poisson", "Catto", "Royal", "Halloween 2020", "Christmas 2020", "Fast Food", "Pirate", "Derpy", "The Spook"
 }
 
 shop.displayShop = function(target, page, keyPressed)
