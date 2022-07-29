@@ -487,26 +487,35 @@ local a="Makinit's XML library"local b="[%a_:][%w%.%-_:]*"function parseXml(c,d)
 
 --==[[ init ]]==--
 
-local VERSION = "v2.6.0.0"
-local VERSION_IMG = "17f7ef9aa88.png"
+local VERSION = "v2.6.1.0"
+local VERSION_IMG = "1824ac71a61.png"
 local CHANGELOG =
 	[[
 
 <p align='center'><font size='20'><b><V>CHANGELOG</V></b></font> <BV><a href='event:log'>[View all]</a></BV></p><font size='12' face='Lucida Console'>
 
-<font size='15' face='Lucida Console'><b><BV>v2.6.0.0</BV></b></font> <i>(7/26/2021)</i>
+<font size='15' face='Lucida Console'><b><BV>v2.6.1.0</BV></b></font> <i>(7/26/2021)</i>
+    • Added 4 new item packs!
+    • These packs includes Fast Food, Pirate, Derpy and The Spook packs! Check all of them out in the shop by pressing O!
+
+
+<font size='15' face='Lucida Console'><b><BV>v2.6.0.1</BV></b></font> <i>(7/17/2021)</i>
+    • Updated TR translations
+
+
+<font size='15' face='Lucida Console'><b><BV>v2.6.0.0</BV></b></font> <i>(03/12/2021)</i>
     • Added spectator mode (press U to toggle!)
 
 
-<font size='15' face='Lucida Console'><b><BV>v2.5.2.0</BV></b></font> <i>(7/26/2021)</i>
+<font size='15' face='Lucida Console'><b><BV>v2.5.2.0</BV></b></font> <i>(12/11/2021)</i>
     • Player data fail safeback
 
 
-<font size='15' face='Lucida Console'><b><BV>v2.5.1.0</BV></b></font> <i>(7/26/2021)</i>
+<font size='15' face='Lucida Console'><b><BV>v2.5.1.0</BV></b></font> <i>(11/13/2021)</i>
     • Minor permission changes for some commands
 
 
-<font size='15' face='Lucida Console'><b><BV>v2.5.0.0</BV></b></font> <i>(7/26/2021)</i>
+<font size='15' face='Lucida Console'><b><BV>v2.5.0.0</BV></b></font> <i>(11/09/2021)</i>
     • Added new map parameters ALLOWED="" and RESTRICTED="", check the map submission thread for more information!
 
 
@@ -525,12 +534,6 @@ local CHANGELOG =
     • Fixed the bug that displays your badges instead of showing the target's badges
     • Added BR translations (Thanks to Santoex#0000)
     • Changed the font size of ratios in leaderboard to '9' as a temporary fix for text wrapping issuess
-
-
-<font size='15' face='Lucida Console'><b><BV>v2.3.2.0</BV></b></font> <i>(3/27/2021)</i>
-    • Added badges for the roles you have obtained!!!
-    • Fixed bugs that caused the leaderboards from not loading properly due to the last update
-    • Fixed some internal commands
 
 
 </font>
@@ -1964,7 +1967,7 @@ shop.packs = {
 			coverAdj = { x = 10, y = 2 },
 			description = "*_*",
 			author = "Transformice",
-			price = 300,
+			price = 100,
 
 			description_locales = {
 				en = "*_*",

@@ -253,7 +253,7 @@ shop.packs = {
 			coverAdj = { x = 10, y = 2 },
 			description = "*_*",
 			author = "Transformice",
-			price = 300,
+			price = 100,
 
 			description_locales = {
 				en = "*_*",
