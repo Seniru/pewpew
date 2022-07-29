@@ -1877,14 +1877,14 @@ shop.packs = {
 		},
 
 		["Fast Food"] = {
-			coverImage = "1765abc248e.png",
-			coverAdj = { x = 0, y = 0 },
-			description = "Fast food",
+			coverImage = "17d3c952d71.png",
+			coverAdj = { x = 10, y = 10 },
+			description = "Fast food at your service!",
 			author = "Transformice",
 			price = 300,
 
 			description_locales = {
-				en = "Fast food",
+				en = "Fast food at your service!",
 			},
 
 			skins = {
@@ -1901,8 +1901,8 @@ shop.packs = {
 		},
 
 		["Pirate"] = {
-			coverImage = "1765abc248e.png",
-			coverAdj = { x = 0, y = 0 },
+			coverImage = "17d3cb13b9f.png",
+			coverAdj = { x = 10, y = 0 },
 			description = "Ahoy!",
 			author = "Transformice",
 			price = 300,
@@ -1950,8 +1950,8 @@ shop.packs = {
 		},
 
 		["The Spook"] = {
-			coverImage = "1765abc248e.png",
-			coverAdj = { x = 0, y = 0 },
+			coverImage = "17dae16cbcc.png",
+			coverAdj = { x = 10, y = 0 },
 			description = "It's really spooky...",
 			author = "Transformice",
 			price = 300,
