@@ -3,7 +3,7 @@ local attributes = { "ALLOWED", "RESTRICT", "GREY" }
 function eventNewGame()
 	if not initialized then return end
 	local fromQueue = mapProps.fromQueue
-	mapProps = { allowed = nil, restricted = nil, grey = nil, items = items, fromQueue = fromQueue }
+	mapProps = { allowed = nil, restricted = nil, grey = {}, items = items, fromQueue = fromQueue }
 	local xml = tfm.get.room.xmlMapInfo.xml:upper()
 	local hasSpecialAttrs = false
 
@@ -40,6 +40,15 @@ function eventNewGame()
 				table.remove(mapProps.items, table.find(mapProps.items, item))
 			end
 		end
+		for z, ground in ipairs(path(dom, "Z", "S", "S")) do
+			if ground.attribute.GREY ~= nil and ground.attribute.O == "323232" then
+				local x, y, w, h = tonumber(ground.attribute.X), tonumber(ground.attribute.Y), tonumber(ground.attribute.L), tonumber(ground.attribute.H)
+				x = x - w / 2
+				y = y - h / 2
+				mapProps.grey[#mapProps.grey + 1] = { x = x, y = y, w = w, h = h }
+			end
+		end
+		if #mapProps.grey > 0 then tfm.exec.chatMessage(translate("GREY_MAP", tfm.get.room.language)) end
 
 		if fromQueue then
 			tfm.exec.chatMessage(translate("LIST_MAP_PROPS", tfm.get.room.language, nil, {
@@ -48,6 +57,7 @@ function eventNewGame()
 				items = table.concat(mapProps.items or {"-"}, ", "),
 				allowed = table.concat(mapProps.allowed or {"-"}, ", "),
 				restricted = table.concat(mapProps.restricted or {"-"}, ", "),
+				grey = tostring(#mapProps.grey > 0)
 			}))
 		end
 

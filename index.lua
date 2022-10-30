@@ -830,7 +830,8 @@ translations["en"] = {
 	SHOW_CLOGS = "<p align='center'><a href='event:changelog'><b>Show changelog</b></a></p>",
 	NEW_VERSION = "<font size='16'><p align='center'><b><J>NEW VERSION <T>${version}</T></J></b></p></font>",
 	MAP_ERROR = "<N>[</N><R>•</R><N>]</N> <R><b>[Map Error]</b>: Reason: <font face='Lucida console'>${reason}</font>\nRetrying another map in 3...</R>",
-	LIST_MAP_PROPS = "<ROSE>[Map Info]</ROSE> <J>@${code}</J> - ${author}\n<ROSE>[Map Info]</ROSE> <VP>Item list:</VP> <N>${items}\n<ROSE>[Map Info]</ROSE> <VP>Allowed:</VP> <N>${allowed}\n<ROSE>[Map Info]</ROSE> <VP>Restricted:</VP> <N>${restricted}",
+	LIST_MAP_PROPS = "<ROSE>[Map Info]</ROSE> <J>@${code}</J> - ${author}\n<ROSE>[Map Info]</ROSE> <VP>Item list:</VP> <N>${items}\n<ROSE>[Map Info]</ROSE> <VP>Allowed:</VP> <N>${allowed}\n<ROSE>[Map Info]</ROSE> <VP>Restricted:</VP> <N>${restricted}\n<ROSE>[Map Info]</ROSE> <VP>Grey areas:</VP> <N>${grey}",
+	GREY_MAP = "<N><ROSE>Careful!</ROSE> You can't shoot in <G><b>grey areas...</b></G></N>",
 	DATA_LOAD_ERROR = "<N>[</N><R>•</R><N>]</N> <R><b>[Error]</b>: We had an issue loading your data; as a result we have stopped saving your data in this room. Rejoining the room might fix the problem.</R>",
 	SPEC_MODE_ON = "<N><ROSE>Spectator mode</ROSE> will be <VP>enabled</VP> from the next round onwards!</ROSE></N>",
 	SPEC_MODE_OFF = "<N><ROSE>Spectator mode</ROSE> will be <R>disabled</R> from the next round onwards!</ROSE></N>",
@@ -949,7 +950,7 @@ translations["tr"] = {
 	SHOW_CLOGS = "<p align='center'><a href='event:changelog'><b>Değişim kaydını göster</b></a></p>",
 	NEW_VERSION = "<font size='16'><p align='center'><b><J>YENİ VERSİYON <T>${version}</T></J></b></p></font>",
 	MAP_ERROR = "<N>[</N><R>•</R><N>]</N> <R><b>[Map Error]</b>: Reason: <font face='Lucida console'>${reason}</font>\nRetrying another map in 3...</R>",
-	LIST_MAP_PROPS = "<ROSE>[Map Info]</ROSE> <J>@${code}</J> - ${author}\n<ROSE>[Map Info]</ROSE> <VP>Item list:</VP> <N>${items}\n<ROSE>[Map Info]</ROSE> <VP>Allowed:</VP> <N>${allowed}\n<ROSE>[Map Info]</ROSE> <VP>Restricted:</VP> <N>${restricted}",
+	LIST_MAP_PROPS = "<ROSE>[Map Info]</ROSE> <J>@${code}</J> - ${author}\n<ROSE>[Map Info]</ROSE> <VP>Item list:</VP> <N>${items}\n<ROSE>[Map Info]</ROSE> <VP>Allowed:</VP> <N>${allowed}\n<ROSE>[Map Info]</ROSE> <VP>Restricted:</VP> <N>${restricted}\n<ROSE>[Map Info]</ROSE> <VP>Grey areas:</VP> <N>${grey}",
 	DATA_LOAD_ERROR = "<N>[</N><R>•</R><N>]</N> <R><b>[Hata]</b>: Verilerinizi yüklerken bir sorun yaşadık; sonuç olarak verilerinizi bu odaya kaydetmeyi durdurduk. Odaya tekrar katılmak sorunu çözebilir.</R>",
 	SPEC_MODE_ON = "<N><ROSE>İzleyici modu</ROSE> bir sonraki turdan itibaren <VP>etkinleştirilecek</VP>!</ROSE></N>",
 	SPEC_MODE_OFF = "<N><ROSE>İzleyici modu</ROSE> bir sonraki turdan itibaren <R>devre dışı bırakılacak</R>!</ROSE></N>",
@@ -1156,7 +1157,13 @@ function Player:setLives(lives)
 end
 
 function Player:shoot(x, y)
-	if newRoundStarted and self.alive and (not(self.isSpecMode and not specWaitingList[self.name])) and (not self.inCooldown) then
+	if (
+		newRoundStarted and
+		self.alive and
+		(not(self.isSpecMode and not specWaitingList[self.name])) and
+		(not self.inCooldown) and
+		(not getGreyArea(x, y))
+		) then
 		if self.equipped == "Random" and not self.tempEquipped then
 			self.tempEquipped = #self.packsArray == 0 and "Default" or self.packsArray[math.random(#self.packsArray)]
 		end
@@ -1355,7 +1362,7 @@ local attributes = { "ALLOWED", "RESTRICT", "GREY" }
 function eventNewGame()
 	if not initialized then return end
 	local fromQueue = mapProps.fromQueue
-	mapProps = { allowed = nil, restricted = nil, grey = nil, items = items, fromQueue = fromQueue }
+	mapProps = { allowed = nil, restricted = nil, grey = {}, items = items, fromQueue = fromQueue }
 	local xml = tfm.get.room.xmlMapInfo.xml:upper()
 	local hasSpecialAttrs = false
 
@@ -1392,6 +1399,15 @@ function eventNewGame()
 				table.remove(mapProps.items, table.find(mapProps.items, item))
 			end
 		end
+		for z, ground in ipairs(path(dom, "Z", "S", "S")) do
+			if ground.attribute.GREY ~= nil and ground.attribute.O == "323232" then
+				local x, y, w, h = tonumber(ground.attribute.X), tonumber(ground.attribute.Y), tonumber(ground.attribute.L), tonumber(ground.attribute.H)
+				x = x - w / 2
+				y = y - h / 2
+				mapProps.grey[#mapProps.grey + 1] = { x = x, y = y, w = w, h = h }
+			end
+		end
+		if #mapProps.grey > 0 then tfm.exec.chatMessage(translate("GREY_MAP", tfm.get.room.language)) end
 
 		if fromQueue then
 			tfm.exec.chatMessage(translate("LIST_MAP_PROPS", tfm.get.room.language, nil, {
@@ -1400,6 +1416,7 @@ function eventNewGame()
 				items = table.concat(mapProps.items or {"-"}, ", "),
 				allowed = table.concat(mapProps.allowed or {"-"}, ", "),
 				restricted = table.concat(mapProps.restricted or {"-"}, ", "),
+				grey = tostring(#mapProps.grey > 0)
 			}))
 		end
 
@@ -2468,6 +2485,14 @@ isInRotation = function(map)
 	map = tostring(map):match("@?(%d+)")
 	for i, m in next, maps.list do if m == map then return true, i end end
 	return false
+end
+
+getGreyArea = function(x, y)
+	for id, area in next, mapProps.grey do
+		if x >= area.x and x <= area.x + area.w and y >= area.y and y <= area.y + area.h then
+			return id
+		end
+	end
 end
 
 createPrettyUI = function(id, x, y, w, h, fixed, closeButton)

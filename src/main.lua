@@ -110,6 +110,14 @@ isInRotation = function(map)
 	return false
 end
 
+getGreyArea = function(x, y)
+	for id, area in next, mapProps.grey do
+		if x >= area.x and x <= area.x + area.w and y >= area.y and y <= area.y + area.h then
+			return id
+		end
+	end
+end
+
 createPrettyUI = function(id, x, y, w, h, fixed, closeButton)
 
 	local window =  Panel(id * 100 + 10, "", x - 4, y - 4, w + 8, h + 8, 0x7f492d, 0x7f492d, 1, fixed)

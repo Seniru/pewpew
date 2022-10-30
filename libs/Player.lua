@@ -75,7 +75,13 @@ function Player:setLives(lives)
 end
 
 function Player:shoot(x, y)
-	if newRoundStarted and self.alive and (not(self.isSpecMode and not specWaitingList[self.name])) and (not self.inCooldown) then
+	if (
+		newRoundStarted and
+		self.alive and
+		(not(self.isSpecMode and not specWaitingList[self.name])) and
+		(not self.inCooldown) and
+		(not getGreyArea(x, y))
+		) then
 		if self.equipped == "Random" and not self.tempEquipped then
 			self.tempEquipped = #self.packsArray == 0 and "Default" or self.packsArray[math.random(#self.packsArray)]
 		end

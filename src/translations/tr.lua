@@ -36,7 +36,7 @@ translations["tr"] = {
 	SHOW_CLOGS = "<p align='center'><a href='event:changelog'><b>Değişim kaydını göster</b></a></p>",
 	NEW_VERSION = "<font size='16'><p align='center'><b><J>YENİ VERSİYON <T>${version}</T></J></b></p></font>",
 	MAP_ERROR = "<N>[</N><R>•</R><N>]</N> <R><b>[Map Error]</b>: Reason: <font face='Lucida console'>${reason}</font>\nRetrying another map in 3...</R>",
-	LIST_MAP_PROPS = "<ROSE>[Map Info]</ROSE> <J>@${code}</J> - ${author}\n<ROSE>[Map Info]</ROSE> <VP>Item list:</VP> <N>${items}\n<ROSE>[Map Info]</ROSE> <VP>Allowed:</VP> <N>${allowed}\n<ROSE>[Map Info]</ROSE> <VP>Restricted:</VP> <N>${restricted}",
+	LIST_MAP_PROPS = "<ROSE>[Map Info]</ROSE> <J>@${code}</J> - ${author}\n<ROSE>[Map Info]</ROSE> <VP>Item list:</VP> <N>${items}\n<ROSE>[Map Info]</ROSE> <VP>Allowed:</VP> <N>${allowed}\n<ROSE>[Map Info]</ROSE> <VP>Restricted:</VP> <N>${restricted}\n<ROSE>[Map Info]</ROSE> <VP>Grey areas:</VP> <N>${grey}",
 	DATA_LOAD_ERROR = "<N>[</N><R>•</R><N>]</N> <R><b>[Hata]</b>: Verilerinizi yüklerken bir sorun yaşadık; sonuç olarak verilerinizi bu odaya kaydetmeyi durdurduk. Odaya tekrar katılmak sorunu çözebilir.</R>",
 	SPEC_MODE_ON = "<N><ROSE>İzleyici modu</ROSE> bir sonraki turdan itibaren <VP>etkinleştirilecek</VP>!</ROSE></N>",
 	SPEC_MODE_OFF = "<N><ROSE>İzleyici modu</ROSE> bir sonraki turdan itibaren <R>devre dışı bırakılacak</R>!</ROSE></N>",
