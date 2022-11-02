@@ -110,9 +110,20 @@ isInRotation = function(map)
 	return false
 end
 
+isPointInRect = function(groundX, groundY, groundWidth, groundHeight, groundAngle, pointX, pointY)
+	-- Borrowed from #utility
+	local n_theta = -math.rad(groundAngle)
+	local c, s = math.cos(n_theta), math.sin(n_theta)
+	local cx, cy = groundX + c * (pointX - groundX) - s * (pointY - groundY),
+		groundY + s * (pointX - groundX) + c * (pointY - groundY)
+
+	return math.abs(cx - groundX) < groundWidth / 2
+		and math.abs(cy - groundY) < groundHeight / 2
+end
+
 getGreyArea = function(x, y)
 	for id, area in next, mapProps.grey do
-		if x >= area.x and x <= area.x + area.w and y >= area.y and y <= area.y + area.h then
+		if isPointInRect(area.x, area.y, area.w, area.h, area.a, x, y) then
 			return id
 		end
 	end

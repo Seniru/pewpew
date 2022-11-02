@@ -42,10 +42,9 @@ function eventNewGame()
 		end
 		for z, ground in ipairs(path(dom, "Z", "S", "S")) do
 			if ground.attribute.GREY ~= nil and ground.attribute.O == "323232" then
-				local x, y, w, h = tonumber(ground.attribute.X), tonumber(ground.attribute.Y), tonumber(ground.attribute.L), tonumber(ground.attribute.H)
-				x = x - w / 2
-				y = y - h / 2
-				mapProps.grey[#mapProps.grey + 1] = { x = x, y = y, w = w, h = h }
+				local x, y, w, h= tonumber(ground.attribute.X), tonumber(ground.attribute.Y), tonumber(ground.attribute.L), tonumber(ground.attribute.H)
+				local props = stringutils.split(ground.attribute.P, ",")
+				mapProps.grey[#mapProps.grey + 1] = { x = x, y = y, w = w, h = h, a = props[5] }
 			end
 		end
 		if #mapProps.grey > 0 then tfm.exec.chatMessage(translate("GREY_MAP", tfm.get.room.language)) end
