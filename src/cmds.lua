@@ -118,7 +118,7 @@ cmds = {
 					return tfm.exec.chatMessage(translate("ERR_PERMS", player.community), author)
 				end
 			else
-				if tfm.get.room.name:sub(2) ~= tfm.get.room.playerList[author].tribeName then
+				if tfm.get.room.name:sub(3) ~= tfm.get.room.playerList[author].tribeName then
 					return tfm.exec.chatMessage(translate("ERR_PERMS", player.community), author)
 				end
 			end
