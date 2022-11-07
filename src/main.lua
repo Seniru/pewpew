@@ -121,9 +121,17 @@ isPointInRect = function(groundX, groundY, groundWidth, groundHeight, groundAngl
 		and math.abs(cy - groundY) < groundHeight / 2
 end
 
+isPointInCircle = function(circleX, circleY, circleRadius, pointX, pointY)
+	-- Borrowed from #utility
+	local dx, dy = circleX - pointX, circleY - pointY
+	return dx * dx + dy * dy <= circleRadius * circleRadius
+end
+
 getGreyArea = function(x, y)
 	for id, area in next, mapProps.grey do
-		if isPointInRect(area.x, area.y, area.w, area.h, area.a, x, y) then
+		if ((area.t == 13) and isPointInCircle(area.x, area.y, area.w, x, y)) or
+			((area.t == 12) and isPointInRect(area.x, area.y, area.w, area.h, area.a, x, y))
+		then
 			return id
 		end
 	end

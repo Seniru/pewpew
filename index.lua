@@ -1401,9 +1401,9 @@ function eventNewGame()
 		end
 		for z, ground in ipairs(path(dom, "Z", "S", "S")) do
 			if ground.attribute.GREY ~= nil and ground.attribute.O == "323232" then
-				local x, y, w, h= tonumber(ground.attribute.X), tonumber(ground.attribute.Y), tonumber(ground.attribute.L), tonumber(ground.attribute.H)
+				local t, x, y, w, h = tonumber(ground.attribute.T), tonumber(ground.attribute.X), tonumber(ground.attribute.Y), tonumber(ground.attribute.L), tonumber(ground.attribute.H)
 				local props = stringutils.split(ground.attribute.P, ",")
-				mapProps.grey[#mapProps.grey + 1] = { x = x, y = y, w = w, h = h, a = props[5] }
+				mapProps.grey[#mapProps.grey + 1] = { t = t, x = x, y = y, w = w, h = h, a = props[5] }
 			end
 		end
 		if #mapProps.grey > 0 then tfm.exec.chatMessage(translate("GREY_MAP", tfm.get.room.language)) end
@@ -2497,9 +2497,17 @@ isPointInRect = function(groundX, groundY, groundWidth, groundHeight, groundAngl
 		and math.abs(cy - groundY) < groundHeight / 2
 end
 
+isPointInCircle = function(circleX, circleY, circleRadius, pointX, pointY)
+	-- Borrowed from #utility
+	local dx, dy = circleX - pointX, circleY - pointY
+	return dx * dx + dy * dy <= circleRadius * circleRadius
+end
+
 getGreyArea = function(x, y)
 	for id, area in next, mapProps.grey do
-		if isPointInRect(area.x, area.y, area.w, area.h, area.a, x, y) then
+		if ((area.t == 13) and isPointInCircle(area.x, area.y, area.w, x, y)) or
+			((area.t == 12) and isPointInRect(area.x, area.y, area.w, area.h, area.a, x, y))
+		then
 			return id
 		end
 	end
